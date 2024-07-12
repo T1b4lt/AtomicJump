@@ -1,0 +1,20 @@
+[gd_scene load_steps=5 format=3 uid="uid://bc28pv650t3ko"]
+
+[ext_resource type="PackedScene" uid="uid://bi1jigid8vavc" path="res://plataformas/inicial.tscn" id="1_dvkcj"]
+[ext_resource type="PackedScene" uid="uid://bj2fndebqtlg5" path="res://personajes/protagonista/protagonista.tscn" id="2_6ul2p"]
+[ext_resource type="PackedScene" uid="uid://da5h06motiwnr" path="res://personajes/camara/camara.tscn" id="2_78d36"]
+[ext_resource type="PackedScene" uid="uid://cjo7ik6qj7xdt" path="res://plataformas/plataforma_1.tscn" id="4_e6pim"]
+
+[node name="nivel" type="Node2D"]
+
+[node name="camara" parent="." instance=ExtResource("2_78d36")]
+position = Vector2(576, 324)
+speed = 10.0
+
+[node name="inicial" parent="." instance=ExtResource("1_dvkcj")]
+
+[node name="plataforma_1" parent="." instance=ExtResource("4_e6pim")]
+position = Vector2(0, -671)
+
+[node name="protagonista" parent="." instance=ExtResource("2_6ul2p")]
+position = Vector2(585, 503)

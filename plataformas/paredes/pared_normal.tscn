@@ -1,0 +1,232 @@
+[gd_scene load_steps=3 format=3 uid="uid://cyjms55c37j6"]
+
+[ext_resource type="Texture2D" uid="uid://c02imneqm5b44" path="res://recursos/scribble-assets/tile.png" id="1_jivox"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pfiaf"]
+size = Vector2(303, 669)
+
+[node name="pared_normal" type="StaticBody2D"]
+
+[node name="Tile41" type="Sprite2D" parent="."]
+position = Vector2(275, 7)
+texture = ExtResource("1_jivox")
+
+[node name="Tile42" type="Sprite2D" parent="."]
+position = Vector2(153, 7)
+texture = ExtResource("1_jivox")
+
+[node name="Tile43" type="Sprite2D" parent="."]
+position = Vector2(214, 7)
+texture = ExtResource("1_jivox")
+
+[node name="Tile44" type="Sprite2D" parent="."]
+position = Vector2(92, 7)
+texture = ExtResource("1_jivox")
+
+[node name="Tile45" type="Sprite2D" parent="."]
+position = Vector2(31, 7)
+texture = ExtResource("1_jivox")
+
+[node name="Tile46" type="Sprite2D" parent="."]
+position = Vector2(275, 68)
+texture = ExtResource("1_jivox")
+
+[node name="Tile47" type="Sprite2D" parent="."]
+position = Vector2(153, 68)
+texture = ExtResource("1_jivox")
+
+[node name="Tile48" type="Sprite2D" parent="."]
+position = Vector2(214, 68)
+texture = ExtResource("1_jivox")
+
+[node name="Tile49" type="Sprite2D" parent="."]
+position = Vector2(92, 68)
+texture = ExtResource("1_jivox")
+
+[node name="Tile50" type="Sprite2D" parent="."]
+position = Vector2(31, 68)
+texture = ExtResource("1_jivox")
+
+[node name="Tile51" type="Sprite2D" parent="."]
+position = Vector2(275, 129)
+texture = ExtResource("1_jivox")
+
+[node name="Tile52" type="Sprite2D" parent="."]
+position = Vector2(153, 129)
+texture = ExtResource("1_jivox")
+
+[node name="Tile53" type="Sprite2D" parent="."]
+position = Vector2(214, 129)
+texture = ExtResource("1_jivox")
+
+[node name="Tile54" type="Sprite2D" parent="."]
+position = Vector2(92, 129)
+texture = ExtResource("1_jivox")
+
+[node name="Tile55" type="Sprite2D" parent="."]
+position = Vector2(31, 129)
+texture = ExtResource("1_jivox")
+
+[node name="Tile21" type="Sprite2D" parent="."]
+position = Vector2(275, 190)
+texture = ExtResource("1_jivox")
+
+[node name="Tile22" type="Sprite2D" parent="."]
+position = Vector2(153, 190)
+texture = ExtResource("1_jivox")
+
+[node name="Tile23" type="Sprite2D" parent="."]
+position = Vector2(214, 190)
+texture = ExtResource("1_jivox")
+
+[node name="Tile24" type="Sprite2D" parent="."]
+position = Vector2(92, 190)
+texture = ExtResource("1_jivox")
+
+[node name="Tile25" type="Sprite2D" parent="."]
+position = Vector2(31, 190)
+texture = ExtResource("1_jivox")
+
+[node name="Tile26" type="Sprite2D" parent="."]
+position = Vector2(275, 251)
+texture = ExtResource("1_jivox")
+
+[node name="Tile27" type="Sprite2D" parent="."]
+position = Vector2(153, 251)
+texture = ExtResource("1_jivox")
+
+[node name="Tile28" type="Sprite2D" parent="."]
+position = Vector2(214, 251)
+texture = ExtResource("1_jivox")
+
+[node name="Tile29" type="Sprite2D" parent="."]
+position = Vector2(92, 251)
+texture = ExtResource("1_jivox")
+
+[node name="Tile30" type="Sprite2D" parent="."]
+position = Vector2(31, 251)
+texture = ExtResource("1_jivox")
+
+[node name="Tile31" type="Sprite2D" parent="."]
+position = Vector2(275, 312)
+texture = ExtResource("1_jivox")
+
+[node name="Tile32" type="Sprite2D" parent="."]
+position = Vector2(153, 312)
+texture = ExtResource("1_jivox")
+
+[node name="Tile33" type="Sprite2D" parent="."]
+position = Vector2(214, 312)
+texture = ExtResource("1_jivox")
+
+[node name="Tile34" type="Sprite2D" parent="."]
+position = Vector2(92, 312)
+texture = ExtResource("1_jivox")
+
+[node name="Tile35" type="Sprite2D" parent="."]
+position = Vector2(31, 312)
+texture = ExtResource("1_jivox")
+
+[node name="Tile36" type="Sprite2D" parent="."]
+position = Vector2(275, 373)
+texture = ExtResource("1_jivox")
+
+[node name="Tile37" type="Sprite2D" parent="."]
+position = Vector2(153, 373)
+texture = ExtResource("1_jivox")
+
+[node name="Tile38" type="Sprite2D" parent="."]
+position = Vector2(214, 373)
+texture = ExtResource("1_jivox")
+
+[node name="Tile39" type="Sprite2D" parent="."]
+position = Vector2(92, 373)
+texture = ExtResource("1_jivox")
+
+[node name="Tile40" type="Sprite2D" parent="."]
+position = Vector2(31, 373)
+texture = ExtResource("1_jivox")
+
+[node name="Tile11" type="Sprite2D" parent="."]
+position = Vector2(275, 434)
+texture = ExtResource("1_jivox")
+
+[node name="Tile12" type="Sprite2D" parent="."]
+position = Vector2(153, 434)
+texture = ExtResource("1_jivox")
+
+[node name="Tile13" type="Sprite2D" parent="."]
+position = Vector2(214, 434)
+texture = ExtResource("1_jivox")
+
+[node name="Tile14" type="Sprite2D" parent="."]
+position = Vector2(92, 434)
+texture = ExtResource("1_jivox")
+
+[node name="Tile15" type="Sprite2D" parent="."]
+position = Vector2(31, 434)
+texture = ExtResource("1_jivox")
+
+[node name="Tile16" type="Sprite2D" parent="."]
+position = Vector2(275, 495)
+texture = ExtResource("1_jivox")
+
+[node name="Tile17" type="Sprite2D" parent="."]
+position = Vector2(153, 495)
+texture = ExtResource("1_jivox")
+
+[node name="Tile18" type="Sprite2D" parent="."]
+position = Vector2(214, 495)
+texture = ExtResource("1_jivox")
+
+[node name="Tile19" type="Sprite2D" parent="."]
+position = Vector2(92, 495)
+texture = ExtResource("1_jivox")
+
+[node name="Tile20" type="Sprite2D" parent="."]
+position = Vector2(31, 495)
+texture = ExtResource("1_jivox")
+
+[node name="Tile6" type="Sprite2D" parent="."]
+position = Vector2(275, 556)
+texture = ExtResource("1_jivox")
+
+[node name="Tile7" type="Sprite2D" parent="."]
+position = Vector2(153, 556)
+texture = ExtResource("1_jivox")
+
+[node name="Tile8" type="Sprite2D" parent="."]
+position = Vector2(214, 556)
+texture = ExtResource("1_jivox")
+
+[node name="Tile9" type="Sprite2D" parent="."]
+position = Vector2(92, 556)
+texture = ExtResource("1_jivox")
+
+[node name="Tile10" type="Sprite2D" parent="."]
+position = Vector2(31, 556)
+texture = ExtResource("1_jivox")
+
+[node name="Tile5" type="Sprite2D" parent="."]
+position = Vector2(275, 617)
+texture = ExtResource("1_jivox")
+
+[node name="Tile4" type="Sprite2D" parent="."]
+position = Vector2(153, 617)
+texture = ExtResource("1_jivox")
+
+[node name="Tile3" type="Sprite2D" parent="."]
+position = Vector2(214, 617)
+texture = ExtResource("1_jivox")
+
+[node name="Tile2" type="Sprite2D" parent="."]
+position = Vector2(92, 617)
+texture = ExtResource("1_jivox")
+
+[node name="Tile" type="Sprite2D" parent="."]
+position = Vector2(31, 617)
+texture = ExtResource("1_jivox")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(153.5, 312.5)
+shape = SubResource("RectangleShape2D_pfiaf")

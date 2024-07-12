@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3 uid="uid://cjo7ik6qj7xdt"]
+
+[ext_resource type="PackedScene" uid="uid://cyjms55c37j6" path="res://plataformas/paredes/pared_normal.tscn" id="1_ur3j5"]
+[ext_resource type="PackedScene" uid="uid://bhn7wwq7c0stb" path="res://plataformas/paredes/pared_izq_hueco_1.tscn" id="2_4qoiw"]
+[ext_resource type="PackedScene" uid="uid://bxdu7kcv0hily" path="res://plataformas/bloques/plataforma_3.tscn" id="3_qk52p"]
+[ext_resource type="PackedScene" uid="uid://cco7ci7mxskjp" path="res://plataformas/bloques/plataforma_2.tscn" id="4_3k2n4"]
+[ext_resource type="PackedScene" uid="uid://honufl5gkksg" path="res://plataformas/bloques/plataforma_4.tscn" id="5_blqni"]
+
+[node name="plataforma_1" type="Node2D"]
+
+[node name="pared_normal" parent="." instance=ExtResource("1_ur3j5")]
+position = Vector2(846, 0)
+
+[node name="pared_izq_hueco_1" parent="." instance=ExtResource("2_4qoiw")]
+
+[node name="plataforma_3" parent="." instance=ExtResource("3_qk52p")]
+position = Vector2(662, 617)
+
+[node name="plataforma_4" parent="." instance=ExtResource("3_qk52p")]
+position = Vector2(398, 529)
+
+[node name="plataforma_2" parent="." instance=ExtResource("4_3k2n4")]
+position = Vector2(785, 435)
+
+[node name="plataforma_5" parent="." instance=ExtResource("3_qk52p")]
+position = Vector2(398, 374)
+
+[node name="plataforma_6" parent="." instance=ExtResource("5_blqni")]
+position = Vector2(606, 98)
+
+[node name="plataforma_7" parent="." instance=ExtResource("4_3k2n4")]
+position = Vector2(367, 8)
