@@ -11,7 +11,7 @@
 position = Vector2(0, -1)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
-polygon = PackedVector2Array(26, -23, 302, -21, 305, 586, 849, 588, 849, -22, 1151, -21, 1151, 647, 1, 648, 1, -23)
+polygon = PackedVector2Array(303, -20, 304, 589, 856, 590, 857, -21, 1158, -21, 1158, 647, 3, 647, 3, -21)
 
 [node name="BackgroundCloudB" type="Sprite2D" parent="."]
 position = Vector2(401, 433)
@@ -38,23 +38,23 @@ position = Vector2(641, 618)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile17" type="Sprite2D" parent="."]
-position = Vector2(1122, 618)
+position = Vector2(1129, 618)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile18" type="Sprite2D" parent="."]
-position = Vector2(1061, 618)
+position = Vector2(1068, 618)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile19" type="Sprite2D" parent="."]
-position = Vector2(1000, 618)
+position = Vector2(1007, 618)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile11" type="Sprite2D" parent="."]
-position = Vector2(939, 618)
+position = Vector2(946, 618)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile12" type="Sprite2D" parent="."]
-position = Vector2(878, 618)
+position = Vector2(885, 618)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile13" type="Sprite2D" parent="."]
@@ -74,283 +74,283 @@ position = Vector2(519, 618)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile79" type="Sprite2D" parent="."]
-position = Vector2(1061, 496)
+position = Vector2(1068, 496)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile80" type="Sprite2D" parent="."]
-position = Vector2(1000, 496)
+position = Vector2(1007, 496)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile81" type="Sprite2D" parent="."]
-position = Vector2(1122, 496)
+position = Vector2(1129, 496)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile82" type="Sprite2D" parent="."]
-position = Vector2(939, 496)
+position = Vector2(946, 496)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile83" type="Sprite2D" parent="."]
-position = Vector2(1061, 374)
+position = Vector2(1068, 374)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile95" type="Sprite2D" parent="."]
-position = Vector2(1000, 374)
+position = Vector2(1007, 374)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile96" type="Sprite2D" parent="."]
-position = Vector2(1122, 374)
+position = Vector2(1129, 374)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile97" type="Sprite2D" parent="."]
-position = Vector2(939, 374)
+position = Vector2(946, 374)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile98" type="Sprite2D" parent="."]
-position = Vector2(1061, 252)
+position = Vector2(1068, 252)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile99" type="Sprite2D" parent="."]
-position = Vector2(1000, 252)
+position = Vector2(1007, 252)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile100" type="Sprite2D" parent="."]
-position = Vector2(1122, 252)
+position = Vector2(1129, 252)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile101" type="Sprite2D" parent="."]
-position = Vector2(939, 252)
+position = Vector2(946, 252)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile102" type="Sprite2D" parent="."]
-position = Vector2(1061, 130)
+position = Vector2(1068, 130)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile103" type="Sprite2D" parent="."]
-position = Vector2(1000, 130)
+position = Vector2(1007, 130)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile104" type="Sprite2D" parent="."]
-position = Vector2(1122, 130)
+position = Vector2(1129, 130)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile105" type="Sprite2D" parent="."]
-position = Vector2(939, 130)
+position = Vector2(946, 130)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile106" type="Sprite2D" parent="."]
-position = Vector2(878, 130)
+position = Vector2(885, 130)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile107" type="Sprite2D" parent="."]
-position = Vector2(1061, 191)
+position = Vector2(1068, 191)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile108" type="Sprite2D" parent="."]
-position = Vector2(1000, 191)
+position = Vector2(1007, 191)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile109" type="Sprite2D" parent="."]
-position = Vector2(1122, 191)
+position = Vector2(1129, 191)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile110" type="Sprite2D" parent="."]
-position = Vector2(939, 191)
+position = Vector2(946, 191)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile111" type="Sprite2D" parent="."]
-position = Vector2(878, 191)
+position = Vector2(885, 191)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile112" type="Sprite2D" parent="."]
-position = Vector2(878, 252)
+position = Vector2(885, 252)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile113" type="Sprite2D" parent="."]
-position = Vector2(1061, 313)
+position = Vector2(1068, 313)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile114" type="Sprite2D" parent="."]
-position = Vector2(1000, 313)
+position = Vector2(1007, 313)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile115" type="Sprite2D" parent="."]
-position = Vector2(1122, 313)
+position = Vector2(1129, 313)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile116" type="Sprite2D" parent="."]
-position = Vector2(939, 313)
+position = Vector2(946, 313)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile117" type="Sprite2D" parent="."]
-position = Vector2(878, 313)
+position = Vector2(885, 313)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile118" type="Sprite2D" parent="."]
-position = Vector2(878, 374)
+position = Vector2(885, 374)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile119" type="Sprite2D" parent="."]
-position = Vector2(1061, 435)
+position = Vector2(1068, 435)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile120" type="Sprite2D" parent="."]
-position = Vector2(1000, 435)
+position = Vector2(1007, 435)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile121" type="Sprite2D" parent="."]
-position = Vector2(1122, 435)
+position = Vector2(1129, 435)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile122" type="Sprite2D" parent="."]
-position = Vector2(939, 435)
+position = Vector2(946, 435)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile123" type="Sprite2D" parent="."]
-position = Vector2(878, 435)
+position = Vector2(885, 435)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile124" type="Sprite2D" parent="."]
-position = Vector2(878, 496)
+position = Vector2(885, 496)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile125" type="Sprite2D" parent="."]
-position = Vector2(1061, 557)
+position = Vector2(1068, 557)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile126" type="Sprite2D" parent="."]
-position = Vector2(1000, 557)
+position = Vector2(1007, 557)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile127" type="Sprite2D" parent="."]
-position = Vector2(1122, 557)
+position = Vector2(1129, 557)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile128" type="Sprite2D" parent="."]
-position = Vector2(939, 557)
+position = Vector2(946, 557)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile129" type="Sprite2D" parent="."]
-position = Vector2(878, 557)
+position = Vector2(885, 557)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile130" type="Sprite2D" parent="."]
-position = Vector2(1061, 496)
+position = Vector2(1068, 496)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile131" type="Sprite2D" parent="."]
-position = Vector2(1000, 496)
+position = Vector2(1007, 496)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile132" type="Sprite2D" parent="."]
-position = Vector2(1122, 496)
+position = Vector2(1129, 496)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile133" type="Sprite2D" parent="."]
-position = Vector2(939, 496)
+position = Vector2(946, 496)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile134" type="Sprite2D" parent="."]
-position = Vector2(1061, 374)
+position = Vector2(1068, 374)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile135" type="Sprite2D" parent="."]
-position = Vector2(1000, 374)
+position = Vector2(1007, 374)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile136" type="Sprite2D" parent="."]
-position = Vector2(1122, 374)
+position = Vector2(1129, 374)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile137" type="Sprite2D" parent="."]
-position = Vector2(939, 374)
+position = Vector2(946, 374)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile138" type="Sprite2D" parent="."]
-position = Vector2(878, 374)
+position = Vector2(885, 374)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile139" type="Sprite2D" parent="."]
-position = Vector2(1061, 435)
+position = Vector2(1068, 435)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile140" type="Sprite2D" parent="."]
-position = Vector2(1000, 435)
+position = Vector2(1007, 435)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile141" type="Sprite2D" parent="."]
-position = Vector2(1122, 435)
+position = Vector2(1129, 435)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile142" type="Sprite2D" parent="."]
-position = Vector2(939, 435)
+position = Vector2(946, 435)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile143" type="Sprite2D" parent="."]
-position = Vector2(878, 435)
+position = Vector2(885, 435)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile144" type="Sprite2D" parent="."]
-position = Vector2(878, 496)
+position = Vector2(885, 496)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile145" type="Sprite2D" parent="."]
-position = Vector2(1061, 557)
+position = Vector2(1068, 557)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile146" type="Sprite2D" parent="."]
-position = Vector2(1000, 557)
+position = Vector2(1007, 557)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile147" type="Sprite2D" parent="."]
-position = Vector2(1122, 557)
+position = Vector2(1129, 557)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile148" type="Sprite2D" parent="."]
-position = Vector2(939, 557)
+position = Vector2(946, 557)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile149" type="Sprite2D" parent="."]
-position = Vector2(1061, 8)
+position = Vector2(1068, 8)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile150" type="Sprite2D" parent="."]
-position = Vector2(1000, 8)
+position = Vector2(1007, 8)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile151" type="Sprite2D" parent="."]
-position = Vector2(1122, 8)
+position = Vector2(1129, 8)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile152" type="Sprite2D" parent="."]
-position = Vector2(939, 8)
+position = Vector2(946, 8)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile153" type="Sprite2D" parent="."]
-position = Vector2(878, 8)
+position = Vector2(885, 8)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile154" type="Sprite2D" parent="."]
-position = Vector2(1061, 69)
+position = Vector2(1068, 69)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile155" type="Sprite2D" parent="."]
-position = Vector2(1000, 69)
+position = Vector2(1007, 69)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile156" type="Sprite2D" parent="."]
-position = Vector2(1122, 69)
+position = Vector2(1129, 69)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile157" type="Sprite2D" parent="."]
-position = Vector2(939, 69)
+position = Vector2(946, 69)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile158" type="Sprite2D" parent="."]
-position = Vector2(878, 69)
+position = Vector2(885, 69)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile159" type="Sprite2D" parent="."]
-position = Vector2(878, 557)
+position = Vector2(885, 557)
 texture = ExtResource("1_qtd82")
 
 [node name="Tile20" type="Sprite2D" parent="."]
@@ -672,7 +672,7 @@ position = Vector2(367, 497)
 position = Vector2(580, 377)
 
 [node name="plataforma_4" parent="." instance=ExtResource("6_1hyhw")]
-position = Vector2(727, 190)
+position = Vector2(733, 191)
 
 [node name="plataforma_5" parent="." instance=ExtResource("4_u7sq0")]
 position = Vector2(368, 69)
