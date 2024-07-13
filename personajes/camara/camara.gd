@@ -1,3 +1,4 @@
+class_name Camara
 extends Camera2D
 
 @export var speed: float = 20.0 # speed attribute

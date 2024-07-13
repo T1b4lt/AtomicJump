@@ -1,3 +1,4 @@
+class_name Protagonista
 extends CharacterBody2D
 
 
@@ -41,8 +42,8 @@ func _physics_process(delta):
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 
-	# Move the character and get the motion result
-	var motion_result = move_and_slide()
+	# Move the character
+	move_and_slide()
 
 	# Handle animations based on the state
 	if not is_on_floor():
@@ -56,6 +57,6 @@ func _physics_process(delta):
 		else:
 			play_animation("reposo")
 
-func play_animation(name: String):
-	if animation_player.current_animation != name:
-		animation_player.play(name)
+func play_animation(animation_name: String):
+	if animation_player.current_animation != animation_name:
+		animation_player.play(animation_name)
