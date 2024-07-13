@@ -1,0 +1,48 @@
+[gd_scene load_steps=3 format=3 uid="uid://dbg8rkmdd53ti"]
+
+[ext_resource type="Texture2D" uid="uid://c02imneqm5b44" path="res://recursos/scribble-assets/tile.png" id="1_q5pci"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i1djc"]
+size = Vector2(547, 59)
+
+[node name="suelo_inicial" type="StaticBody2D"]
+
+[node name="Tile9" type="Sprite2D" parent="."]
+position = Vector2(702, 618)
+texture = ExtResource("1_q5pci")
+
+[node name="Tile10" type="Sprite2D" parent="."]
+position = Vector2(641, 618)
+texture = ExtResource("1_q5pci")
+
+[node name="Tile13" type="Sprite2D" parent="."]
+position = Vector2(824, 618)
+texture = ExtResource("1_q5pci")
+
+[node name="Tile14" type="Sprite2D" parent="."]
+position = Vector2(763, 618)
+texture = ExtResource("1_q5pci")
+
+[node name="Tile15" type="Sprite2D" parent="."]
+position = Vector2(580, 618)
+texture = ExtResource("1_q5pci")
+
+[node name="Tile16" type="Sprite2D" parent="."]
+position = Vector2(519, 618)
+texture = ExtResource("1_q5pci")
+
+[node name="Tile5" type="Sprite2D" parent="."]
+position = Vector2(458, 618)
+texture = ExtResource("1_q5pci")
+
+[node name="Tile6" type="Sprite2D" parent="."]
+position = Vector2(397, 618)
+texture = ExtResource("1_q5pci")
+
+[node name="Tile7" type="Sprite2D" parent="."]
+position = Vector2(336, 618)
+texture = ExtResource("1_q5pci")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(580.5, 618.5)
+shape = SubResource("RectangleShape2D_i1djc")
