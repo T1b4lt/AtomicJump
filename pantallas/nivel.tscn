@@ -13,7 +13,7 @@
 position = Vector2(0, -671)
 
 [node name="camara" parent="." instance=ExtResource("3_5ojfx")]
-position = Vector2(580, 324)
+position = Vector2(580, 335)
 speed = 10.0
 
 [node name="protagonista" parent="." instance=ExtResource("4_1rmhl")]

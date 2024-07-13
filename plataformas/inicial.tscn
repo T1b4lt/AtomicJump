@@ -10,23 +10,25 @@
 [node name="inicial" type="Node2D"]
 
 [node name="fondo_1" parent="." instance=ExtResource("1_7aq7b")]
+position = Vector2(0, 21)
 
 [node name="pared_normal" parent="." instance=ExtResource("2_k6wek")]
-position = Vector2(0, 1)
+position = Vector2(0, 22)
 
 [node name="pared_normal2" parent="." instance=ExtResource("2_k6wek")]
-position = Vector2(854, 1)
+position = Vector2(854, 22)
 
 [node name="suelo_inicial" parent="." instance=ExtResource("3_jth3w")]
+position = Vector2(0, 21)
 
 [node name="plataforma_2" parent="." instance=ExtResource("4_u7sq0")]
-position = Vector2(367, 497)
+position = Vector2(367, 518)
 
 [node name="plataforma_3" parent="." instance=ExtResource("5_0pnu1")]
-position = Vector2(580, 377)
+position = Vector2(580, 398)
 
 [node name="plataforma_4" parent="." instance=ExtResource("6_1hyhw")]
-position = Vector2(733, 191)
+position = Vector2(733, 212)
 
 [node name="plataforma_5" parent="." instance=ExtResource("4_u7sq0")]
-position = Vector2(368, 69)
+position = Vector2(368, 90)
