@@ -2,7 +2,7 @@ name: "godot-ci build-and-release"
 
 on:
   release:
-    types: [released, published]
+    types: [released]
 
 env:
   GODOT_VERSION: 4.2.2
