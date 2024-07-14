@@ -29,9 +29,23 @@ vertical_alignment = 1
 layout_mode = 2
 text = "Solo Mode"
 
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="game_seed_input" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+placeholder_text = "Game seed (only 9 digits)"
+max_length = 9
+
+[node name="seed_mode_button" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Seed Mode"
+
 [node name="exit_button" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 text = "Exit"
 
 [connection signal="pressed" from="VBoxContainer/solo_mode_button" to="." method="_on_solo_mode_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/seed_mode_button" to="." method="_on_seed_mode_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/exit_button" to="." method="_on_exit_button_pressed"]
