@@ -28,6 +28,7 @@ position = Vector2(585, 503)
 process_mode = 2
 visible = false
 
+[connection signal="jump" from="protagonist" to="." method="_on_protagonist_jump"]
 [connection signal="exit_button_pressed" from="pause_menu" to="." method="_on_pause_menu_exit_button_pressed"]
 [connection signal="menu_button_pressed" from="pause_menu" to="." method="_on_pause_menu_menu_button_pressed"]
 [connection signal="resume_button_pressed" from="pause_menu" to="." method="_on_pause_menu_resume_button_pressed"]

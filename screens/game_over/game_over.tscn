@@ -30,6 +30,12 @@ text = "Score: 0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="jump_counter" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Jumps: 0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="menu_button" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 text = "Menu"

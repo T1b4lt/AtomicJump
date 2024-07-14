@@ -9,11 +9,13 @@ var MAX_JUMPS = 2  # Allow double jump
 @onready var body_sprite = $body
 @onready var animation_player = $AnimationPlayer
 
+signal jump()
+
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 # Variable to keep track of the number of jumps
-var jump_count = 0
+var consecutive_jump_count = 0
 
 func _physics_process(delta):
 	# Add the gravity.
@@ -21,13 +23,14 @@ func _physics_process(delta):
 		velocity.y += gravity * delta
 
 	# Handle jump.
-	if Input.is_action_just_pressed("jump") and jump_count < MAX_JUMPS - 1:
+	if Input.is_action_just_pressed("jump") and consecutive_jump_count < MAX_JUMPS - 1:
 		velocity.y = JUMP_VELOCITY
-		jump_count += 1
+		consecutive_jump_count += 1
+		jump.emit()
 		
 	# Reset jump count when on floor
 	if is_on_floor():
-		jump_count = 0
+		consecutive_jump_count = 0
 
 	# Get the input direction and handle the movement/deceleration.
 	var direction = Input.get_axis("left", "right")

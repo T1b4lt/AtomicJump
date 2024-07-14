@@ -14,6 +14,7 @@ var camera_initial_y
 
 # Game values
 var altitude = 0
+var jump_counter = 0
 
 func _ready():
 	# Save camera initial position
@@ -23,8 +24,9 @@ func _ready():
 func _process(delta):
 	# Check if protagonist fall off out of camera view
 	if protagonist.position.y > camera.position.y + get_viewport().size[1]/2 + 50:
-		# Save altitude in global
-		global.update_global_altitude(altitude)
+		# Set fina global variables
+		global.set_altitude(altitude)
+		global.set_jump_counter(jump_counter)
 		# Go to game over screen
 		get_tree().change_scene_to_file(GAME_OVER_SCENE)
 		return
@@ -57,3 +59,7 @@ func _on_pause_menu_menu_button_pressed():
 func _on_pause_menu_exit_button_pressed():
 	# Exit game
 	get_tree().quit()
+
+
+func _on_protagonist_jump():
+	jump_counter = jump_counter + 1
