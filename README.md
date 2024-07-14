@@ -7,7 +7,7 @@
 <p align="center">
         <img src="https://img.shields.io/badge/Status-Development-yellow" alt="Project status badge"/>
         <img src="https://img.shields.io/github/v/release/T1b4lt/AtomicJump" alt="Release badge"/>
-        <span>v0.3.2</span>
+        <span>v0.3.3</span>
 </p>
 
 Juego de plataformas de ascensión vertical con caracteristicas roguelike (objetos, bonificadores, enemigos y generación procedural) y competitivo (pvp).
