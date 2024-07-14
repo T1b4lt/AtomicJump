@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://c04xqp021bidx"]
+
+[ext_resource type="Texture2D" uid="uid://ddc7xy1fi86qg" path="res://assets/scribble-assets/background_cloudB.png" id="1_2ar8f"]
+[ext_resource type="Texture2D" uid="uid://6dxordmdkyc6" path="res://assets/scribble-assets/background_cloudA.png" id="2_jg6n7"]
+
+[node name="background_1" type="Node2D"]
+
+[node name="BackgroundCloudB" type="Sprite2D" parent="."]
+position = Vector2(401, 433)
+texture = ExtResource("1_2ar8f")
+
+[node name="BackgroundCloudA" type="Sprite2D" parent="."]
+position = Vector2(741, 369)
+texture = ExtResource("2_jg6n7")
+
+[node name="BackgroundCloudA2" type="Sprite2D" parent="."]
+position = Vector2(490, 213)
+texture = ExtResource("2_jg6n7")
+
+[node name="BackgroundCloudB2" type="Sprite2D" parent="."]
+position = Vector2(714, 92)
+texture = ExtResource("1_2ar8f")

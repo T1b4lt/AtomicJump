@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://da5h06motiwnr"]
+
+[ext_resource type="Script" path="res://characters/camera/camera.gd" id="1_5edmd"]
+
+[node name="camera" type="Camera2D"]
+script = ExtResource("1_5edmd")

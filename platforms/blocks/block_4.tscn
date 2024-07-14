@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://honufl5gkksg"]
+
+[ext_resource type="Texture2D" uid="uid://6il7pqp016d4" path="res://assets/scribble-assets/tile_brick.png" id="1_70m6i"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6rwah"]
+size = Vector2(243, 59)
+
+[node name="block_4" type="StaticBody2D"]
+
+[node name="TileBrick" type="Sprite2D" parent="."]
+position = Vector2(-93, 0)
+texture = ExtResource("1_70m6i")
+
+[node name="TileBrick2" type="Sprite2D" parent="."]
+position = Vector2(-32, 0)
+texture = ExtResource("1_70m6i")
+
+[node name="TileBrick3" type="Sprite2D" parent="."]
+position = Vector2(30, 0)
+texture = ExtResource("1_70m6i")
+
+[node name="TileBrick4" type="Sprite2D" parent="."]
+position = Vector2(91, 0)
+texture = ExtResource("1_70m6i")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1.5, 0)
+shape = SubResource("RectangleShape2D_6rwah")
+one_way_collision = true

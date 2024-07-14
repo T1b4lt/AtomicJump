@@ -1,0 +1,34 @@
+[gd_scene load_steps=8 format=3 uid="uid://bc28pv650t3ko"]
+
+[ext_resource type="Script" path="res://screens/level/level.gd" id="1_5va7a"]
+[ext_resource type="PackedScene" uid="uid://bi1jigid8vavc" path="res://platforms/initial.tscn" id="2_8oa34"]
+[ext_resource type="PackedScene" uid="uid://cjo7ik6qj7xdt" path="res://platforms/platform_1.tscn" id="3_viv4m"]
+[ext_resource type="PackedScene" uid="uid://da5h06motiwnr" path="res://characters/camera/camera.tscn" id="4_nknsb"]
+[ext_resource type="PackedScene" uid="uid://bj2fndebqtlg5" path="res://characters/protagonist/protagonist.tscn" id="5_4iv76"]
+[ext_resource type="PackedScene" uid="uid://v0li1tt8875t" path="res://screens/hud/hud.tscn" id="6_3smjk"]
+[ext_resource type="PackedScene" uid="uid://t4y468f26a2b" path="res://screens/pause_menu/pause_menu.tscn" id="7_c706t"]
+
+[node name="level" type="Node2D"]
+script = ExtResource("1_5va7a")
+
+[node name="initial" parent="." instance=ExtResource("2_8oa34")]
+
+[node name="platform_1" parent="." instance=ExtResource("3_viv4m")]
+position = Vector2(0, -671)
+
+[node name="camera" parent="." instance=ExtResource("4_nknsb")]
+position = Vector2(580, 335)
+speed = 10.0
+
+[node name="protagonist" parent="." instance=ExtResource("5_4iv76")]
+position = Vector2(585, 503)
+
+[node name="hud" parent="." instance=ExtResource("6_3smjk")]
+
+[node name="pause_menu" parent="." instance=ExtResource("7_c706t")]
+process_mode = 2
+visible = false
+
+[connection signal="exit_button_pressed" from="pause_menu" to="." method="_on_pause_menu_exit_button_pressed"]
+[connection signal="menu_button_pressed" from="pause_menu" to="." method="_on_pause_menu_menu_button_pressed"]
+[connection signal="resume_button_pressed" from="pause_menu" to="." method="_on_pause_menu_resume_button_pressed"]

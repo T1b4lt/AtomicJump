@@ -1,7 +1,7 @@
 # AtomicJump
 
 <p align="center">
-  <img src="./recursos/readme/portada_atomic_jump.png" alt="AtomicJump" width="400"/>
+  <img src="./assets/readme/atomic_jump_cover.png" alt="AtomicJump Cover" width="400"/>
 </p>
 
 <p align="center">
@@ -11,7 +11,7 @@
 
 Juego de plataformas de ascensión vertical con caracteristicas roguelike (objetos, bonificadores, enemigos y generación procedural) y competitivo (pvp).
 
-El juego consiste en un unico nivel que no tiene final, el objetivo es llegar lo más alto posible. La puntuación final se calcula en base a la altura alcanzada, los enemigos eliminados y los objetos recogidos.
+El juego consiste en un único nivel que no tiene final, el objetivo es llegar lo más alto posible. La puntuación final se calcula en base a la altura alcanzada, los enemigos eliminados y los objetos recogidos.
 
 Cada partida es única, la generación de niveles es aleatoria y los objetos y enemigos que aparecen en cada nivel también. Todo esto gracias a la generación de una semilla aleatoria que determina el comportamiento de los algoritmos de generación procedural.
 
@@ -144,9 +144,9 @@ WIP 🚧
 
 # Estadisticas
 
-Las estadísticas son modificadores que afectan al comportamiento del personaje. Estas estadisticas se pueden modificar recogiendo objetos o bonificadores. Algunas de estas estadisticas se mostraran en un HUD, otras en un panel de estadisticas, otras en una lista de objetos y otras no se mostrarán en ningún sitio.
+Las estadísticas son modificadores que afectan al comportamiento del personaje. Estas estadísticas se pueden modificar recogiendo objetos o bonificadores. Algunas de estas estadísticas se mostraran en un HUD, otras en un panel de estadísticas, otras en una lista de objetos y otras no se mostrarán en ningún sitio.
 
-Las estadisticas de los personajes son las siguientes:
+Las estadísticas de los personajes son las siguientes:
 
 - Vida (HUD): Cantidad de vida del personaje. Si llega a 0, el personaje muere.
 - Vida máxima (HUD): Cantidad máxima de vida del personaje.
@@ -175,7 +175,7 @@ Los objetos son elementos que aparecen de forma aleatoria en los sitios designad
 
 ## Cofres
 
-- Cofre de monedas: Contiene uno o mas modificadores de estadisticas.
+- Cofre de monedas: Contiene uno o mas modificadores de estadísticas.
 - Cofre de llaves: Contiene un modificador de disparo o estadistica especial.
 
 ## Bonificadores
