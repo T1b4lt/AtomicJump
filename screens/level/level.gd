@@ -1,26 +1,34 @@
 class_name Level
 extends Node2D
 
+
+# Scenes
 const MAIN_MENU_SCENE = "res://screens/main_menu/main_menu.tscn"
 const GAME_OVER_SCENE = "res://screens/game_over/game_over.tscn"
 
+# Childs
 @onready var camera = $camera
 @onready var protagonist = $protagonist
 @onready var hud = $hud
 @onready var pause_menu = $pause_menu
 
-# Camera initial position
+# Variables
 var camera_initial_y
 
 # Game values
 var altitude = 0
 var jump_counter = 0
 
+
 func _ready():
 	# Save camera initial position
 	camera_initial_y = camera.position.y
+	
+	# Set game seed
+	seed(global.game_seed)
+	hud.set_game_seed(global.game_seed)
+	
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	# Check if protagonist fall off out of camera view
 	if protagonist.position.y > camera.position.y + get_viewport().size[1]/2 + 50:
@@ -40,7 +48,7 @@ func _process(delta):
 		
 	# Update altitude
 	altitude = int((camera_initial_y - camera.position.y) / (get_viewport().size[1]/11))
-	hud.update_altitude(altitude)
+	hud.set_altitude(altitude)
 
 func _on_pause_menu_resume_button_pressed():
 	# Hide pause menu

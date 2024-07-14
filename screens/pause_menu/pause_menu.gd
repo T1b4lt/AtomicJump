@@ -1,7 +1,7 @@
 class_name PauseMenu
 extends CanvasLayer
 
-
+# Signals
 signal resume_button_pressed()
 signal menu_button_pressed()
 signal exit_button_pressed()

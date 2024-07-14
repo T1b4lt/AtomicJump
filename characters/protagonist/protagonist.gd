@@ -2,20 +2,24 @@ class_name Protagonist
 extends CharacterBody2D
 
 
+# Parameters
 var SPEED = 300.0
 var JUMP_VELOCITY = -450.0
 var MAX_JUMPS = 2  # Allow double jump
 
+# Childs
 @onready var body_sprite = $body
 @onready var animation_player = $AnimationPlayer
 
+# Signals
 signal jump()
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
-# Variable to keep track of the number of jumps
+# Variables
 var consecutive_jump_count = 0
+
 
 func _physics_process(delta):
 	# Add the gravity.
@@ -60,5 +64,6 @@ func _physics_process(delta):
 			play_animation("idle")
 
 func play_animation(animation_name: String):
+	# If animation is not being played, play it
 	if animation_player.current_animation != animation_name:
 		animation_player.play(animation_name)
