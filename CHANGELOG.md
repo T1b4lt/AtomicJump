@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.3](https://github.com/T1b4lt/AtomicJump/compare/v0.3.2...v0.3.3) (2024-07-14)
+
+
+### Miscellaneous Chores
+
+* :memo: update readme version ([5af5781](https://github.com/T1b4lt/AtomicJump/commit/5af5781dc03200e2d6d3411776839df612464184))
+
 ## [0.3.2](https://github.com/T1b4lt/AtomicJump/compare/v0.3.1...v0.3.2) (2024-07-14)
 
 
