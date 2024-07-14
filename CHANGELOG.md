@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.0](https://github.com/T1b4lt/AtomicJump/compare/v0.1.0...v0.2.0) (2024-07-14)
+
+
+### Features
+
+* :dizzy: generate random seed ([3a6e908](https://github.com/T1b4lt/AtomicJump/commit/3a6e908e04fc0d2d83aba67fcf3320eb97a01322))
+* :lipstick: new icon for the game ([0d003cd](https://github.com/T1b4lt/AtomicJump/commit/0d003cd437721b422aedda824ad59b71374de4b1))
+* :sparkles: add jump_counter to game over screen ([36c76b7](https://github.com/T1b4lt/AtomicJump/commit/36c76b746fd767993cea97dbbe36609e99307991))
+* :sparkles: add seed mode ([4ee416f](https://github.com/T1b4lt/AtomicJump/commit/4ee416fc0b133027c51041d72cf2bc6eda72a2b0))
+* :sparkles: hud altitude counts ([addcedc](https://github.com/T1b4lt/AtomicJump/commit/addcedc4f4cf452d77ecf120abaa6f4fd40cf63b))
+* :sparkles: menus implemented ([ea0942a](https://github.com/T1b4lt/AtomicJump/commit/ea0942a2b6cd45b1685633c8d6f3b7ecf5be3ac1))
+
 ## 0.1.0 (2024-07-13)
 
 
