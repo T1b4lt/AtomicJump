@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/T1b4lt/AtomicJump/compare/v0.2.0...v0.3.0) (2024-07-14)
+
+
+### Features
+
+* :sparkles: add platforms procedurally ([aa9c0d3](https://github.com/T1b4lt/AtomicJump/commit/aa9c0d34c9c1770d92dc96972a4356dda97e9cfd))
+
 ## [0.2.0](https://github.com/T1b4lt/AtomicJump/compare/v0.1.0...v0.2.0) (2024-07-14)
 
 
