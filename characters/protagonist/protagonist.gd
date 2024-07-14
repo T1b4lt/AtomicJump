@@ -3,6 +3,7 @@ extends CharacterBody2D
 
 
 # Parameters
+var GRAVITY = ProjectSettings.get_setting("physics/2d/default_gravity")
 var SPEED = 300.0
 var JUMP_VELOCITY = -450.0
 var MAX_JUMPS = 2  # Allow double jump
@@ -14,9 +15,6 @@ var MAX_JUMPS = 2  # Allow double jump
 # Signals
 signal jump()
 
-# Get the gravity from the project settings to be synced with RigidBody nodes.
-var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
-
 # Variables
 var consecutive_jump_count = 0
 
@@ -24,7 +22,7 @@ var consecutive_jump_count = 0
 func _physics_process(delta):
 	# Add the gravity.
 	if not is_on_floor():
-		velocity.y += gravity * delta
+		velocity.y += GRAVITY * delta
 
 	# Handle jump.
 	if Input.is_action_just_pressed("jump") and consecutive_jump_count < MAX_JUMPS - 1:

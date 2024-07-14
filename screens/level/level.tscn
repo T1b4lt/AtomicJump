@@ -1,8 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://bc28pv650t3ko"]
+[gd_scene load_steps=7 format=3 uid="uid://bc28pv650t3ko"]
 
 [ext_resource type="Script" path="res://screens/level/level.gd" id="1_5va7a"]
 [ext_resource type="PackedScene" uid="uid://bi1jigid8vavc" path="res://platforms/initial.tscn" id="2_8oa34"]
-[ext_resource type="PackedScene" uid="uid://cjo7ik6qj7xdt" path="res://platforms/platform_1.tscn" id="3_viv4m"]
 [ext_resource type="PackedScene" uid="uid://da5h06motiwnr" path="res://characters/camera/camera.tscn" id="4_nknsb"]
 [ext_resource type="PackedScene" uid="uid://bj2fndebqtlg5" path="res://characters/protagonist/protagonist.tscn" id="5_4iv76"]
 [ext_resource type="PackedScene" uid="uid://v0li1tt8875t" path="res://screens/hud/hud.tscn" id="6_3smjk"]
@@ -13,13 +12,11 @@ script = ExtResource("1_5va7a")
 
 [node name="initial" parent="." instance=ExtResource("2_8oa34")]
 
-[node name="platform_1" parent="." instance=ExtResource("3_viv4m")]
-position = Vector2(0, -671)
-
 [node name="camera" parent="." instance=ExtResource("4_nknsb")]
 position = Vector2(580, 335)
 
 [node name="protagonist" parent="." instance=ExtResource("5_4iv76")]
+z_index = 2
 position = Vector2(585, 503)
 
 [node name="hud" parent="." instance=ExtResource("6_3smjk")]
