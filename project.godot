@@ -16,6 +16,10 @@ config/features=PackedStringArray("4.2", "GL Compatibility")
 boot_splash/image="res://assets/readme/atomic_jump_cover.png"
 config/icon="res://atomic_jump_icon.png"
 
+[autoload]
+
+global="*res://scripts/global.gd"
+
 [display]
 
 window/size/viewport_width=1160

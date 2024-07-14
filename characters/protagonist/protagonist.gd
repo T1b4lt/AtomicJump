@@ -2,9 +2,9 @@ class_name Protagonist
 extends CharacterBody2D
 
 
-@export var SPEED = 300.0
-@export var JUMP_VELOCITY = -400.0
-@export var MAX_JUMPS = 2  # Allow double jump
+var SPEED = 300.0
+var JUMP_VELOCITY = -450.0
+var MAX_JUMPS = 2  # Allow double jump
 
 @onready var body_sprite = $body
 @onready var animation_player = $AnimationPlayer

@@ -18,7 +18,6 @@ position = Vector2(0, -671)
 
 [node name="camera" parent="." instance=ExtResource("4_nknsb")]
 position = Vector2(580, 335)
-speed = 10.0
 
 [node name="protagonist" parent="." instance=ExtResource("5_4iv76")]
 position = Vector2(585, 503)

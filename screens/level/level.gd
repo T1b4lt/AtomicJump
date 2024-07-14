@@ -4,23 +4,30 @@ extends Node2D
 const MAIN_MENU_SCENE = "res://screens/main_menu/main_menu.tscn"
 const GAME_OVER_SCENE = "res://screens/game_over/game_over.tscn"
 
-@onready var camera: Camera2D = $camera
-@onready var protagonist: CharacterBody2D = $protagonist
-@onready var pause_menu: CanvasLayer = $pause_menu
+@onready var camera = $camera
+@onready var protagonist = $protagonist
+@onready var hud = $hud
+@onready var pause_menu = $pause_menu
 
-# Camara initial position
-var camera_initial_pos
+# Camera initial position
+var camera_initial_y
+
+# Game values
+var altitude = 0
 
 func _ready():
-	# Save camara initial position
-	camera_initial_pos = camera.position
+	# Save camera initial position
+	camera_initial_y = camera.position.y
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	# Check if protagonist fall off out of camara view
+	# Check if protagonist fall off out of camera view
 	if protagonist.position.y > camera.position.y + get_viewport().size[1]/2 + 50:
+		# Save altitude in global
+		global.update_global_altitude(altitude)
 		# Go to game over screen
 		get_tree().change_scene_to_file(GAME_OVER_SCENE)
+		return
 		
 	# Check if user press pause button
 	if Input.is_action_just_pressed("pause"):
@@ -28,7 +35,10 @@ func _process(delta):
 		get_tree().paused = true
 		# Show pause menu
 		pause_menu.visible = true
-
+		
+	# Update altitude
+	altitude = int((camera_initial_y - camera.position.y) / (get_viewport().size[1]/11))
+	hud.update_altitude(altitude)
 
 func _on_pause_menu_resume_button_pressed():
 	# Hide pause menu

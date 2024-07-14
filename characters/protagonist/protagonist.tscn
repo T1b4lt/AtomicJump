@@ -63,35 +63,6 @@ tracks/1/keys = {
 "values": [Vector2(-19, -13), Vector2(-17, -13), Vector2(-22, -13), Vector2(-17, -13), Vector2(-20, -13)]
 }
 
-[sub_resource type="Animation" id="Animation_cq2qn"]
-resource_name = "walk"
-length = 0.5
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("righthand:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(19, 6), Vector2(20.54, 6), Vector2(16.68, 6), Vector2(19.755, 6), Vector2(15.605, 6)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("lefthand:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(-19, 6), Vector2(-16.37, 6), Vector2(-20.55, 6), Vector2(-16.05, 6), Vector2(-20.325, 6)]
-}
-
 [sub_resource type="Animation" id="Animation_4v1y0"]
 resource_name = "idle"
 loop_mode = 1
@@ -148,6 +119,35 @@ tracks/1/keys = {
 "values": [Vector2(-19, 6), Vector2(-19, 2), Vector2(-19, 19)]
 }
 
+[sub_resource type="Animation" id="Animation_cq2qn"]
+resource_name = "walk"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("righthand:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(19, 6), Vector2(20.54, 6), Vector2(16.68, 6), Vector2(19.755, 6), Vector2(15.605, 6)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("lefthand:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(-19, 6), Vector2(-16.37, 6), Vector2(-20.55, 6), Vector2(-16.05, 6), Vector2(-20.325, 6)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hgwae"]
 _data = {
 "RESET": SubResource("Animation_52nni"),
@@ -160,7 +160,6 @@ _data = {
 [node name="protagonist" type="CharacterBody2D"]
 scale = Vector2(0.9, 0.9)
 script = ExtResource("1_fhl8c")
-JUMP_VELOCITY = -450.0
 
 [node name="body" type="Sprite2D" parent="."]
 texture = ExtResource("1_fdoqc")

@@ -1,7 +1,7 @@
 class_name Camera
 extends Camera2D
 
-@export var speed: float = 20.0 # speed attribute
+var CAMERA_SPEED: float = 50.0 # camera speed attribute
 
 
 # Called when the node enters the scene tree for the first time.
@@ -12,4 +12,4 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	# move camera upwards
-	position.y -= speed * delta
+	position.y -= CAMERA_SPEED * delta
