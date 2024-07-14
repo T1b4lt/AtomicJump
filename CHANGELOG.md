@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.4](https://github.com/T1b4lt/AtomicJump/compare/v0.3.3...v0.3.4) (2024-07-14)
+
+
+### Code Refactoring
+
+* :fire: delete workflow build-and-release ([00a5784](https://github.com/T1b4lt/AtomicJump/commit/00a57846d0be9de82791a2b175a4b596661be858))
+
 ## [0.3.3](https://github.com/T1b4lt/AtomicJump/compare/v0.3.2...v0.3.3) (2024-07-14)
 
 
