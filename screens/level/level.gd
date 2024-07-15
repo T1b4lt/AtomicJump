@@ -17,13 +17,13 @@ const NUM_PLATFORMS = 2
 @onready var pause_menu = $pause_menu
 
 # Variables
-var camera_initial_y = 0
-var added_platforms = 0
-var is_platform_added = false
+var camera_initial_y: int = 0
+var added_platforms: int = 0
+var is_platform_added: bool = false
 
 # Game values
-var altitude = 0
-var jump_counter = 0
+var altitude: float = 0.0
+var jump_counter: int = 0
 
 
 func _ready():
@@ -33,10 +33,6 @@ func _ready():
 	# Set game seed
 	seed(global.game_seed)
 	hud.set_game_seed(global.game_seed)
-	
-	# Set first platform randomly
-	# _add_platform()
-	
 
 func _process(delta):
 	# Check if protagonist fall off out of camera view
@@ -47,17 +43,7 @@ func _process(delta):
 		# Go to game over screen
 		get_tree().change_scene_to_file(GAME_OVER_SCENE)
 		return
-	
-	# Check if its time to add a new platform
-	if altitude % 11 == 0 and !is_platform_added:
-		# Remove passed platform if exist
-		_remove_platform()
-		# Add new platform
-		_add_platform()
-		is_platform_added = true
-	if altitude % 11 != 0 and is_platform_added:
-		is_platform_added = false
-		
+
 	# Check if user press pause button
 	if Input.is_action_just_pressed("pause"):
 		# Pause everything in the scene
@@ -66,7 +52,7 @@ func _process(delta):
 		pause_menu.visible = true
 		
 	# Update altitude
-	altitude = int((camera_initial_y - camera.position.y) / (get_viewport().size[1]/11))
+	altitude = (camera_initial_y - camera.position.y) / (get_viewport().size[1]/11)
 	hud.set_altitude(altitude)
 	
 func _add_platform():
@@ -83,15 +69,15 @@ func _add_platform():
 	platform.position.y = -(get_viewport().size[1]) * added_platforms
 	# Add new platform to scene
 	add_child(platform)
+	# Add signal observers
+	platform.platform_enter_screen.connect(_add_platform)
+	platform.platform_leave_screen.connect(_remove_platform)
 
 func _remove_platform():
-	if altitude == 0:
-		return
-	elif altitude == 11:
-		get_node("initial").queue_free() 
-	else:
-		get_node("platform_" + str(added_platforms-2)).queue_free()
+	if added_platforms >= 3:
+		get_node("platform_" + str(added_platforms-3)).queue_free()
 
+# Pause Menu Signals
 func _on_pause_menu_resume_button_pressed():
 	# Hide pause menu
 	pause_menu.visible = false
@@ -110,6 +96,14 @@ func _on_pause_menu_exit_button_pressed():
 	# Exit game
 	get_tree().quit()
 
-
+# Protagonist Signals
 func _on_protagonist_jump():
 	jump_counter = jump_counter + 1
+
+# Initial Platform Signals
+func _on_initial_platform_enter_screen():
+	_add_platform()
+
+
+func _on_initial_platform_leave_screen():
+	get_node("initial").queue_free()

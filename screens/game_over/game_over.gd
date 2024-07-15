@@ -16,7 +16,7 @@ func _ready():
 	var game_seed_string = "Seed: " + str(global.game_seed)
 	game_seed.text = game_seed_string
 	# Fill stats with global values
-	var final_score_string = "Score: " + str(global.altitude)
+	var final_score_string = "Score: " + ("%.2f" % global.altitude)
 	final_score.text = final_score_string
 	var jump_counter_string = "Jumps: " + str(global.jump_counter)
 	jump_counter.text = jump_counter_string

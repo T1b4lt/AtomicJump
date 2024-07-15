@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://bi1jigid8vavc"]
+[gd_scene load_steps=8 format=3 uid="uid://bi1jigid8vavc"]
 
 [ext_resource type="PackedScene" uid="uid://c04xqp021bidx" path="res://platforms/backgrounds/background_1.tscn" id="1_7aq7b"]
+[ext_resource type="Script" path="res://scripts/platform.gd" id="1_rpahe"]
 [ext_resource type="PackedScene" uid="uid://cyjms55c37j6" path="res://platforms/walls/wall_normal.tscn" id="2_k6wek"]
 [ext_resource type="PackedScene" uid="uid://dbg8rkmdd53ti" path="res://platforms/walls/floor_initial.tscn" id="3_jth3w"]
 [ext_resource type="PackedScene" uid="uid://cco7ci7mxskjp" path="res://platforms/blocks/block_2.tscn" id="4_u7sq0"]
@@ -8,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://honufl5gkksg" path="res://platforms/blocks/block_4.tscn" id="6_1hyhw"]
 
 [node name="initial" type="Node2D"]
+script = ExtResource("1_rpahe")
 
 [node name="background_1" parent="." instance=ExtResource("1_7aq7b")]
 position = Vector2(0, 21)
@@ -32,3 +34,9 @@ position = Vector2(733, 212)
 
 [node name="block_5" parent="." instance=ExtResource("4_u7sq0")]
 position = Vector2(368, 90)
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(1150, 10)
+
+[connection signal="screen_entered" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

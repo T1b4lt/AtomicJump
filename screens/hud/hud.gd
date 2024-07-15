@@ -9,6 +9,6 @@ extends CanvasLayer
 func set_game_seed(new_seed):
 	game_seed.text = str(new_seed)
 
-func set_altitude(new_altitude: int):
-	altitude.text = str(new_altitude)
+func set_altitude(new_altitude: float):
+	altitude.text = "%.2f" % new_altitude
 
