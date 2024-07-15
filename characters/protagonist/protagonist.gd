@@ -14,7 +14,6 @@ var MAX_JUMPS = 2  # Allow double jump
 
 # Signals
 signal jump()
-signal out_of_screen()
 
 # Variables
 var consecutive_jump_count = 0
@@ -66,7 +65,3 @@ func play_animation(animation_name: String):
 	# If animation is not being played, play it
 	if animation_player.current_animation != animation_name:
 		animation_player.play(animation_name)
-
-
-func _on_visible_on_screen_notifier_2d_screen_exited():
-	out_of_screen.emit()

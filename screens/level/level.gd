@@ -12,6 +12,7 @@ const NUM_PLATFORMS = 2
 
 # Childs
 @onready var camera = $camera
+@onready var protagonist = $protagonist
 @onready var hud = $hud
 @onready var pause_menu = $pause_menu
 
@@ -34,6 +35,15 @@ func _ready():
 	hud.set_game_seed(global.game_seed)
 
 func _process(delta):
+	# Check if protagonist fall off out of camera view
+	if protagonist.position.y > camera.position.y + get_viewport().size[1]/2 + 50:
+		# Set final global variables
+		global.set_altitude(altitude)
+		global.set_jump_counter(jump_counter)
+		# Go to game over screen
+		get_tree().change_scene_to_file(GAME_OVER_SCENE)
+		return
+
 	# Check if user press pause button
 	if Input.is_action_just_pressed("pause"):
 		# Pause everything in the scene
@@ -89,14 +99,6 @@ func _on_pause_menu_exit_button_pressed():
 # Protagonist Signals
 func _on_protagonist_jump():
 	jump_counter = jump_counter + 1
-
-
-func _on_protagonist_out_of_screen():
-	# Set final global variables
-	global.set_altitude(altitude)
-	global.set_jump_counter(jump_counter)
-	# Go to game over screen
-	get_tree().change_scene_to_file(GAME_OVER_SCENE)
 
 # Initial Platform Signals
 func _on_initial_platform_enter_screen():
