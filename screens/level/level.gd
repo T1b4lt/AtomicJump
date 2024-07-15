@@ -22,7 +22,7 @@ var added_platforms: int = 0
 var is_platform_added: bool = false
 
 # Game values
-var altitude: int = 0
+var altitude: float = 0.0
 var jump_counter: int = 0
 
 
@@ -52,7 +52,7 @@ func _process(delta):
 		pause_menu.visible = true
 		
 	# Update altitude
-	altitude = int((camera_initial_y - camera.position.y) / (get_viewport().size[1]/11))
+	altitude = (camera_initial_y - camera.position.y) / (get_viewport().size[1]/11)
 	hud.set_altitude(altitude)
 	
 func _add_platform():

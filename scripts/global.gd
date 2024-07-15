@@ -4,14 +4,14 @@ extends Node
 var game_seed: int
 
 # Game stats
-var altitude: int
+var altitude: float
 var jump_counter: int
 
 func set_seed(new_seed: int):
 	# Set seed
 	game_seed = new_seed
 
-func set_altitude(new_altitude: int):
+func set_altitude(new_altitude: float):
 	# Set altitude
 	altitude = new_altitude
 	
