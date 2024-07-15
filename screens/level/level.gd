@@ -12,18 +12,17 @@ const NUM_PLATFORMS = 2
 
 # Childs
 @onready var camera = $camera
-@onready var protagonist = $protagonist
 @onready var hud = $hud
 @onready var pause_menu = $pause_menu
 
 # Variables
-var camera_initial_y = 0
-var added_platforms = 0
-var is_platform_added = false
+var camera_initial_y: int = 0
+var added_platforms: int = 0
+var is_platform_added: bool = false
 
 # Game values
-var altitude = 0
-var jump_counter = 0
+var altitude: int = 0
+var jump_counter: int = 0
 
 
 func _ready():
@@ -39,15 +38,6 @@ func _ready():
 	
 
 func _process(delta):
-	# Check if protagonist fall off out of camera view
-	if protagonist.position.y > camera.position.y + get_viewport().size[1]/2 + 50:
-		# Set final global variables
-		global.set_altitude(altitude)
-		global.set_jump_counter(jump_counter)
-		# Go to game over screen
-		get_tree().change_scene_to_file(GAME_OVER_SCENE)
-		return
-	
 	# Check if its time to add a new platform
 	if altitude % 11 == 0 and !is_platform_added:
 		# Remove passed platform if exist
@@ -113,3 +103,11 @@ func _on_pause_menu_exit_button_pressed():
 
 func _on_protagonist_jump():
 	jump_counter = jump_counter + 1
+
+
+func _on_protagonist_out_of_screen():
+	# Set final global variables
+	global.set_altitude(altitude)
+	global.set_jump_counter(jump_counter)
+	# Go to game over screen
+	get_tree().change_scene_to_file(GAME_OVER_SCENE)
