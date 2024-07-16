@@ -6,6 +6,7 @@
 size = Vector2(120, 58)
 
 [node name="wall_left_hole_1" type="StaticBody2D"]
+collision_mask = 11
 
 [node name="Tile41" type="Sprite2D" parent="."]
 position = Vector2(275, 7)

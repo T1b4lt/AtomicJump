@@ -14,7 +14,7 @@ script = ExtResource("1_5v6d0")
 position = Vector2(0, 22)
 
 [node name="wall_normal" parent="." instance=ExtResource("2_71tp2")]
-position = Vector2(857, 22)
+position = Vector2(855, 22)
 
 [node name="wall_normal2" parent="." instance=ExtResource("2_71tp2")]
 position = Vector2(0, 22)
@@ -35,7 +35,7 @@ position = Vector2(737, 212)
 position = Vector2(367, 30)
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
-position = Vector2(1152, 10)
+position = Vector2(1150, 10)
 
 [connection signal="screen_entered" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_entered"]
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

@@ -65,8 +65,8 @@ func _add_platform():
 	platform.name = "platform_" + str(added_platforms)
 	# Add 1 to platform counter
 	added_platforms += 1
-	# Set platform position
-	platform.position.y = -(get_viewport().size[1]) * added_platforms
+	# Set platform position (670 is viewport height in project settings)
+	platform.position.y = -670 * added_platforms
 	# Add new platform to scene
 	add_child(platform)
 	# Add signal observers

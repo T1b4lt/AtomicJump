@@ -15,7 +15,7 @@ script = ExtResource("1_7ftdb")
 position = Vector2(0, 22)
 
 [node name="wall_normal" parent="." instance=ExtResource("1_ur3j5")]
-position = Vector2(854, 22)
+position = Vector2(855, 22)
 
 [node name="wall_left_hole_1" parent="." instance=ExtResource("2_4qoiw")]
 position = Vector2(0, 22)

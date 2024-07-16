@@ -6,6 +6,7 @@
 size = Vector2(121, 60)
 
 [node name="block_2" type="StaticBody2D"]
+collision_mask = 11
 
 [node name="TileBrick" type="Sprite2D" parent="."]
 position = Vector2(-31, 0)
