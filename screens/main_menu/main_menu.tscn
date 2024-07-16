@@ -42,10 +42,15 @@ max_length = 9
 layout_mode = 2
 text = "Seed Mode"
 
+[node name="settings_button" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Settings"
+
 [node name="exit_button" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 text = "Exit"
 
 [connection signal="pressed" from="VBoxContainer/solo_mode_button" to="." method="_on_solo_mode_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/seed_mode_button" to="." method="_on_seed_mode_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/settings_button" to="." method="_on_settings_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/exit_button" to="." method="_on_exit_button_pressed"]

@@ -3,6 +3,7 @@ extends CanvasLayer
 
 # Scenes
 const LEVEL_SCENE = "res://screens/level/level.tscn"
+const SETTINGS_MENU_SCENE = "res://screens/settings_menu/settings_menu.tscn"
 
 # Childs
 @onready var game_seed_input = $VBoxContainer/HBoxContainer/game_seed_input
@@ -24,6 +25,10 @@ func _on_seed_mode_button_pressed():
 	global.set_seed(int(game_seed_input.text))
 	# Change to scene level
 	get_tree().change_scene_to_file(LEVEL_SCENE)
+	
+func _on_settings_button_pressed():
+	# Change to settings menu
+	get_tree().change_scene_to_file(SETTINGS_MENU_SCENE)
 
 func _on_exit_button_pressed():
 	# Exit game
