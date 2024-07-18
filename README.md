@@ -26,6 +26,7 @@ La temática del juego es la de un personaje subcuántico que debe de ascender p
 - [Menus](#menus)
   - [Menu principal](#menu-principal)
   - [Menu de elección de personaje](#menu-de-elección-de-personaje)
+  - [Menu de logros y estadísticas](#menu-de-logros-y-estadísticas)
   - [Menu de opciones](#menu-de-opciones)
   - [Menu de pausa](#menu-de-pausa)
 - [Controles](#controles)
@@ -38,12 +39,15 @@ La temática del juego es la de un personaje subcuántico que debe de ascender p
   - [Lista de personajes](#lista-de-personajes)
 - [Enemigos](#enemigos)
   - [Lista de enemigos](#lista-de-enemigos)
-- [Estadisticas](#estadisticas)
+- [Estadísticas](#estadísticas)
 - [Objetos](#objetos)
   - [Divisas](#divisas)
   - [Cofres](#cofres)
   - [Bonificadores](#bonificadores)
   - [Modificadores de disparo](#modificadores-de-disparo)
+- [Logros y estadísticas globales](#logros-y-estadísticas-globales)
+  - [Estadísticas globales](#estadísticas-globales)
+  - [Logros](#logros)
 
 # Instalación
 
@@ -72,6 +76,10 @@ El menu principal es el menu que se muestra al iniciar el juego. Desde aquí se 
 ## Menu de elección de personaje
 
 En este menu se puede elegir el personaje con el que se jugará la partida. Cada personaje tiene sus propias habilidades y características.
+
+## Menu de logros y estadísticas
+
+En este menu se pueden consultar los logros y estadísticas globales del jugador.
 
 ## Menu de opciones
 
@@ -106,23 +114,24 @@ Los enemigos aparecerán en sitios designados pero el tipo de enemigo será alea
 
 ### Bloques
 
-- Bloque normal 1x2
-- Bloque normal 1x3
-- Bloque normal 1x4
+- Bloque normal 1x2 (block_2)
+- Bloque normal 1x3 (block_3)
+- Bloque normal 1x4 (block_4)
 - Bloque pinchos 1 1x2 (WIP)
 - Bloque pinchos 2 1x2 (WIP)
 - WIP 🚧
 
 ### Paredes
 
-- Pared normal
-- Pared izquierda con hueco 1
+- Pared normal (wall_normal)
+- Pared izquierda con hueco 1 (wall_left_hole_1)
 - WIP 🚧
 
 ### Plataformas
 
-- Plataforma inicial
-- Plataforma 1
+- Plataforma inicial (initial)
+- Plataforma 1 (platform_1)
+- Plataforma 2 (platform_2)
 - WIP 🚧
 
 # Personajes
@@ -142,7 +151,7 @@ Los enemigos son personajes que aparecen a partir de cierta altura y que intenta
 
 WIP 🚧
 
-# Estadisticas
+# Estadísticas
 
 Las estadísticas son modificadores que afectan al comportamiento del personaje. Estas estadísticas se pueden modificar recogiendo objetos o bonificadores. Algunas de estas estadísticas se mostraran en un HUD, otras en un panel de estadísticas, otras en una lista de objetos y otras no se mostrarán en ningún sitio.
 
@@ -176,7 +185,7 @@ Los objetos son elementos que aparecen de forma aleatoria en los sitios designad
 ## Cofres
 
 - Cofre de monedas: Contiene uno o mas modificadores de estadísticas.
-- Cofre de llaves: Contiene un modificador de disparo o estadistica especial.
+- Cofre de llaves: Contiene un modificador de disparo o estadística especial.
 
 ## Bonificadores
 
@@ -203,5 +212,37 @@ Los objetos son elementos que aparecen de forma aleatoria en los sitios designad
 - Ralentizador: Los proyectiles ralentizan a los enemigos.
 - Veneno: Los proyectiles envenenan a los enemigos. Daño por segundo.
 - Fantasma: Los proyectiles atraviesan a las plataformas. Ya no pueden rebotar. Hace menos daño.
-- Brujula: Los proyectiles salen en las tres direcciones (arriba, derecha e izquierda).
+- Brujula: Los proyectiles salen en las cuatro direcciones (arriba, abajo, derecha e izquierda).
+- WIP 🚧
+
+# Logros y estadísticas globales
+
+Las estadísticas globales se mantienen entre partidas. Estas estadísticas se pueden consultar en un panel de estadísticas a través del menú principal. Los logros son objetivos que se alcanzan cuando se alcanzan ciertos hitos en el juego o se llega a determinado valor en alguna estadistica global. Los logros se pueden consultar en un panel de logros a través del menú principal.
+
+## Estadísticas globales
+
+- Partidas jugadas: Cantidad de partidas jugadas.
+- Puntuación máxima: Puntuación más alta alcanzada en una partida.
+- Puntuación total: Puntuación total acumulada en todas las partidas.
+- Número máximo de saltos en una partida: Cantidad máxima de saltos realizados en una partida.
+- Número de saltos total: Cantidad total de saltos realizados en todas las partidas.
+- Número máximo de monedas recogidas en una partida: Cantidad máxima de monedas recogidas en una partida.
+- Número total de monedas recogidas: Cantidad total de monedas recogidas en todas las partidas.
+- Número máximo de llaves recogidas en una partida: Cantidad máxima de llaves recogidas en una partida.
+- Número total de llaves recogidas: Cantidad total de llaves recogidas en todas las partidas.
+- Número máximo de enemigos eliminados en una partida: Cantidad máxima de enemigos eliminados en una partida.
+- Número total de enemigos eliminados: Cantidad total de enemigos eliminados en todas las partidas.
+- WIP 🚧
+
+## Logros
+
+- Primer salto: Realiza el primer salto.
+- Primer disparo: Realiza el primer disparo.
+- Primer enemigo eliminado: Elimina el primer enemigo.
+- Primera moneda recogida: Recoge la primera moneda.
+- Primera llave recogida: Recoge la primera llave.
+- Primer bonificador recogido: Recoge el primer bonificador.
+- Primer modificador de disparo recogido: Recoge el primer modificador de disparo.
+- Primer cofre de monedas abierto: Abre el primer cofre de monedas.
+- Primer cofre de llaves abierto: Abre el primer cofre de llaves.
 - WIP 🚧
