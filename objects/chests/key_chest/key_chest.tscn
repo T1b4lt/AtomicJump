@@ -1,0 +1,150 @@
+[gd_scene load_steps=21 format=3 uid="uid://dqcn1ictw3hjb"]
+
+[ext_resource type="Texture2D" uid="uid://gfl8wxvwv2kk" path="res://assets/chests/chests-spritesheet.png" id="1_om6yw"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0tqkf"]
+atlas = ExtResource("1_om6yw")
+region = Rect2(0, 128, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fp4q3"]
+atlas = ExtResource("1_om6yw")
+region = Rect2(32, 128, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mwumv"]
+atlas = ExtResource("1_om6yw")
+region = Rect2(64, 128, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lqo8w"]
+atlas = ExtResource("1_om6yw")
+region = Rect2(0, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wxrs3"]
+atlas = ExtResource("1_om6yw")
+region = Rect2(32, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r56op"]
+atlas = ExtResource("1_om6yw")
+region = Rect2(64, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3sgxw"]
+atlas = ExtResource("1_om6yw")
+region = Rect2(0, 128, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r6kgq"]
+atlas = ExtResource("1_om6yw")
+region = Rect2(32, 128, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jtjlx"]
+atlas = ExtResource("1_om6yw")
+region = Rect2(64, 128, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f0rwg"]
+atlas = ExtResource("1_om6yw")
+region = Rect2(0, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q6h8m"]
+atlas = ExtResource("1_om6yw")
+region = Rect2(32, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1sfu8"]
+atlas = ExtResource("1_om6yw")
+region = Rect2(64, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6rnfp"]
+atlas = ExtResource("1_om6yw")
+region = Rect2(0, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vvtqx"]
+atlas = ExtResource("1_om6yw")
+region = Rect2(32, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4nc3y"]
+atlas = ExtResource("1_om6yw")
+region = Rect2(64, 192, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yh1qj"]
+atlas = ExtResource("1_om6yw")
+region = Rect2(0, 224, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fnsbr"]
+atlas = ExtResource("1_om6yw")
+region = Rect2(32, 224, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1qjyf"]
+atlas = ExtResource("1_om6yw")
+region = Rect2(64, 224, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_a5epa"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0tqkf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fp4q3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mwumv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lqo8w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wxrs3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r56op")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3sgxw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r6kgq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jtjlx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f0rwg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q6h8m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1sfu8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6rnfp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vvtqx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4nc3y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yh1qj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fnsbr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1qjyf")
+}],
+"loop": false,
+"name": &"open",
+"speed": 10.0
+}]
+
+[node name="key_chest" type="Area2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_a5epa")
+animation = &"open"
+frame = 11
+frame_progress = 1.0
