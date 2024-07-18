@@ -5,12 +5,21 @@
 [node name="hud" type="CanvasLayer"]
 script = ExtResource("1_ldeaq")
 
-[node name="altitude" type="Node2D" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="."]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 63.0
+offset_bottom = 100.0
 
-[node name="altitude_text" type="Label" parent="altitude"]
-offset_left = 2.0
-offset_right = 60.0
-offset_bottom = 58.0
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="altitude" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="altitude_text" type="Label" parent="PanelContainer/VBoxContainer/altitude"]
+layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 10
@@ -18,10 +27,50 @@ text = "Altitude"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="altitude_data" type="Label" parent="altitude"]
-offset_left = 63.0
-offset_right = 121.0
-offset_bottom = 58.0
+[node name="altitude_data" type="Label" parent="PanelContainer/VBoxContainer/altitude"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 20
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="coins" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="coins_text" type="Label" parent="PanelContainer/VBoxContainer/coins"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 10
+text = "Coins"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="coins_data" type="Label" parent="PanelContainer/VBoxContainer/coins"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 20
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="keys" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="keys_text" type="Label" parent="PanelContainer/VBoxContainer/keys"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 10
+text = "Keys"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="keys_data" type="Label" parent="PanelContainer/VBoxContainer/keys"]
+layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 20

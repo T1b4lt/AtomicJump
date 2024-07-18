@@ -25,7 +25,7 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("jump") and consecutive_jump_count < MAX_JUMPS - 1:
 		velocity.y = JUMP_VELOCITY
 		consecutive_jump_count += 1
-		game.inc_jump_counter()
+		game.jump_counter += 1
 		
 	# Reset jump count when on floor
 	if is_on_floor():

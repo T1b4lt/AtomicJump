@@ -1,5 +1,6 @@
-[gd_scene load_steps=16 format=3 uid="uid://bgtyy3vt0ketd"]
+[gd_scene load_steps=17 format=3 uid="uid://bgtyy3vt0ketd"]
 
+[ext_resource type="Script" path="res://objects/currencies/key/key.gd" id="1_4s8hh"]
 [ext_resource type="Texture2D" uid="uid://ci6pb0lbrudru" path="res://assets/key/key-spritesheet.png" id="1_kixri"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tb0ff"]
@@ -97,6 +98,9 @@ animations = [{
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_b1jm7"]
 
 [node name="key" type="Area2D"]
+collision_layer = 8
+collision_mask = 2
+script = ExtResource("1_4s8hh")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_ever7")
@@ -106,3 +110,5 @@ frame_progress = 0.357223
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_b1jm7")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

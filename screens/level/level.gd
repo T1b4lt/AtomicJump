@@ -26,7 +26,7 @@ func _ready():
 	camera_initial_y = camera.position.y
 	
 	# Set game seed
-	seed(game.game_seed)
+	seed(game.seed)
 
 func _process(_delta):
 	# Check if protagonist fall off out of camera view
@@ -43,7 +43,7 @@ func _process(_delta):
 		pause_menu.visible = true
 		
 	# Update altitude
-	game.set_altitude((camera_initial_y - camera.position.y) / (get_viewport().size[1]/11))
+	game.altitude = (camera_initial_y - camera.position.y) / (get_viewport().size[1]/11)
 	
 func _add_platform():
 	# Get a random number
