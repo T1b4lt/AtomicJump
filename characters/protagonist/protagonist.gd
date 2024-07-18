@@ -12,9 +12,6 @@ var MAX_JUMPS = 2  # Allow double jump
 @onready var body_sprite = $body
 @onready var animation_player = $AnimationPlayer
 
-# Signals
-signal jump()
-
 # Variables
 var consecutive_jump_count = 0
 
@@ -28,7 +25,7 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("jump") and consecutive_jump_count < MAX_JUMPS - 1:
 		velocity.y = JUMP_VELOCITY
 		consecutive_jump_count += 1
-		jump.emit()
+		game.inc_jump_counter()
 		
 	# Reset jump count when on floor
 	if is_on_floor():

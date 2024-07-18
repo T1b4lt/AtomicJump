@@ -11,7 +11,7 @@ const SETTINGS_MENU_SCENE = "res://screens/settings_menu/settings_menu.tscn"
 func _on_solo_mode_button_pressed():
 	# Generate a game seed
 	var game_seed = str(Time.get_unix_time_from_system()).hash()
-	global.set_seed(game_seed)
+	game.set_seed(game_seed)
 	# Change to scene level
 	get_tree().change_scene_to_file(LEVEL_SCENE)
 
@@ -21,8 +21,8 @@ func _on_seed_mode_button_pressed():
 		# Reset input
 		game_seed_input.text = ""
 		return
-	# Set global game seed
-	global.set_seed(int(game_seed_input.text))
+	# Set game seed
+	game.set_seed(int(game_seed_input.text))
 	# Change to scene level
 	get_tree().change_scene_to_file(LEVEL_SCENE)
 	

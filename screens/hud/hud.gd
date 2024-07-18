@@ -6,9 +6,11 @@ extends CanvasLayer
 @onready var game_seed = $game_seed
 @onready var altitude = $altitude/altitude_data
 
-func set_game_seed(new_seed):
-	game_seed.text = str(new_seed)
+func _ready():
+	# Set game seed
+	game_seed.text = str(game.game_seed)
 
-func set_altitude(new_altitude: float):
-	altitude.text = "%.2f" % new_altitude
+func _process(_delta):
+	# Set stats from game values
+	altitude.text = "%.2f" % game.altitude
 

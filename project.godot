@@ -18,7 +18,7 @@ config/icon="res://atomic_jump_icon.png"
 
 [autoload]
 
-global="*res://scripts/global.gd"
+game="*res://scripts/game.gd"
 settings="*res://scripts/settings.gd"
 
 [display]

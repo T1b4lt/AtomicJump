@@ -27,7 +27,6 @@ visible = false
 
 [connection signal="platform_enter_screen" from="initial" to="." method="_on_initial_platform_enter_screen"]
 [connection signal="platform_leave_screen" from="initial" to="." method="_on_initial_platform_leave_screen"]
-[connection signal="jump" from="protagonist" to="." method="_on_protagonist_jump"]
 [connection signal="exit_button_pressed" from="pause_menu" to="." method="_on_pause_menu_exit_button_pressed"]
 [connection signal="menu_button_pressed" from="pause_menu" to="." method="_on_pause_menu_menu_button_pressed"]
 [connection signal="resume_button_pressed" from="pause_menu" to="." method="_on_pause_menu_resume_button_pressed"]

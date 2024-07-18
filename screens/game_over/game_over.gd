@@ -12,15 +12,17 @@ const MAIN_MENU_SCENE = "res://screens/main_menu/main_menu.tscn"
 
 
 func _ready():
-	# Fill seed with global value
-	var game_seed_string = "Seed: " + str(global.game_seed)
+	# Fill seed with game value
+	var game_seed_string = "Seed: " + str(game.game_seed)
 	game_seed.text = game_seed_string
-	# Fill stats with global values
-	var final_score_string = "Score: " + ("%.2f" % global.altitude)
+	# Fill stats with game values
+	var final_score_string = "Score: " + ("%.2f" % game.altitude)
 	final_score.text = final_score_string
-	var jump_counter_string = "Jumps: " + str(global.jump_counter)
+	var jump_counter_string = "Jumps: " + str(game.jump_counter)
 	jump_counter.text = jump_counter_string
 
 func _on_menu_button_pressed():
+	# Reset game values
+	game.reset_game()
 	# Navigate to Main Menu scene
 	get_tree().change_scene_to_file(MAIN_MENU_SCENE)
