@@ -23,9 +23,6 @@ position = Vector2(0, 22)
 [node name="block_2" parent="." instance=ExtResource("5_7au6q")]
 position = Vector2(795, 578)
 
-[node name="block_3" parent="." instance=ExtResource("4_fjvrd")]
-position = Vector2(397, 639)
-
 [node name="block_4" parent="." instance=ExtResource("4_fjvrd")]
 position = Vector2(397, 517)
 
@@ -40,6 +37,65 @@ position = Vector2(367, 30)
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
 position = Vector2(1150, 10)
+
+[node name="object_placeholders" type="Node2D" parent="."]
+
+[node name="random_0" type="Node2D" parent="object_placeholders"]
+position = Vector2(764, 526)
+
+[node name="random_1" type="Node2D" parent="object_placeholders"]
+position = Vector2(826, 528)
+
+[node name="random_2" type="Node2D" parent="object_placeholders"]
+position = Vector2(338, 467)
+
+[node name="random_3" type="Node2D" parent="object_placeholders"]
+position = Vector2(392, 462)
+
+[node name="random_4" type="Node2D" parent="object_placeholders"]
+position = Vector2(454, 468)
+
+[node name="random_5" type="Node2D" parent="object_placeholders"]
+position = Vector2(334, 339)
+
+[node name="random_6" type="Node2D" parent="object_placeholders"]
+position = Vector2(393, 342)
+
+[node name="random_7" type="Node2D" parent="object_placeholders"]
+position = Vector2(458, 342)
+
+[node name="random_8" type="Node2D" parent="object_placeholders"]
+position = Vector2(215, 221)
+
+[node name="random_9" type="Node2D" parent="object_placeholders"]
+position = Vector2(273, 219)
+
+[node name="random_10" type="Node2D" parent="object_placeholders"]
+position = Vector2(158, 344)
+
+[node name="random_11" type="Node2D" parent="object_placeholders"]
+position = Vector2(218, 341)
+
+[node name="random_12" type="Node2D" parent="object_placeholders"]
+position = Vector2(274, 342)
+
+[node name="random_13" type="Node2D" parent="object_placeholders"]
+position = Vector2(578, 91)
+
+[node name="random_14" type="Node2D" parent="object_placeholders"]
+position = Vector2(636, 92)
+
+[node name="random_15" type="Node2D" parent="object_placeholders"]
+position = Vector2(700, 89)
+
+[node name="random_16" type="Node2D" parent="object_placeholders"]
+position = Vector2(758, 92)
+
+[node name="random_17" type="Node2D" parent="object_placeholders"]
+position = Vector2(338, -18)
+
+[node name="random_18" type="Node2D" parent="object_placeholders"]
+position = Vector2(402, -16)
 
 [connection signal="screen_entered" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_entered"]
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

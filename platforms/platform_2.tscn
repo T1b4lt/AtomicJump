@@ -37,5 +37,49 @@ position = Vector2(367, 30)
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
 position = Vector2(1150, 10)
 
+[node name="object_placeholders" type="Node2D" parent="."]
+
+[node name="random_0" type="Node2D" parent="object_placeholders"]
+position = Vector2(340, 588)
+
+[node name="random_1" type="Node2D" parent="object_placeholders"]
+position = Vector2(402, 586)
+
+[node name="random_2" type="Node2D" parent="object_placeholders"]
+position = Vector2(458, 582)
+
+[node name="random_3" type="Node2D" parent="object_placeholders"]
+position = Vector2(768, 522)
+
+[node name="random_4" type="Node2D" parent="object_placeholders"]
+position = Vector2(824, 526)
+
+[node name="random_5" type="Node2D" parent="object_placeholders"]
+position = Vector2(338, 342)
+
+[node name="random_6" type="Node2D" parent="object_placeholders"]
+position = Vector2(398, 340)
+
+[node name="random_7" type="Node2D" parent="object_placeholders"]
+position = Vector2(456, 338)
+
+[node name="random_8" type="Node2D" parent="object_placeholders"]
+position = Vector2(646, 158)
+
+[node name="random_9" type="Node2D" parent="object_placeholders"]
+position = Vector2(706, 148)
+
+[node name="random_10" type="Node2D" parent="object_placeholders"]
+position = Vector2(766, 152)
+
+[node name="random_11" type="Node2D" parent="object_placeholders"]
+position = Vector2(826, 154)
+
+[node name="random_12" type="Node2D" parent="object_placeholders"]
+position = Vector2(336, -26)
+
+[node name="random_13" type="Node2D" parent="object_placeholders"]
+position = Vector2(402, -28)
+
 [connection signal="screen_entered" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_entered"]
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

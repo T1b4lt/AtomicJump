@@ -2,7 +2,7 @@ class_name Game
 extends Node
 
 # Random number generator seed
-var seed: int
+var game_seed: int
 
 # Game stats
 var altitude: float = 0.0
@@ -16,7 +16,7 @@ var actual_keys: int = 0
 
 func reset_game():
 	# Seed
-	seed = 0
+	game_seed = 0
 	
 	# Game stats
 	altitude = 0.0

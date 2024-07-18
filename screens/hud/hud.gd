@@ -12,7 +12,7 @@ extends CanvasLayer
 
 func _ready():
 	# Set game seed
-	game_seed.text = str(game.seed)
+	game_seed.text = str(game.game_seed)
 
 func _process(_delta):
 	# Set stats from game values

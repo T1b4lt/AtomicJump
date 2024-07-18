@@ -26,7 +26,7 @@ func _ready():
 	camera_initial_y = camera.position.y
 	
 	# Set game seed
-	seed(game.seed)
+	seed(game.game_seed)
 
 func _process(_delta):
 	# Check if protagonist fall off out of camera view
@@ -50,7 +50,7 @@ func _add_platform():
 	var platform_idx = randi_range(1, NUM_PLATFORMS)
 	# Instantiate the platform
 	var platform_name = BASE_PLATFORM_RES % str(platform_idx)
-	var platform = load(platform_name).instantiate()
+	var platform = load(platform_name).instantiate() as Platform
 	# Give name to new platform
 	platform.name = "platform_" + str(added_platforms)
 	# Add 1 to platform counter
@@ -59,6 +59,8 @@ func _add_platform():
 	platform.position.y = -670 * added_platforms
 	# Add new platform to scene
 	add_child(platform)
+	# Place objects in the platform
+	platform.place_objects()
 	# Add signal observers
 	platform.platform_enter_screen.connect(_add_platform)
 	platform.platform_leave_screen.connect(_remove_platform)

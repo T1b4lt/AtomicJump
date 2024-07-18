@@ -17,7 +17,7 @@ const MAIN_MENU_SCENE = "res://screens/main_menu/main_menu.tscn"
 
 func _ready():
 	# Fill seed with game value
-	var game_seed_string = "Seed: " + str(game.seed)
+	var game_seed_string = "Seed: " + str(game.game_seed)
 	game_seed.text = game_seed_string
 	
 	# Fill stats with game values
