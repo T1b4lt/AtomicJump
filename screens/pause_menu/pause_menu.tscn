@@ -11,45 +11,42 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -112.5
-offset_top = -89.0
-offset_right = 112.5
-offset_bottom = 89.0
+offset_left = -111.0
+offset_top = -66.5
+offset_right = 111.0
+offset_bottom = 66.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -94.5
-offset_top = -77.5
-offset_right = 94.5
-offset_bottom = 77.5
-grow_horizontal = 2
-grow_vertical = 2
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
 
-[node name="pause_text" type="Label" parent="VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="pause_text" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "PAUSE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="resume_button" type="Button" parent="VBoxContainer"]
+[node name="resume_button" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Resume"
 
-[node name="menu_button" type="Button" parent="VBoxContainer"]
+[node name="menu_button" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Menu"
 
-[node name="exit_button" type="Button" parent="VBoxContainer"]
+[node name="exit_button" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Exit"
 
-[connection signal="pressed" from="VBoxContainer/resume_button" to="." method="_on_resume_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/menu_button" to="." method="_on_menu_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/exit_button" to="." method="_on_exit_button_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/resume_button" to="." method="_on_resume_button_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/menu_button" to="." method="_on_menu_button_pressed"]
+[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/exit_button" to="." method="_on_exit_button_pressed"]

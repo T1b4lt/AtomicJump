@@ -90,8 +90,12 @@ func _on_pause_menu_exit_button_pressed():
 
 # Initial Platform Signals
 func _on_initial_platform_enter_screen():
+	# Add second platform
 	_add_platform()
+	# Place objects intial platform
+	get_node("initial").place_objects()
 
 
 func _on_initial_platform_leave_screen():
+	# Delete intial platform
 	get_node("initial").queue_free()

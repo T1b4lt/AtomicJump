@@ -9,8 +9,9 @@ func _ready():
 	anim.play("idle")
 
 func _on_body_entered(body):
-	# Increase game keys
-	game.actual_keys += 1
-	game.total_keys += 1
-	# Delete node
-	queue_free()
+	if body is Protagonist:
+		# Increase game keys
+		game.actual_keys += 1
+		game.total_keys += 1
+		# Delete node
+		queue_free()
