@@ -3,12 +3,12 @@ extends CanvasLayer
 
 
 # Childs
-@onready var game_seed = $PanelContainer2/MarginContainer/game_seed
+@onready var game_seed = $seed_panel/MarginContainer/game_seed
 
-@onready var altitude = $PanelContainer/MarginContainer/VBoxContainer/altitude/altitude_data
+@onready var altitude = $stats_panel/MarginContainer/GridContainer/altitude_data
 
-@onready var coins = $PanelContainer/MarginContainer/VBoxContainer/coins/coins_data
-@onready var keys = $PanelContainer/MarginContainer/VBoxContainer/keys/keys_data
+@onready var coins = $stats_panel/MarginContainer/GridContainer/coins_data
+@onready var keys = $stats_panel/MarginContainer/GridContainer/keys_data
 
 func _ready():
 	# Set game seed

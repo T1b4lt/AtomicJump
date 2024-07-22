@@ -5,87 +5,72 @@
 [node name="hud" type="CanvasLayer"]
 script = ExtResource("1_ldeaq")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="stats_panel" type="PanelContainer" parent="."]
 offset_left = 8.0
 offset_top = 8.0
 offset_right = 63.0
 offset_bottom = 100.0
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="stats_panel"]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+[node name="GridContainer" type="GridContainer" parent="stats_panel/MarginContainer"]
 layout_mode = 2
+columns = 2
 
-[node name="altitude" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 4
-
-[node name="altitude_text" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/altitude"]
+[node name="altitude_text" type="Label" parent="stats_panel/MarginContainer/GridContainer"]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 15
 text = "Altitude"
-horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="altitude_data" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/altitude"]
+[node name="altitude_data" type="Label" parent="stats_panel/MarginContainer/GridContainer"]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 20
 text = "0"
-horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="coins" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="coins_text" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/coins"]
+[node name="coins_text" type="Label" parent="stats_panel/MarginContainer/GridContainer"]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 15
 text = "Coins"
-horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="coins_data" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/coins"]
+[node name="coins_data" type="Label" parent="stats_panel/MarginContainer/GridContainer"]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 20
 text = "0"
-horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="keys" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="keys_text" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/keys"]
+[node name="keys_text" type="Label" parent="stats_panel/MarginContainer/GridContainer"]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 15
 text = "Keys"
-horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="keys_data" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/keys"]
+[node name="keys_data" type="Label" parent="stats_panel/MarginContainer/GridContainer"]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 20
 text = "0"
-horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PanelContainer2" type="PanelContainer" parent="."]
+[node name="seed_panel" type="PanelContainer" parent="."]
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -95,14 +80,14 @@ offset_right = 139.0
 offset_bottom = -7.0
 grow_vertical = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer2"]
+[node name="MarginContainer" type="MarginContainer" parent="seed_panel"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="game_seed" type="Label" parent="PanelContainer2/MarginContainer"]
+[node name="game_seed" type="Label" parent="seed_panel/MarginContainer"]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
