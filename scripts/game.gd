@@ -5,9 +5,17 @@ extends Node
 var game_seed: int
 
 # Protagonist stats
-var pr_walk_velocity = 300.0
-var pr_jump_velocity = -450.0
-var pr_max_jumps = 2  # Allow double jump
+var pr_hp: float = 100.0 # Protagonist life
+var pr_max_hp: float = 110.0 # Protagonist max life
+var pr_luck: int = 1 # 1 to 100 % of luck
+var pr_walk_velocity: float = 300.0 # Speed
+var pr_jump_velocity: float = -450.0 # Jump force
+var pr_max_jumps: int = 2  # Allow double jump
+var pr_size: float = 1.0 # Protagonist size
+var pr_attack_power: float = 5.0 # Base damage
+var pr_attack_haste: float = 1.0 # Shoots per second
+var pr_attack_distance: float = 5.0 # Distance shoot
+var pr_defense: float = 5.0 # Protagonist damage reducer factor
 
 # Game stats
 var altitude: float = 0.0
