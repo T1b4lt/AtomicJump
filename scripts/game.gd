@@ -15,7 +15,7 @@ var pr_size: float = 1.0 # Protagonist size
 var pr_attack_power: float = 5.0 # Base damage
 var pr_attack_haste: float = 1.0 # Shoots per second
 var pr_attack_distance: float = 5.0 # Distance shoot
-var pr_defense: float = 5.0 # Protagonist damage reducer factor
+var pr_defense: float = 1.0 # Protagonist damage reducer factor, decreasing to 0.5
 
 # Game stats
 var altitude: float = 0.0
@@ -30,6 +30,19 @@ var actual_keys: int = 0
 func reset_game():
 	# Seed
 	game_seed = 0
+
+	# Protagonist stats
+	pr_hp = 100.0
+	pr_max_hp = 110.0
+	pr_luck = 1
+	pr_walk_velocity = 300.0
+	pr_jump_velocity = -450.0
+	pr_max_jumps = 2
+	pr_size = 1.0
+	pr_attack_power = 5.0
+	pr_attack_haste = 1.0
+	pr_attack_distance = 5.0
+	pr_defense = 1.0
 	
 	# Game stats
 	altitude = 0.0

@@ -34,6 +34,12 @@ func _process(_delta):
 		# Go to game over screen
 		get_tree().change_scene_to_file(GAME_OVER_SCENE)
 		return
+		
+	# Check if protagonist run out of hp
+	if game.pr_hp <= 0:
+		# Go to game over screen
+		get_tree().change_scene_to_file(GAME_OVER_SCENE)
+		return
 
 	# Check if user press pause button
 	if Input.is_action_just_pressed("pause"):

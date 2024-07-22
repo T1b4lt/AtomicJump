@@ -19,13 +19,13 @@ func _ready():
 	# Set initial values for hp_bar and hp_text from game.gd
 	hp_bar.max_value = game.pr_max_hp
 	hp_bar.value = game.pr_hp
-	hp_data.text = str(game.pr_hp) + "/" + str(game.pr_max_hp)
+	hp_data.text = "%.2f" % game.pr_hp + "/" + str(game.pr_max_hp)
 
 func _process(_delta):
 	# Update Health bar and text with game.gd values
 	hp_bar.max_value = game.pr_max_hp
 	hp_bar.value = game.pr_hp
-	hp_data.text = str(game.pr_hp) + "/" + str(game.pr_max_hp)
+	hp_data.text = "%.2f" % game.pr_hp + "/" + str(game.pr_max_hp)
 
 func _physics_process(delta):
 	# Add the gravity.

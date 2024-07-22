@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://u1pphxsw1nww"]
+
+[ext_resource type="Script" path="res://platforms/blocks/spike/spike.gd" id="1_jdljq"]
+[ext_resource type="Texture2D" uid="uid://ub01oaekr2qn" path="res://assets/scribble-assets/tile_spikes.png" id="1_pe2yu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0ebnb"]
+size = Vector2(62, 32)
+
+[node name="spike" type="Area2D"]
+collision_mask = 2
+script = ExtResource("1_jdljq")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 15)
+shape = SubResource("RectangleShape2D_0ebnb")
+
+[node name="TileSpikes" type="Sprite2D" parent="."]
+texture = ExtResource("1_pe2yu")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
