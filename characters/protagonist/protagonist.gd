@@ -16,6 +16,9 @@ var consecutive_jump_count = 0
 
 
 func _ready():
+	# Set initial scale from game.gd
+	scale = Vector2(game.pr_size, game.pr_size)
+	
 	# Set initial values for hp_bar and hp_text from game.gd
 	hp_bar.max_value = game.pr_max_hp
 	hp_bar.value = game.pr_hp
