@@ -4,6 +4,11 @@ extends Node
 # Random number generator seed
 var game_seed: int
 
+# Protagonist stats
+var pr_walk_velocity = 300.0
+var pr_jump_velocity = -450.0
+var pr_max_jumps = 2  # Allow double jump
+
 # Game stats
 var altitude: float = 0.0
 var jump_counter: int = 0

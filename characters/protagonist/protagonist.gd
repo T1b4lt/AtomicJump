@@ -4,9 +4,6 @@ extends CharacterBody2D
 
 # Parameters
 var GRAVITY = ProjectSettings.get_setting("physics/2d/default_gravity")
-var SPEED = 300.0
-var JUMP_VELOCITY = -450.0
-var MAX_JUMPS = 2  # Allow double jump
 
 # Childs
 @onready var body_sprite = $body
@@ -22,8 +19,8 @@ func _physics_process(delta):
 		velocity.y += GRAVITY * delta
 
 	# Handle jump.
-	if Input.is_action_just_pressed("jump") and consecutive_jump_count < MAX_JUMPS - 1:
-		velocity.y = JUMP_VELOCITY
+	if Input.is_action_just_pressed("jump") and consecutive_jump_count < game.pr_max_jumps - 1:
+		velocity.y = game.pr_jump_velocity
 		consecutive_jump_count += 1
 		game.jump_counter += 1
 		
@@ -34,14 +31,14 @@ func _physics_process(delta):
 	# Get the input direction and handle the movement/deceleration.
 	var direction = Input.get_axis("left", "right")
 	if direction:
-		velocity.x = direction * SPEED
+		velocity.x = direction * game.pr_walk_velocity
 		# Flip the sprite based on movement direction
 		if direction < 0:
 			body_sprite.scale.x = -1
 		else:
 			body_sprite.scale.x = 1
 	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
+		velocity.x = move_toward(velocity.x, 0, game.pr_walk_velocity)
 
 	# Move the character
 	move_and_slide()

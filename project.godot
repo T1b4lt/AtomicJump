@@ -25,6 +25,7 @@ settings="*res://scripts/settings.gd"
 
 window/size/viewport_width=1160
 window/size/viewport_height=670
+window/size/resizable=false
 
 [input]
 
