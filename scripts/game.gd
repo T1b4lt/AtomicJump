@@ -8,8 +8,8 @@ var game_seed: int
 var pr_hp: float = 100.0 # Protagonist life
 var pr_max_hp: float = 110.0 # Protagonist max life
 var pr_luck: int = 1 # 1 to 100 % of luck
-var pr_walk_velocity: float = 300.0 # Speed
-var pr_jump_velocity: float = -450.0 # Jump force
+var pr_speed: float = 300.0 # Speed
+var pr_jump_force: float = -450.0 # Jump force
 var pr_max_jumps: int = 2  # Allow double jump
 var pr_size: float = 1.0 # Protagonist size
 var pr_attack_power: float = 5.0 # Base damage
@@ -35,8 +35,8 @@ func reset_game():
 	pr_hp = 100.0
 	pr_max_hp = 110.0
 	pr_luck = 1
-	pr_walk_velocity = 300.0
-	pr_jump_velocity = -450.0
+	pr_speed = 300.0
+	pr_jump_force = -450.0
 	pr_max_jumps = 2
 	pr_size = 1.0
 	pr_attack_power = 5.0

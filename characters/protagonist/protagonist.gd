@@ -34,7 +34,7 @@ func _physics_process(delta):
 
 	# Handle jump.
 	if Input.is_action_just_pressed("jump") and consecutive_jump_count < game.pr_max_jumps - 1:
-		velocity.y = game.pr_jump_velocity
+		velocity.y = game.pr_jump_force
 		consecutive_jump_count += 1
 		game.jump_counter += 1
 		
@@ -45,14 +45,14 @@ func _physics_process(delta):
 	# Get the input direction and handle the movement/deceleration.
 	var direction = Input.get_axis("left", "right")
 	if direction:
-		velocity.x = direction * game.pr_walk_velocity
+		velocity.x = direction * game.pr_speed
 		# Flip the sprite based on movement direction
 		if direction < 0:
 			body_sprite.scale.x = -1
 		else:
 			body_sprite.scale.x = 1
 	else:
-		velocity.x = move_toward(velocity.x, 0, game.pr_walk_velocity)
+		velocity.x = move_toward(velocity.x, 0, game.pr_speed)
 
 	# Move the character
 	move_and_slide()
