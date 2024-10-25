@@ -1,5 +1,36 @@
 # Changelog
 
+## [0.4.0](https://github.com/T1b4lt/AtomicJump/compare/v0.3.4...v0.4.0) (2024-10-25)
+
+
+### Features
+
+* add all protagonist stats to game.gd ([a8b2181](https://github.com/T1b4lt/AtomicJump/commit/a8b21816abe08c3db0edd75f8f8f9807906b0e0c))
+* add coins and keys to hud and game ([f4c19c7](https://github.com/T1b4lt/AtomicJump/commit/f4c19c75b75037fbeb617161d5b3a4369eb0f668))
+* add currencies and chests objects scenes ([d906190](https://github.com/T1b4lt/AtomicJump/commit/d906190a4fc10d28d5ea07851a4ed58779142cc8))
+* add object placeholders to platform and implement place_objects() method ([01fc22c](https://github.com/T1b4lt/AtomicJump/commit/01fc22c37d9aa7d189497962f74990e47e9e4a5f))
+* add panel container to pause menu ([acabaef](https://github.com/T1b4lt/AtomicJump/commit/acabaefdcba096455ff706e033f9c0effafa7b35))
+* add protagonist stats to hud ([c7beebf](https://github.com/T1b4lt/AtomicJump/commit/c7beebf01fcf74ef0511a9a5c4007e72db7c3d94))
+* add settings menu to main menu ([f2a6e3b](https://github.com/T1b4lt/AtomicJump/commit/f2a6e3ba8c1db6d6db9247571e78936ee25da58f))
+* altitude as float everywhere! ([e14120b](https://github.com/T1b4lt/AtomicJump/commit/e14120b03f0762f409378499232ce804dbde9fba))
+* collision mask and minor improvements ([733368d](https://github.com/T1b4lt/AtomicJump/commit/733368dedaa77a4dd4b37f75d13709dcc53bdfcc))
+* create global settings scripts and add to autoload ([7a5b87e](https://github.com/T1b4lt/AtomicJump/commit/7a5b87e8d4f9c8312babd0e9a37d3e4b997874f8))
+* create hp_bar for protagonist ([ca05079](https://github.com/T1b4lt/AtomicJump/commit/ca05079c66244a06ac4f54e4e5ee8d3176fb9dfd))
+* create settings menu ([00cb1bb](https://github.com/T1b4lt/AtomicJump/commit/00cb1bbfbad3061a2f8524f4a540cd139c6a9011))
+* create spikes, that do dmg, place randomly and hp=0 gameover ([a34fb78](https://github.com/T1b4lt/AtomicJump/commit/a34fb789447038baef05fc1a80ea4087fc344143))
+* hud stats is now grid ([5fdfa54](https://github.com/T1b4lt/AtomicJump/commit/5fdfa5494bb9ed721c1bbd72278d9c111e4cb4b3))
+* improve hp_bar ([42e0000](https://github.com/T1b4lt/AtomicJump/commit/42e000024c343a38e88e9894b982582ba08d4f50))
+* minor improvements ([a922bb8](https://github.com/T1b4lt/AtomicJump/commit/a922bb8098312771817c863b60ca01634776311f))
+* move protagonist stats to game.gd ([8f062f1](https://github.com/T1b4lt/AtomicJump/commit/8f062f1250ec92032eeed3116f7a1901db73097e))
+* use game.gd size for protagonist scale ([311a13d](https://github.com/T1b4lt/AtomicJump/commit/311a13ded6dbbae1b3d4725633fd682e1e3d23f2))
+* use screen notifier in character for game over ([153c682](https://github.com/T1b4lt/AtomicJump/commit/153c6824426086974cecc0ad4c5e1b501c20727e))
+* use VisibleOnScreenNotifier2D as reference for creating platforms ([255d2bb](https://github.com/T1b4lt/AtomicJump/commit/255d2bb24e905b07386296dac949abe0eb3006a8))
+
+
+### Bug Fixes
+
+* revert VisibleNotifier in protagonist ([bcc6579](https://github.com/T1b4lt/AtomicJump/commit/bcc657987ae4372e7093e446c97120dbc7c79def))
+
 ## [0.3.4](https://github.com/T1b4lt/AtomicJump/compare/v0.3.3...v0.3.4) (2024-07-14)
 
 
