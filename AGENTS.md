@@ -58,6 +58,6 @@ rm -rf "$TMP_GODOT"
 - Orden dentro de un script (lo comprueba `gdlint`): `class_name`, `extends`, señales, enums, constantes, `@export`, variables, `@onready`, funciones.
 - "Llamar hacia abajo, señales hacia arriba"; nombres únicos (`%Nodo`) en la UI; `preload()` para escenas fijas; nada de números mágicos.
 - Tests con **gdUnit4** en `tests/`, ficheros `*_test.gd` que extienden `GdUnitTestSuite`.
-- Commits con _Conventional Commits_ (release-please genera versión y CHANGELOG). Trabaja en ramas con PR a `main`.
+- Commits con _Conventional Commits_ (release-please genera versión y CHANGELOG; configuración en `release-please-config.json` y `.release-please-manifest.json`, no edites la versión a mano). Trabaja en ramas con PR a `main`.
 - No edites `addons/gdUnit4/` (dependencia de terceros, v6.2.1) ni `.godot/`.
 - El arte se genera con el generador de `art/` (Python, `uv`); ver [`art/README.md`](art/README.md).
