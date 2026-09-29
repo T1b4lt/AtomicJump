@@ -7,242 +7,69 @@
 <p align="center">
         <img src="https://img.shields.io/badge/Status-Development-yellow" alt="Project status badge"/>
         <img src="https://img.shields.io/github/v/release/T1b4lt/AtomicJump" alt="Release badge"/>
+        <img src="https://img.shields.io/badge/Godot-4.7-478cbf" alt="Godot version badge"/>
 </p>
 
-Juego de plataformas de ascensión vertical con caracteristicas roguelike (objetos, bonificadores, enemigos y generación procedural) y competitivo (pvp).
+**AtomicJump** es un roguelike de plataformas vertical. Eres **Wilas**, una partícula consciente nacida en el núcleo de un átomo, y tu objetivo es escapar: ascender por las capas electrónicas **K, L, M y N** hasta alcanzar la ionización, mientras la **Decoherencia** sube desde abajo y colapsa todo lo que toca.
 
-El juego consiste en un único nivel que no tiene final, el objetivo es llegar lo más alto posible. La puntuación final se calcula en base a la altura alcanzada, los enemigos eliminados y los objetos recogidos.
+Cada partida empieza desde cero. Durante la ascensión construyes tu _build_ con **interacciones** de las fuerzas fundamentales, **observables** y **operadores**. Al decoherear (morir) vuelves al **Núcleo** con los **quarks** conseguidos para desbloquear mejoras permanentes, nuevos objetos, personajes y modos.
 
-Cada partida es única, la generación de niveles es aleatoria y los objetos y enemigos que aparecen en cada nivel también. Todo esto gracias a la generación de una semilla aleatoria que determina el comportamiento de los algoritmos de generación procedural.
+Cada partida tiene una **semilla** que la hace completamente reproducible: comparte la tuya y compara hasta dónde llega cada uno.
 
-La temática del juego es la de un personaje subcuántico que debe de ascender por la estructura de un átomo, evitando las particulas subatómicas y recogiendo los objetos que le ayudarán a avanzar. Esta idea es la que giara todo el diseño artistico, de los objetos, enemigos y plataformas del juego.
+> Referencias: _Hades I y II_ y _The Binding of Isaac_, llevados a un plataformas vertical donde las salas son **tramos** y la prisa la pone una amenaza ascendente.
 
-- [AtomicJump](#atomicjump)
-- [Instalación](#instalación)
-- [Modos de juego](#modos-de-juego)
-  - [Modo solitario](#modo-solitario)
-  - [Modo semilla](#modo-semilla)
-  - [Modo multijugador](#modo-multijugador)
-- [Menus](#menus)
-  - [Menu principal](#menu-principal)
-  - [Menu de elección de personaje](#menu-de-elección-de-personaje)
-  - [Menu de logros y estadísticas](#menu-de-logros-y-estadísticas)
-  - [Menu de opciones](#menu-de-opciones)
-  - [Menu de pausa](#menu-de-pausa)
-- [Controles](#controles)
-- [Plataformas](#plataformas)
-  - [Lista de plataformas](#lista-de-plataformas)
-    - [Bloques](#bloques)
-    - [Paredes](#paredes)
-    - [Plataformas](#plataformas-1)
-- [Personajes](#personajes)
-  - [Lista de personajes](#lista-de-personajes)
-- [Enemigos](#enemigos)
-  - [Lista de enemigos](#lista-de-enemigos)
-- [Estadísticas](#estadísticas)
-- [Objetos](#objetos)
-  - [Divisas](#divisas)
-  - [Cofres](#cofres)
-  - [Bonificadores](#bonificadores)
-  - [Modificadores de disparo](#modificadores-de-disparo)
-- [Logros y estadísticas globales](#logros-y-estadísticas-globales)
-  - [Estadísticas globales](#estadísticas-globales)
-  - [Logros](#logros)
+## Pilares
 
-# Instalación
+1. **Subir siempre**: la Decoherencia empuja, la altura puntúa.
+2. **Cada partida es un build**: sinergias entre familias de fuerzas y observables.
+3. **La semilla es sagrada**: misma semilla, mismo mundo.
+4. **Progresión que se nota**: morir nunca es perder del todo.
+5. **Imaginario cuántico coherente**: todo en el juego pertenece al mundo subatómico.
+6. **Lo social ocurre fuera**: semillas y capturas de la tarjeta final.
 
-WIP 🚧
+## Documentación de diseño
 
-# Modos de juego
+| Documento                                            | Contenido                                                                    |
+| ---------------------------------------------------- | ---------------------------------------------------------------------------- |
+| [01 · Visión y pilares](docs/01-vision.md)           | Concepto, referencias, decisiones tomadas, alcance, dirección artística      |
+| [02 · Universo y glosario](docs/02-universe.md)      | Premisa, regla de nombres código↔juego, glosario temático completo           |
+| [03 · Estructura de partida](docs/03-run.md)         | Capas, bifurcaciones, Decoherencia, jefes, victoria, Modo Plasma, puntuación |
+| [04 · Jugador](docs/04-player.md)                    | Controles, movimiento, combate, ranuras, estadísticas, personajes            |
+| [05 · Mundo](docs/05-world.md)                       | Capas (biomas), tramos, reglas de diseño y generación procedural             |
+| [06 · Economía](docs/06-economy.md)                  | Fotones, positrones, contenedores, Intercambio, divisas permanentes          |
+| [07 · Objetos y mejoras](docs/07-items.md)           | Observables, operadores, interacciones, unificaciones, rarezas y pools       |
+| [08 · Semillas](docs/08-seeds.md)                    | Reproducibilidad, tiradas direccionadas, monotonía de los modificadores      |
+| [09 · Enemigos y jefes](docs/09-enemies.md)          | Bestiario por capa y jefes                                                   |
+| [10 · Meta-progresión](docs/10-meta.md)              | El Núcleo, Campo de Higgs, Acelerador, personajes, Entropía, registros       |
+| [11 · Interfaz](docs/11-ui.md)                       | Flujo de pantallas, HUD, tarjeta de partida, opciones, _game feel_           |
+| [12 · Arquitectura](docs/12-architecture.md)         | Estructura técnica objetivo, convenciones y sistemas                         |
+| [13 · Dirección de arte](docs/13-art-style.md) | Estilo "Luz sobre el vacío", paleta, reglas visuales, animación y generador `art/` · [propuesta visual](docs/assets/art-direction/index.html) |
+| [99 · Ideas a futuro](docs/99-future-ideas.md) | Lo que queda fuera del roadmap: música, semilla diaria, guardar a mitad de partida, diálogos, Steam… |
 
-## Modo solitario
+El plan de desarrollo, fase a fase, está en el **[ROADMAP](ROADMAP.md)**.
 
-En este modo de juego el jugador comienza una nueva partida (generando la correspondiente semilla aleatoria) y debe de ascender por las plataformas evitando los enemigos y recogiendo los objetos que le ayudarán a avanzar.
+## Estado actual
 
-## Modo semilla
+Prototipo temprano (v0.4): menú, nivel con plataformas aleatorias, recogida de monedas y llaves, pinchos, HUD, pausa y pantalla final con semilla. Los assets son **provisionales**. Consulta el [ROADMAP](ROADMAP.md) para ver en qué fase está el proyecto.
 
-Este modo de juego es igual que el anterior, pero en lugar de generar una semilla aleatoria, el jugador puede introducir una semilla manualmente. Esto permite a los jugadores compartir semillas y competir por ver quien llega más lejos.
+## Ejecutar el proyecto
 
-## Modo multijugador
+1. Instala [Godot 4.7](https://godotengine.org/download).
+2. Abre `project.godot` desde el gestor de proyectos.
+3. Pulsa **F5**.
 
-En este modo de juego los jugadores compiten entre ellos en una partida en la que todos los jugadores comparten la misma semilla. Los jugadores entonces compiten por ver quien llega más lejos, jugando cada uno de forma local compartiendo la semilla con el resto de jugadores. Segun los jugadores van muriendo, se va generando una clasificación con la puntuación de cada jugador. Cuando todos los jugadores han muerto, se muestra la clasificación final y la partida termina.
+## Controles (objetivo)
 
-# Menus
+| Acción          | Teclado | Mando           |
+| --------------- | ------- | --------------- |
+| Moverse         | A / D   | Stick izquierdo |
+| Saltar          | Espacio | A               |
+| Disparar        | Flechas | Stick derecho   |
+| Túnel (esquiva) | Shift   | RB              |
+| Operador        | E       | LB              |
+| Build           | Tab     | Select          |
+| Pausa           | Esc     | Start           |
 
-## Menu principal
+## Licencia
 
-El menu principal es el menu que se muestra al iniciar el juego. Desde aquí se puede acceder a los distintos modos de juego, al menu de elección de personaje y a las opciones del juego.
-
-## Menu de elección de personaje
-
-En este menu se puede elegir el personaje con el que se jugará la partida. Cada personaje tiene sus propias habilidades y características.
-
-## Menu de logros y estadísticas
-
-En este menu se pueden consultar los logros y estadísticas globales del jugador.
-
-## Menu de opciones
-
-En este menu se pueden configurar las opciones del juego, como el volumen de la música y los efectos de sonido, controles, etc.
-
-## Menu de pausa
-
-Este menu se muestra cuando el jugador pausa la partida. Desde aquí se puede reanudar la partida, ir al menu de opciones, volver al menu principal o salir del juego.
-
-# Controles
-
-Los controles del juego son los siguientes:
-
-- 'A' para moverse a la izquierda.
-- 'D' para moverse a la derecha.
-- 'Espacio' para saltar.
-- '->' para disparar a la derecha.
-- '<-' para disparar a la izquierda.
-- '↑' para disparar hacia arriba.
-- '↓' para disparar hacia abajo.
-- 'Esc' para abrir el menu de pausa.
-
-# Plataformas
-
-La idea es generar un conjunto de plataformas de un tamaño fijo y que se vayan cargando y descargando según el jugador avanza por el nivel. Esta parte estará controlada por la semilla y la generación procedural.
-
-En cada plataforma hay varios sitios designados para la aparicion de objetos y enemigos en función del algoritmo procedural apareceran ahí o no (los objetos) o el tipo (enemigo). Habrá sitios designados para monedas (probabilidad alta), llaves (probabilidad baja). Cofre de monedas (probabilidad alta) y cofre de llaves (probabilidad baja). Bonificadores sin cofre (probabilidad baja)
-
-Los enemigos aparecerán en sitios designados pero el tipo de enemigo será aleatorio.
-
-## Lista de plataformas
-
-### Bloques
-
-- Bloque normal 1x2 (block_2)
-- Bloque normal 1x3 (block_3)
-- Bloque normal 1x4 (block_4)
-- Bloque pinchos 1 1x2 (WIP)
-- Bloque pinchos 2 1x2 (WIP)
-- WIP 🚧
-
-### Paredes
-
-- Pared normal (wall_normal)
-- Pared izquierda con hueco 1 (wall_left_hole_1)
-- WIP 🚧
-
-### Plataformas
-
-- Plataforma inicial (initial)
-- Plataforma 1 (platform_1)
-- Plataforma 2 (platform_2)
-- WIP 🚧
-
-# Personajes
-
-En un futuro se espera que el juego tenga varios personajes seleccionables, cada uno con sus propias habilidades y características.
-
-## Lista de personajes
-
-- Wilas: Personaje por defecto. No tiene habilidades especiales.
-- WIP 🚧
-
-# Enemigos
-
-Los enemigos son personajes que aparecen a partir de cierta altura y que intentan matar al jugador. Los enemigos pueden ser de varios tipos y tener distintos comportamientos.
-
-## Lista de enemigos
-
-WIP 🚧
-
-# Estadísticas
-
-Las estadísticas son modificadores que afectan al comportamiento del personaje. Estas estadísticas se pueden modificar recogiendo objetos o bonificadores. Algunas de estas estadísticas se mostraran en un HUD, otras en un panel de estadísticas, otras en una lista de objetos y otras no se mostrarán en ningún sitio.
-
-Las estadísticas de los personajes son las siguientes:
-
-- Vida (HUD): Cantidad de vida del personaje. Si llega a 0, el personaje muere.
-- Vida máxima (HUD): Cantidad máxima de vida del personaje.
-- Suerte (Stats): Modificador de probabilidad de aparición de objetos.
-- Velocidad (Stats): Velocidad a la que se mueve el personaje.
-- Salto (Stats): Fuerza del salto del personaje.
-- Tamaño (Stats): Tamaño del personaje.
-- Multi-salto (Stats): Cantidad de saltos que puede hacer el personaje en el aire.
-- Ataque (Stats): Daño que hace el personaje al disparar.
-- Celeridad (Stats): Velocidad a la que el personaje dispara.
-- Distancia (Stats): Distancia a la que llegan los disparos del personaje.
-- Defensa (Stats): Reducción de daño que recibe el personaje.
-- Modificadores disparo (List): Modificadores que afectan al disparo del personaje.
-- WIP 🚧
-
-En función del personaje que el jugador escoge, las estadísticas base del jugador varían.
-
-# Objetos
-
-Los objetos son elementos que aparecen de forma aleatoria en los sitios designados en las distintas plataformas y con los cuales el jugador puede interactuar. Los objetos pueden ser de cuatro tipos: divisas, cofres, bonificadores y modificadores de disparo.
-
-## Divisas
-
-- Moneda: Divisa básica del juego. Se usa para abrir cofres de monedas.
-- Llaves: Divisa especial del juego. Se usa para abrir cofres de llaves.
-
-## Cofres
-
-- Cofre de monedas: Contiene uno o mas modificadores de estadísticas.
-- Cofre de llaves: Contiene un modificador de disparo o estadística especial.
-
-## Bonificadores
-
-- Bonificador de curación: Recupera vida del personaje.
-- Bonificador de vida máxima: Aumenta la vida máxima del personaje.
-- Bonificador de suerte: Aumenta la suerte del personaje.
-- Bonificador de velocidad: Aumenta la velocidad del personaje.
-- Bonificador de salto: Aumenta la fuerza del salto del personaje.
-- Bonificador de tamaño: Reduce el tamaño del personaje.
-- Bonificador de multi-salto: Aumenta la cantidad de saltos que puede hacer el personaje en el aire.
-- Bonificador de ataque: Aumenta el daño que hace el personaje al disparar.
-- Bonificador de celeridad: Aumenta la velocidad a la que el personaje dispara.
-- Bonificador de distancia: Aumenta la distancia a la que llegan los disparos del personaje.
-- Bonificador de defensa: Aumenta la reducción de daño que recibe el personaje.
-- WIP 🚧
-
-## Modificadores de disparo
-
-- Disparo doble: Dispara dos proyectiles en lugar de uno.
-- Disparo triple: Dispara tres proyectiles en lugar de uno, sustituyendo al disparo doble.
-- Explosión: Los proyectiles explotan al impactar. La explosión hace daño a los enemigos cercanos.
-- Rebote: Los proyectiles rebotan en las paredes. Hace menos daño.
-- Perforante: Los proyectiles atraviesan a los enemigos. Hace menos daño.
-- Ralentizador: Los proyectiles ralentizan a los enemigos.
-- Veneno: Los proyectiles envenenan a los enemigos. Daño por segundo.
-- Fantasma: Los proyectiles atraviesan a las plataformas. Ya no pueden rebotar. Hace menos daño.
-- Brujula: Los proyectiles salen en las cuatro direcciones (arriba, abajo, derecha e izquierda).
-- WIP 🚧
-
-# Logros y estadísticas globales
-
-Las estadísticas globales se mantienen entre partidas. Estas estadísticas se pueden consultar en un panel de estadísticas a través del menú principal. Los logros son objetivos que se alcanzan cuando se alcanzan ciertos hitos en el juego o se llega a determinado valor en alguna estadistica global. Los logros se pueden consultar en un panel de logros a través del menú principal.
-
-## Estadísticas globales
-
-- Partidas jugadas: Cantidad de partidas jugadas.
-- Puntuación máxima: Puntuación más alta alcanzada en una partida.
-- Puntuación total: Puntuación total acumulada en todas las partidas.
-- Número máximo de saltos en una partida: Cantidad máxima de saltos realizados en una partida.
-- Número de saltos total: Cantidad total de saltos realizados en todas las partidas.
-- Número máximo de monedas recogidas en una partida: Cantidad máxima de monedas recogidas en una partida.
-- Número total de monedas recogidas: Cantidad total de monedas recogidas en todas las partidas.
-- Número máximo de llaves recogidas en una partida: Cantidad máxima de llaves recogidas en una partida.
-- Número total de llaves recogidas: Cantidad total de llaves recogidas en todas las partidas.
-- Número máximo de enemigos eliminados en una partida: Cantidad máxima de enemigos eliminados en una partida.
-- Número total de enemigos eliminados: Cantidad total de enemigos eliminados en todas las partidas.
-- WIP 🚧
-
-## Logros
-
-- Primer salto: Realiza el primer salto.
-- Primer disparo: Realiza el primer disparo.
-- Primer enemigo eliminado: Elimina el primer enemigo.
-- Primera moneda recogida: Recoge la primera moneda.
-- Primera llave recogida: Recoge la primera llave.
-- Primer bonificador recogido: Recoge el primer bonificador.
-- Primer modificador de disparo recogido: Recoge el primer modificador de disparo.
-- Primer cofre de monedas abierto: Abre el primer cofre de monedas.
-- Primer cofre de llaves abierto: Abre el primer cofre de llaves.
-- WIP 🚧
+[GPLv3](LICENSE)
