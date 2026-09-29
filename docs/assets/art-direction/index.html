@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Luz sobre el vacío · AtomicJump</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #05070F; --void-2: #0B1022; --void-3: #141B36; --grid: #1C2547;
+    --ink: #EAF2FF; --ink-dim: #8C97B8;
+    --player: #6BFFB8; --neg: #3DE8FF; --pos: #FF3D8B; --neu: #DCE3F5;
+    --em: #FFE45C; --strong: #FF6A3D; --weak: #C6FF3D; --grav: #8F7BFF; --quant: #FF7BF1;
+    --sans: "Space Grotesk", "DejaVu Sans", system-ui, sans-serif;
+    --mono: "JetBrains Mono", "DejaVu Sans Mono", ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--void); color: var(--ink); font: 17px/1.6 var(--sans); }
+  img { max-width: 100%; display: block; }
+  a { color: var(--player); }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  section { padding: 88px 0 24px; }
+  .kicker { font: 600 12px/1 var(--mono); letter-spacing: .22em; text-transform: uppercase; color: var(--player); margin-bottom: 14px; }
+  h1, h2, h3 { font-weight: 700; letter-spacing: -.02em; margin: 0; }
+  h2 { font-size: clamp(30px, 4.4vw, 46px); line-height: 1.08; margin-bottom: 18px; }
+  h3 { font-size: 21px; margin-bottom: 6px; }
+  p { margin: 0 0 14px; color: #C9D2EA; }
+  .lead { font-size: 20px; color: var(--ink); max-width: 760px; }
+  .dim { color: var(--ink-dim); }
+  .mono { font-family: var(--mono); }
+  .grid { display: grid; gap: 18px; }
+  .g2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+  .g3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .g4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+  .card { background: linear-gradient(180deg, var(--void-2), rgba(11,16,34,.5)); border: 1px solid var(--grid); border-radius: 16px; padding: 22px; }
+  .card img { margin: 0 auto 12px; }
+  .card h3 small { font: 500 12px var(--mono); color: var(--ink-dim); margin-left: 8px; }
+  .tag { display: inline-block; font: 600 11px/1 var(--mono); padding: 5px 8px; border-radius: 999px; border: 1px solid currentColor; margin: 0 6px 8px 0; }
+  .shot { border-radius: 14px; overflow: hidden; border: 1px solid var(--grid); box-shadow: 0 30px 80px -30px rgba(61,232,255,.25); }
+  .caption { font: 13px var(--mono); color: var(--ink-dim); margin-top: 10px; }
+  hr { border: 0; border-top: 1px solid var(--grid); margin: 64px 0 0; }
+
+  /* Portada */
+  .cover { min-height: min(100vh, 860px); display: grid; align-content: center; padding: 64px 0; position: relative; overflow: hidden; }
+  .cover::before { content: ""; position: absolute; inset: 0; background: url(img/bg_K.png) center/cover; opacity: .55; }
+  .cover .wrap { position: relative; }
+  .cover h1 { font-size: clamp(46px, 8vw, 104px); line-height: .95; margin: 8px 0 20px; }
+  .cover h1 span { color: var(--player); text-shadow: 0 0 30px rgba(107,255,184,.55); }
+  .cover .who { font: 13px var(--mono); color: var(--ink-dim); margin-top: 26px; }
+  .cover-art { display: grid; grid-template-columns: 1.2fr .8fr; gap: 40px; align-items: center; }
+  .cover-art img { filter: drop-shadow(0 0 40px rgba(107,255,184,.35)); }
+  @media (max-width: 760px) { .cover-art { grid-template-columns: 1fr; } .cover-art img { max-width: 200px; } }
+
+  .pillars .card { border-top: 3px solid var(--player); }
+  .pillars .card:nth-child(2) { border-top-color: var(--neg); }
+  .pillars .card:nth-child(3) { border-top-color: var(--pos); }
+  .pillars .num { font: 600 13px var(--mono); color: var(--ink-dim); }
+
+  /* Paleta */
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  .sw { border-radius: 12px; overflow: hidden; border: 1px solid var(--grid); background: var(--void-2); }
+  .sw div { height: 64px; }
+  .sw p { margin: 0; padding: 9px 11px; font: 12px/1.45 var(--mono); color: var(--ink-dim); }
+  .sw b { display: block; color: var(--ink); font: 600 13px var(--sans); }
+  .pal-title { font: 600 12px var(--mono); letter-spacing: .15em; text-transform: uppercase; color: var(--ink-dim); margin: 28px 0 10px; }
+
+  /* Reglas */
+  .rules { counter-reset: r; display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+  .rule { counter-increment: r; display: flex; gap: 16px; align-items: flex-start; background: var(--void-2); border: 1px solid var(--grid); border-radius: 14px; padding: 16px 18px; }
+  .rule::before { content: counter(r, decimal-leading-zero); font: 600 14px var(--mono); color: var(--player); padding-top: 2px; }
+  .rule p { margin: 0; }
+  .rule b { color: var(--ink); }
+
+  /* Enemigos */
+  .layer-h { display: flex; align-items: baseline; gap: 14px; margin: 42px 0 14px; }
+  .layer-h h3 { font-size: 26px; margin: 0; }
+  .enemy img { width: 150px; }
+  .enemy p { font-size: 15px; margin: 0; }
+
+  /* Iconos */
+  .icons { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 12px; }
+  .icons figure { margin: 0; background: var(--void-2); border: 1px solid var(--grid); border-radius: 12px; padding: 12px 8px; text-align: center; }
+  .icons img { width: 80px; margin: 0 auto 6px; }
+  .icons figcaption { font: 12px/1.3 var(--mono); color: var(--ink-dim); }
+  .row-items { display: flex; flex-wrap: wrap; gap: 14px; }
+  .row-items figure { margin: 0; text-align: center; width: 120px; background: var(--void-2); border: 1px solid var(--grid); border-radius: 12px; padding: 12px 6px; }
+  .row-items img { width: 70px; margin: 0 auto 6px; }
+  .row-items figcaption { font: 12px/1.3 var(--mono); color: var(--ink-dim); }
+
+  /* Capas */
+  .layers img { border-radius: 12px; border: 1px solid var(--grid); }
+  .layers .card { padding: 14px; }
+  .grid.layers { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 760px) { .grid.layers { grid-template-columns: 1fr; } }
+  .layers h3 { margin-top: 4px; }
+
+  /* Pipeline */
+  .pipe { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 0; margin: 26px 0; }
+  .step { position: relative; padding: 20px 20px 20px 0; }
+  .step .box { background: var(--void-2); border: 1px solid var(--grid); border-radius: 14px; padding: 18px; height: 100%; }
+  .step .box b { display: block; font: 600 12px var(--mono); color: var(--player); letter-spacing: .1em; margin-bottom: 6px; }
+  .step .box code { font: 12px var(--mono); color: var(--neg); }
+  .step:not(:last-child)::after { content: "→"; position: absolute; right: 2px; top: 50%; transform: translateY(-50%); color: var(--player); font: 18px var(--mono); }
+  @media (max-width: 760px) { .step:not(:last-child)::after { content: "↓"; right: 50%; top: auto; bottom: -6px; } }
+
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  th, td { text-align: left; padding: 12px 10px; border-bottom: 1px solid var(--grid); vertical-align: top; }
+  th { font: 600 12px var(--mono); color: var(--ink-dim); letter-spacing: .1em; text-transform: uppercase; }
+  td:first-child { color: var(--ink); white-space: nowrap; }
+  .table-scroll { overflow-x: auto; }
+
+  .honest { border-left: 3px solid var(--em); }
+  .anims { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); margin-top: 22px; }
+  .anim { margin: 0; background: var(--void); border: 1px solid var(--grid); border-radius: 14px; padding: 12px; }
+  .anim img { margin: 0 auto; border-radius: 8px; max-height: 360px; }
+  .anim figcaption { font-size: 14px; color: #C9D2EA; margin-top: 10px; }
+  .anim figcaption b { display: block; color: var(--ink); font-size: 15px; }
+  .anim figcaption .mono { font-size: 12px; color: var(--player); }
+  .live { display: inline-flex; align-items: center; gap: 8px; font: 600 11px var(--mono); color: var(--pos); letter-spacing: .15em; }
+  .live::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--pos); box-shadow: 0 0 10px var(--pos); animation: pulse 1.2s infinite; }
+  @keyframes pulse { 50% { opacity: .25; } }
+  @media (prefers-reduced-motion: reduce) { .live::before { animation: none; } }
+  .cta { text-align: center; padding: 110px 0 140px; }
+  .cta h2 { font-size: clamp(34px, 5vw, 60px); }
+  .cta img { width: 180px; margin: 0 auto 26px; filter: drop-shadow(0 0 30px rgba(107,255,184,.4)); }
+  nav.toc { position: sticky; top: 0; z-index: 5; background: rgba(5,7,15,.86); backdrop-filter: blur(10px); border-bottom: 1px solid var(--grid); }
+  nav.toc .wrap { display: flex; gap: 22px; overflow-x: auto; padding-top: 12px; padding-bottom: 12px; font: 12px var(--mono); white-space: nowrap; }
+  nav.toc a { color: var(--ink-dim); text-decoration: none; }
+  nav.toc a:hover { color: var(--player); }
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="wrap cover-art">
+    <div>
+      <div class="kicker">Propuesta de dirección de arte · AtomicJump</div>
+      <h1>Luz sobre<br>el <span>vacío</span>.</h1>
+      <p class="lead">Un átomo no se ilustra: se <em>mide</em>. Te propongo un estilo hecho de lo mismo que tu juego: partículas que brillan, órbitas que se curvan y nubes de probabilidad reales. Minimalista, legible a 60 FPS y producido íntegramente por código, así que crece contigo tramo a tramo.</p>
+      <div class="who">Presentado por Claude · Artista técnico y generativo · Septiembre 2026</div>
+    </div>
+    <img src="img/wilas_hero.png" alt="Wilas, el protagonista">
+  </div>
+</header>
+
+<nav class="toc"><div class="wrap">
+  <a href="#idea">La idea</a><a href="#paleta">Paleta</a><a href="#reglas">Lenguaje</a><a href="#wilas">Wilas</a><a href="#bestiario">Bestiario</a><a href="#mundo">Mundo</a><a href="#objetos">Objetos</a><a href="#iconos">Iconos</a><a href="#vfx">VFX</a><a href="#interfaz">Interfaz</a><a href="#proceso">Proceso</a><a href="#plan">Plan</a>
+</div></nav>
+
+<main class="wrap">
+
+<section>
+  <div class="live" style="margin-bottom:12px">EN MOVIMIENTO</div>
+  <div class="shot"><img src="img/anim_gameplay.webp" alt="Escena de juego animada en la Capa K"></div>
+  <p class="caption">Tres segundos de la Capa K. Wilas corre, salta, recoge fotones, dispara a un electrón orbital (las trazas en espiral son su desintegración) y encadena un salto cuántico hasta la siguiente plataforma. Cada fotograma sale del generador.</p>
+</section>
+
+<section id="idea">
+  <div class="kicker">01 · La idea en 30 segundos</div>
+  <h2>Tres promesas visuales</h2>
+  <p class="lead">AtomicJump pide un estilo que se lea al instante bajo presión, que se sienta cuántico sin necesitar explicación y que pueda producirse al ritmo de un roguelike que no para de crecer.</p>
+  <div class="grid g3 pillars" style="margin-top:28px">
+    <div class="card"><div class="num">I</div><h3>Luz sobre el vacío</h3><p>Fondo casi negro y todo lo importante emite luz. El contraste máximo hace que el ojo encuentre siempre lo que importa: tú, lo que te daña y lo que recoges.</p></div>
+    <div class="card"><div class="num">II</div><h3>Física de verdad</h3><p>Los fondos son las nubes de probabilidad reales de cada capa. Los enemigos tienen el color de su carga eléctrica. Las estelas imitan las trazas de una cámara de burbujas. Quien sepa física sonreirá, y quien no, lo sentirá coherente.</p></div>
+    <div class="card"><div class="num">III</div><h3>Legible a 60 FPS</h3><p>Siluetas únicas, un código de color estricto y reglas que nunca se rompen. En plena lluvia de muones sabes qué es cada cosa sin leer un solo texto.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="kicker">02 · Por qué este estilo</div>
+  <h2>Pensado para tu juego y para tu forma de producirlo</h2>
+  <div class="grid g2" style="margin-top:24px">
+    <div class="card"><h3>El arte provisional deja de existir</h3><p>Cada asset nace ya con el estilo final. Desde la Fase 4 del roadmap, todo lo que pruebes se verá como el juego terminado, no como un prototipo de Kenney.</p></div>
+    <div class="card"><h3>Coherente por construcción</h3><p>Una sola paleta y un solo conjunto de reglas alimentan todos los generadores. Es imposible que el enemigo número 12 no encaje con el número 1.</p></div>
+    <div class="card"><h3>Paramétrico</h3><p>¿La Capa M debería ser más fría? Se cambia un color y se regenera todo en segundos. ¿Wilas con un orbital más grueso? Una línea.</p></div>
+    <div class="card"><h3>Independiente de la resolución</h3><p>Vectorial: nítido en 720p, 1080p, 4K y Steam Deck. Resolución de referencia: 1280×720 con escalado <span class="mono">canvas_items</span>.</p></div>
+    <div class="card"><h3>Versionable</h3><p>Todo el arte es texto (Python, SVG y shaders): diffs legibles en git, revisión en PR y reproducible desde cero con un comando.</p></div>
+    <div class="card"><h3>No envejece</h3><p>Los estilos geométricos y luminosos (<em>Geometry Wars</em>, <em>Osmos</em>, <em>Thumper</em>) se ven igual de bien diez años después. El detalle realista envejece; la geometría no.</p></div>
+  </div>
+</section>
+
+<section id="paleta">
+  <div class="kicker">03 · Paleta</div>
+  <h2>Cada color tiene un trabajo</h2>
+  <p class="lead">Ningún color es decorativo. Si algo brilla en cian, es carga negativa; si brilla en menta, eres tú. La paleta vive en <span class="mono">art/atomic_art/palette.py</span> y la leen todos los generadores.</p>
+
+  <div class="pal-title">Vacío y luz</div>
+  <div class="swatches">
+    <div class="sw"><div style="background:#05070F"></div><p><b>Vacío</b>#05070F · fondo</p></div>
+    <div class="sw"><div style="background:#0B1022"></div><p><b>Vacío 2</b>#0B1022 · paneles, paredes</p></div>
+    <div class="sw"><div style="background:#141B36"></div><p><b>Vacío 3</b>#141B36 · rellenos</p></div>
+    <div class="sw"><div style="background:#EAF2FF"></div><p><b>Luz</b>#EAF2FF · texto, líneas</p></div>
+    <div class="sw"><div style="background:#8C97B8"></div><p><b>Luz tenue</b>#8C97B8 · secundario</p></div>
+  </div>
+  <div class="pal-title">Identidad y carga</div>
+  <div class="swatches">
+    <div class="sw"><div style="background:#6BFFB8"></div><p><b>Jugador</b>#6BFFB8 · exclusivo de Wilas y su coherencia</p></div>
+    <div class="sw"><div style="background:#3DE8FF"></div><p><b>Carga −</b>#3DE8FF · electrones, muones, tau</p></div>
+    <div class="sw"><div style="background:#FF3D8B"></div><p><b>Carga +</b>#FF3D8B · protones, alfa, positrón, peligro</p></div>
+    <div class="sw"><div style="background:#DCE3F5"></div><p><b>Neutra</b>#DCE3F5 · neutrones, neutrinos, Z</p></div>
+    <div class="sw"><div style="background:#C9D2FF"></div><p><b>Decoherencia</b>#C9D2FF · la amenaza</p></div>
+  </div>
+  <div class="pal-title">Familias de interacción</div>
+  <div class="swatches">
+    <div class="sw"><div style="background:#FFE45C"></div><p><b>Electromagnética</b>#FFE45C · y los fotones</p></div>
+    <div class="sw"><div style="background:#FF6A3D"></div><p><b>Fuerte</b>#FF6A3D</p></div>
+    <div class="sw"><div style="background:#C6FF3D"></div><p><b>Débil</b>#C6FF3D</p></div>
+    <div class="sw"><div style="background:#8F7BFF"></div><p><b>Gravitatoria</b>#8F7BFF</p></div>
+    <div class="sw"><div style="background:#FF7BF1"></div><p><b>Cuántica</b>#FF7BF1</p></div>
+  </div>
+  <div class="pal-title">Rarezas y capas</div>
+  <div class="swatches">
+    <div class="sw"><div style="background:#EAF2FF"></div><p><b>Fundamental</b>común</p></div>
+    <div class="sw"><div style="background:#4DA3FF"></div><p><b>Excitado</b>raro</p></div>
+    <div class="sw"><div style="background:#B06BFF"></div><p><b>Resonante</b>épico</p></div>
+    <div class="sw"><div style="background:#FFD25A"></div><p><b>Unificado</b>legendario · Higgs</p></div>
+    <div class="sw"><div style="background:linear-gradient(90deg,#2F6BFF 25%,#12C9B4 25% 50%,#8C4DFF 50% 75%,#FF3D62 75%)"></div><p><b>Capas K · L · M · N</b>tinte del orbital</p></div>
+  </div>
+</section>
+
+<section id="reglas">
+  <div class="kicker">04 · Lenguaje visual</div>
+  <h2>Seis reglas que nunca se rompen</h2>
+  <p class="lead">Estas reglas son el contrato entre el arte y la jugabilidad. Están codificadas en los generadores: no dependen de que alguien se acuerde.</p>
+  <img src="img/rules_color.png" alt="Regla de color por carga" style="max-width:620px;margin:26px 0">
+  <div class="rules">
+    <div class="rule"><p><b>El color es la carga.</b> Cian negativa, magenta positiva, blanco frío neutra. Aprendes a leer el juego aprendiendo física, sin darte cuenta.</p></div>
+    <div class="rule"><p><b>Relleno es materia, hueco es antimateria.</b> El positrón y el antiprotón son vacío rodeado de luz: su imagen en negativo.</p></div>
+    <div class="rule"><p><b>Ojos redondos solo para el jugador.</b> Los enemigos tienen ojos rasgados. Wilas es el único que te mira con cariño.</p></div>
+    <div class="rule"><p><b>La traza anticipa el movimiento.</b> Cada enemigo dibuja su huella: la órbita del electrón, la estela vertical del muón, las líneas de embestida de la alfa.</p></div>
+    <div class="rule"><p><b>La forma del marco es la familia.</b> Círculo EM, hexágono Fuerte, triángulo Débil, rombo Gravitatoria, estrella Cuántica y cuadrado para los observables.</p></div>
+    <div class="rule"><p><b>La joya es la rareza.</b> Un pequeño rombo bajo cada icono. Nunca se usa el color de rareza para otra cosa.</p></div>
+  </div>
+</section>
+
+<section id="wilas">
+  <div class="kicker">05 · Protagonista</div>
+  <h2>Wilas: una partícula con alma</h2>
+  <p class="lead">Un núcleo luminoso, un orbital inclinado que lo abraza con su electrón y dos ojos enormes. Toda la personalidad está en la mirada y en cómo se deforma: el cuerpo es una esfera perfecta que se estira al saltar y se aplasta al caer.</p>
+  <div class="card" style="margin-top:24px"><img src="img/wilas_sheet.png" alt="Hoja de modelo de Wilas"><p class="caption" style="text-align:center">Expresiones: reposo · alegría · salto · concentración · daño. Debajo, la deformación elástica (squash &amp; stretch), animada en el motor con tweens.</p></div>
+  <h3 style="margin:40px 0 4px">En movimiento</h3>
+  <div class="anims">
+    <figure class="anim"><img src="img/anim_wilas_idle.webp" alt=""><figcaption><b>Reposo</b>Flota, respira y parpadea; el electrón nunca deja de orbitar y pasa <em>por detrás</em> del núcleo. <span class="mono">órbita 1 s · parpadeo cada 2 s</span></figcaption></figure>
+    <figure class="anim"><img src="img/anim_wilas_jump.webp" alt=""><figcaption><b>Salto y salto cuántico</b>Anticipación aplastada, estiramiento al subir, pulso de anillo en el doble salto, peso en la caída y rebote al aterrizar. <span class="mono">anticipación 60 ms · aterrizaje 80 ms</span></figcaption></figure>
+    <figure class="anim"><img src="img/anim_wilas_hurt.webp" alt=""><figcaption><b>Daño</b>Destello blanco, ojos en X, retroceso y parpadeo mientras dura la invulnerabilidad. <span class="mono">destello 100 ms · i-frames 1 s a 15 Hz</span></figcaption></figure>
+  </div>
+  <div class="card" style="margin-top:22px">
+    <h3>Principios de animación</h3>
+    <div class="rules" style="margin-top:12px">
+      <div class="rule"><p><b>Nada está quieto.</b> Todo lo vivo respira, orbita o vibra. El vacío es lo único que no se mueve.</p></div>
+      <div class="rule"><p><b>Anticipar y deformar.</b> Las esferas se aplastan antes de saltar y al caer. La forma perfecta solo existe en reposo.</p></div>
+      <div class="rule"><p><b>Avisar antes de golpear.</b> Cada ataque enemigo tiene un aviso de 300–500 ms: una línea, un anillo o un parpadeo.</p></div>
+      <div class="rule"><p><b>Los impactos se sienten.</b> Destello, retroceso, <em>hitstop</em> de 40–60 ms y una traza que se desvanece.</p></div>
+      <div class="rule"><p><b>La física manda.</b> Las órbitas son elipses, las cargas dejan espirales y la aniquilación emite dos fotones opuestos.</p></div>
+      <div class="rule"><p><b>Todo en el motor.</b> Tweens, AnimationPlayer y shaders sobre formas vectoriales: no hay hojas de sprites que redibujar.</p></div>
+    </div>
+  </div>
+
+  <h3 style="margin:40px 0 14px">Personajes desbloqueables</h3>
+  <div class="grid g4">
+    <div class="card"><img src="img/char_wilas.png" alt="Wilas" width="140"><h3>Wilas</h3><p>Equilibrado. El orbital simple y limpio.</p></div>
+    <div class="card"><img src="img/char_muon.png" alt="Muón" width="140"><h3>Muón</h3><p>Tanque. Cuerpo cuadrado y doble anillo grueso: se ve pesado antes de moverse.</p></div>
+    <div class="card"><img src="img/char_neutrino.png" alt="Neutrino" width="140"><h3>Neutrino</h3><p>Fantasma. Contorno punteado y semitransparente; deja ecos de sí mismo.</p></div>
+    <div class="card"><img src="img/char_tau.png" alt="Tau" width="140"><h3>Tau</h3><p>Riesgo. Un rombo afilado que suelta fragmentos: literalmente se está desintegrando.</p></div>
+  </div>
+</section>
+
+<section id="bestiario">
+  <div class="kicker">06 · Bestiario</div>
+  <h2>Cada enemigo es un fenómeno</h2>
+  <p class="lead">La silueta cuenta cómo se mueve y el color cuenta qué es. Tres enemigos por capa, cada uno con una lectura instantánea.</p>
+
+  <div class="layer-h"><h3 style="color:#7FB0FF">Capa K</h3><span class="dim mono">1s · aprender a leer</span></div>
+  <div class="grid g3">
+    <div class="card enemy"><img src="img/enemy_K_0.png" alt=""><h3>Electrón orbital <small>−</small></h3><p>Su órbita punteada te dice exactamente por dónde pasará.</p></div>
+    <div class="card enemy"><img src="img/enemy_K_1.png" alt=""><h3>Neutrón libre <small>0</small></h3><p>Una cápsula con sus tres quarks (udd) dentro. La grieta avisa: al morir se desintegra.</p></div>
+    <div class="card enemy"><img src="img/enemy_K_2.png" alt=""><h3>Partícula alfa <small>+</small></h3><p>Dos protones y dos neutrones. Las líneas de velocidad anuncian la embestida.</p></div>
+  </div>
+  <div class="layer-h"><h3 style="color:#7CF5E4">Capa L</h3><span class="dim mono">2p · amenazas desde arriba</span></div>
+  <div class="grid g3">
+    <div class="card enemy"><img src="img/enemy_L_0.png" alt=""><h3>Muón <small>−</small></h3><p>Una gota que cae en picado; su estela vertical aparece antes que él.</p></div>
+    <div class="card enemy"><img src="img/enemy_L_1.png" alt=""><h3>Kaón <small>0</small></h3><p>Mitad sólido, mitad fantasma: oscila entre vulnerable e intangible.</p></div>
+    <div class="card enemy"><img src="img/enemy_L_2.png" alt=""><h3>Antiprotón <small>− anti</small></h3><p>Vacío rodeado de púas de luz. Si te toca, os aniquiláis los dos.</p></div>
+  </div>
+  <div class="layer-h"><h3 style="color:#C7A6FF">Capa M</h3><span class="dim mono">3d · lo que casi no se ve</span></div>
+  <div class="grid g3">
+    <div class="card enemy"><img src="img/enemy_M_0.png" alt=""><h3>Neutrino <small>0</small></h3><p>Casi invisible: una mira punteada que solo destella.</p></div>
+    <div class="card enemy"><img src="img/enemy_M_1.png" alt=""><h3>Partículas virtuales <small>±</small></h3><p>Materia y antimateria unidas por un bucle de Feynman. Mata a las dos o explotan.</p></div>
+    <div class="card enemy"><img src="img/enemy_M_2.png" alt=""><h3>Monopolo <small>N/S</small></h3><p>Sus líneas de campo curvan tus disparos. Se ve el campo, no se adivina.</p></div>
+  </div>
+  <div class="layer-h"><h3 style="color:#FF9DB0">Capa N</h3><span class="dim mono">4f · el caos</span></div>
+  <div class="grid g3">
+    <div class="card enemy"><img src="img/enemy_N_0.png" alt=""><h3>Trío de quarks <small>color</small></h3><p>Rojo, verde y azul unidos por muelles de gluón. Si estiras uno, el muelle se rompe y crea más.</p></div>
+    <div class="card enemy"><img src="img/enemy_N_1.png" alt=""><h3>Tau <small>−</small></h3><p>Élite. La silueta más agresiva del juego: una estrella de doce puntas.</p></div>
+    <div class="card enemy"><img src="img/enemy_N_2.png" alt=""><h3>Bosón Z <small>0</small></h3><p>Torreta hexagonal que emite ondas en abanico; la Z se lee de lejos.</p></div>
+  </div>
+
+  <h3 style="margin:44px 0 4px">Cómo se mueven</h3>
+  <div class="anims">
+    <figure class="anim"><img src="img/anim_orbital_electron.webp" alt=""><figcaption><b>Electrón orbital</b>La órbita punteada es la promesa; la estela, la confirmación. <span class="mono">1,5 s por vuelta</span></figcaption></figure>
+    <figure class="anim"><img src="img/anim_muon_fall.webp" alt=""><figcaption><b>Muón</b>Aviso parpadeante, caída en picado con aceleración, rebote y desintegración. <span class="mono">aviso 500 ms · caída 200 ms</span></figcaption></figure>
+    <figure class="anim"><img src="img/anim_kaon.webp" alt=""><figcaption><b>Kaón</b>Oscila entre sólido (se le puede dar) e intangible (atraviésalo). <span class="mono">ciclo 2 s</span></figcaption></figure>
+    <figure class="anim"><img src="img/anim_quark_triplet.webp" alt=""><figcaption><b>Trío de quarks</b>Los muelles de gluón se estiran y tiran de vuelta: el confinamiento se ve. <span class="mono">muelles recalculados cada fotograma</span></figcaption></figure>
+  </div>
+
+  <div class="card" style="margin-top:36px">
+    <div class="grid g2" style="align-items:center">
+      <img src="img/anim_pauli_pair.webp" alt="Jefe Par de Pauli en movimiento">
+      <div><div class="kicker">Jefe · Capa K</div><h3 style="font-size:28px">Par de Pauli</h3><p>Dos electrones gemelos con el espín opuesto (↑ ↓), siempre en espejo respecto al eje central. El principio de exclusión hecho mecánica: el escudo punteado cambia de uno a otro y nunca pueden ser vulnerables a la vez. Las coronas de luz marcan su tamaño de jefe sin romper la geometría del resto del juego.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="mundo">
+  <div class="kicker">07 · Mundo</div>
+  <h2>Cuatro capas, cuatro orbitales reales</h2>
+  <p class="lead">El fondo de cada capa es la <b>densidad de probabilidad real</b> de su orbital característico, calculada con las funciones de onda del átomo de hidrógeno. Los puntos son "mediciones" muestreadas de esa distribución, como en los libros de texto. En el juego será un shader con una animación sutil.</p>
+  <div class="grid g2 layers" style="margin-top:24px">
+    <div class="card"><img src="img/bg_K.png" alt="Capa K"><h3 style="color:#7FB0FF">Capa K · 1s</h3><p class="dim">Una nube esférica y serena. El lugar donde aprendes.</p></div>
+    <div class="card"><img src="img/bg_L.png" alt="Capa L"><h3 style="color:#7CF5E4">Capa L · 2p</h3><p class="dim">Dos lóbulos separados por un plano nodal: el mundo empieza a dividirse.</p></div>
+    <div class="card"><img src="img/bg_M.png" alt="Capa M"><h3 style="color:#C7A6FF">Capa M · 3d</h3><p class="dim">Un trébol de cuatro lóbulos; la geometría se complica.</p></div>
+    <div class="card"><img src="img/bg_N.png" alt="Capa N"><h3 style="color:#FF9DB0">Capa N · 4f</h3><p class="dim">Seis pétalos en rojo: la última capa antes de la ionización.</p></div>
+  </div>
+
+  <div class="grid g2" style="margin-top:22px;align-items:center">
+    <figure class="anim"><img src="img/anim_orbital_L.webp" alt="Fondo orbital animado de la Capa L"></figure>
+    <div><h3>El fondo respira</h3><p>En el juego, el fondo es un shader: la nube late despacio y las "mediciones" aparecen y se apagan como si alguien estuviera observando el átomo. Es movimiento ambiental que nunca compite con la acción.</p></div>
+  </div>
+
+  <h3 style="margin:44px 0 12px">Plataformas: niveles de energía</h3>
+  <p>Las plataformas son niveles de energía: barras con el borde superior luminoso y marcas de escala. Las atravesables son niveles "virtuales" discontinuos; las paredes, una retícula cristalina; los peligros, la gráfica literal de un potencial con picos.</p>
+  <div class="card"><img src="img/tiles.png" alt="Tiles"><img src="img/tiles_layers.png" alt="Plataformas por capa" style="margin-top:12px"></div>
+
+  <h3 style="margin:44px 0 12px">La Decoherencia</h3>
+  <p>La amenaza no es un color más: es la <b>ausencia de forma</b>. Un frente de ruido pálido que disuelve en bloques lo que toca, con líneas de escaneo. Contrasta con todo lo demás, que es geometría limpia.</p>
+  <div class="grid g2" style="align-items:center">
+    <figure class="anim"><img src="img/anim_decoherence.webp" alt="La Decoherencia subiendo"></figure>
+    <p>El frente ondula de forma continua, el ruido cambia en cada fotograma y los bloques se desprenden por delante como si el mundo se pixelara al perder coherencia. Se traga las plataformas sin cortarlas: simplemente dejan de existir bajo el ruido.</p>
+  </div>
+
+  <h3 style="margin:44px 0 12px">Bifurcaciones</h3>
+  <div class="grid g2" style="align-items:center">
+    <figure class="anim"><img src="img/anim_fork_collapse.webp" alt="Bifurcación: la rama no elegida colapsa"></figure>
+    <p>Cada salida muestra su recompensa. Al cruzar una, la otra <b>colapsa</b>: la pared se cierra, el icono se encoge y se disuelve en fragmentos. Es la función de onda eligiendo un estado, y el jugador lo entiende sin leer nada.</p>
+  </div>
+</section>
+
+<section id="objetos">
+  <div class="kicker">08 · Objetos y economía</div>
+  <h2>Cosas que dan ganas de coger</h2>
+  <p class="lead">Nada de monedas, llaves ni cofres: cada objeto de la economía es un fenómeno que se entiende a simple vista.</p>
+  <div class="row-items" style="margin-top:24px">
+    <figure><img src="img/pickup_photon_1.png" alt=""><figcaption>Fotón ×1</figcaption></figure>
+    <figure><img src="img/pickup_photon_5.png" alt=""><figcaption>Fotón ×5</figcaption></figure>
+    <figure><img src="img/pickup_photon_10.png" alt=""><figcaption>Fotón ×10</figcaption></figure>
+    <figure><img src="img/pickup_positron.png" alt=""><figcaption>Positrón</figcaption></figure>
+    <figure><img src="img/pickup_heal.png" alt=""><figcaption>Cuanto de energía</figcaption></figure>
+    <figure><img src="img/pickup_quark.png" alt=""><figcaption>Quark</figcaption></figure>
+    <figure><img src="img/pickup_higgs.png" alt=""><figcaption>Bosón de Higgs</figcaption></figure>
+  </div>
+  <div class="anims">
+    <figure class="anim"><img src="img/anim_photon_collect.webp" alt=""><figcaption><b>Recoger fotones</b>Ondulan en su sitio, se aceleran hacia Wilas al acercarse y estallan en un anillo con el contador. <span class="mono">atracción con aceleración (ease-in)</span></figcaption></figure>
+    <figure class="anim"><img src="img/anim_well_open.webp" alt=""><figcaption><b>Abrir un pozo cuántico</b>Los fotones pagados caen dentro, los niveles se encienden uno a uno y el objeto salta fuera del pozo. <span class="mono">pago 350 ms · salto 500 ms</span></figcaption></figure>
+    <figure class="anim"><img src="img/anim_annihilation.webp" alt=""><figcaption><b>Aniquilación</b>El positrón alcanza al electrón ligado: destello, dos fotones gamma en direcciones opuestas y el objeto queda libre. <span class="mono">e⁺ + e⁻ → γ γ</span></figcaption></figure>
+  </div>
+  <p class="caption">Los fotones son paquetes de ondas: más valor = más periodos y más halos. El quark lleva las tres cargas de color. El Higgs luce su halo discontinuo, como su propagador en un diagrama de Feynman.</p>
+  <div class="grid g3" style="margin-top:26px">
+    <div class="card"><img src="img/container_well.png" alt="" width="140"><h3>Pozo cuántico</h3><p>El objeto duerme en el fondo del pozo. Los niveles de energía se iluminan al pagar fotones y el objeto "salta" fuera.</p></div>
+    <div class="card"><img src="img/container_bound.png" alt="" width="140"><h3>Electrón ligado</h3><p>Un electrón custodia el objeto en órbita cerrada. El signo e⁺ te dice qué necesitas: aniquilación y destello.</p></div>
+    <div class="card"><img src="img/container_superposition.png" alt="" width="140"><h3>Superposición</h3><p>Dos objetos semitransparentes en el mismo sitio, bajo un |ψ⟩. Al tocar uno, el otro colapsa.</p></div>
+  </div>
+</section>
+
+<section id="iconos">
+  <div class="kicker">09 · Iconografía</div>
+  <h2>Un sistema, no cien dibujos</h2>
+  <p class="lead">El juego necesitará más de cien iconos. En lugar de dibujarlos uno a uno, propongo una gramática: <b>marco</b> (familia) + <b>glifo</b> (el efecto, a menudo un mini diagrama de Feynman) + <b>joya</b> (rareza). Un icono nuevo es una combinación nueva, y siempre encaja.</p>
+  <div class="icons" style="margin-top:24px">
+    <figure><img src="img/icon_0.png" alt=""><figcaption>Descarga en cadena</figcaption></figure>
+    <figure><img src="img/icon_1.png" alt=""><figcaption>Salto iónico</figcaption></figure>
+    <figure><img src="img/icon_2.png" alt=""><figcaption>Fisión</figcaption></figure>
+    <figure><img src="img/icon_3.png" alt=""><figcaption>Confinamiento</figcaption></figure>
+    <figure><img src="img/icon_4.png" alt=""><figcaption>Desintegración beta</figcaption></figure>
+    <figure><img src="img/icon_5.png" alt=""><figcaption>Singularidad</figcaption></figure>
+    <figure><img src="img/icon_6.png" alt=""><figcaption>Superposición</figcaption></figure>
+    <figure><img src="img/icon_7.png" alt=""><figcaption>Espín</figcaption></figure>
+    <figure><img src="img/icon_8.png" alt=""><figcaption>Masa efectiva</figcaption></figure>
+    <figure><img src="img/icon_9.png" alt=""><figcaption>Espín alto</figcaption></figure>
+    <figure><img src="img/icon_10.png" alt=""><figcaption>Gato de Schrödinger</figcaption></figure>
+  </div>
+  <p class="caption">"Salto iónico" es un electrón emitiendo un fotón; "Confinamiento", el intercambio de un gluón; "Desintegración beta", el diagrama n → p e⁻ ν̄. Divulgación escondida en la interfaz.</p>
+</section>
+
+<section id="vfx">
+  <div class="kicker">10 · Efectos visuales</div>
+  <h2>La firma: trazas de cámara de burbujas</h2>
+  <p class="lead">Las partículas cargadas dejan espirales que se cierran al perder energía en un campo magnético. Es la imagen más reconocible de la física de partículas, y aquí es el ADN de todos los efectos: disparos, impactos, muertes y transiciones de capa.</p>
+  <div class="shot" style="margin-top:24px"><img src="img/bubble_chamber.png" alt="Trazas de cámara de burbujas"></div>
+  <div class="grid g2" style="margin-top:22px;align-items:center">
+    <figure class="anim"><img src="img/anim_shot_impact.webp" alt="Disparo e impacto"><figcaption><b>Disparo e impacto</b>Retroceso al disparar, destello blanco en el enemigo, empujón y dos trazas en espiral de cargas opuestas. <span class="mono">3 disparos/s · impacto 150 ms</span></figcaption></figure>
+    <p>El proyectil de Wilas es un paquete de ondas: una cabeza brillante y una estela que ondula. Cada familia de interacción cambiará el color y la forma de la estela, así que <b>tu build se ve en tus disparos</b>.</p>
+  </div>
+</section>
+
+<section id="interfaz">
+  <div class="kicker">11 · Interfaz</div>
+  <h2>Hecha para la captura</h2>
+  <p class="lead">El HUD vive en las esquinas y deja el centro libre para la acción vertical. Y la tarjeta de partida es el cartel que tus jugadores compartirán: la semilla en grande, el build en iconos y una composición limpia a 16:9.</p>
+  <div class="shot" style="margin-top:24px"><img src="img/hero.png" alt="HUD sobre una captura simulada"></div>
+  <p class="caption">HUD sobre una captura simulada: coherencia y saltos disponibles, capa y altura, divisas, operador e interacciones por ranura. Arriba, las dos salidas de una bifurcación con su recompensa.</p>
+  <div class="shot" style="margin-top:28px"><img src="img/run_card.png" alt="Tarjeta de partida"></div>
+  <p class="caption">Tarjeta de partida · diseñada para hacerle captura y enviarla. La semilla es lo primero que se lee.</p>
+</section>
+
+<section id="proceso">
+  <div class="kicker">12 · Cómo trabajo</div>
+  <h2>Del código a la pantalla</h2>
+  <p class="lead">Todo el arte sale de un proyecto Python en <span class="mono">art/</span>. Lo genero, lo renderizo, <b>lo miro</b> y lo corrijo, en ciclos de minutos. Cuando pidas un enemigo nuevo, llega con el estilo del resto sin que tengas que tocar nada.</p>
+  <div class="pipe">
+    <div class="step"><div class="box"><b>1 · PALETA Y REGLAS</b><code>palette.py</code><p class="dim" style="margin:6px 0 0;font-size:14px">Tokens de color y reglas del lenguaje visual.</p></div></div>
+    <div class="step"><div class="box"><b>2 · GENERADORES</b><code>characters.py · enemies.py · items.py · world.py</code><p class="dim" style="margin:6px 0 0;font-size:14px">Cada asset es una función. NumPy calcula los orbitales.</p></div></div>
+    <div class="step"><div class="box"><b>3 · SVG / PNG</b><code>uv run build…</code><p class="dim" style="margin:6px 0 0;font-size:14px">Vectores para Godot y renders para revisar.</p></div></div>
+    <div class="step"><div class="box"><b>4 · REVISIÓN VISUAL</b><code>hoja de contactos</code><p class="dim" style="margin:6px 0 0;font-size:14px">Renderizo y compruebo la coherencia del conjunto.</p></div></div>
+    <div class="step"><div class="box"><b>5 · GODOT</b><code>import SVG · shaders · tweens</code><p class="dim" style="margin:6px 0 0;font-size:14px">El motor pone el brillo, el movimiento y la vida.</p></div></div>
+  </div>
+  <div class="grid g2">
+    <div class="card"><h3>Lo que hace el generador</h3><p>Formas, colores, composiciones, atlas de tiles, iconos, fondos orbitales, texturas de ruido y los SFX, sintetizados al estilo sfxr.</p></div>
+    <div class="card"><h3>Lo que hace el motor</h3><p>El brillo (<em>glow</em>: el importador SVG de Godot no admite filtros, así que se aplica con el glow del entorno o con un shader de bloom), los fondos animados por shader, la Decoherencia, las partículas y toda la animación: órbitas que giran, squash &amp; stretch y parpadeos.</p></div>
+  </div>
+  <div class="card honest" style="margin-top:18px"><h3>Lo que te digo con sinceridad</h3><p>Este estilo tiene un techo deliberadamente minimalista: no habrá ilustraciones detalladas ni retratos pintados. La personalidad sale de la forma, el color, el movimiento y el <em>game feel</em>. Para la <b>música</b> te recomiendo una librería o un encargo externo: puedo generar efectos de sonido coherentes, pero no música a la altura del juego. Las <b>fuentes</b> (Space Grotesk y JetBrains Mono) son libres, de Google Fonts.</p></div>
+</section>
+
+<section id="plan">
+  <div class="kicker">13 · Plan de entrega</div>
+  <h2>El arte acompaña al roadmap</h2>
+  <p class="lead">No hace falta esperar a la Fase 13: el estilo es barato de producir, así que el arte crece a la vez que el juego.</p>
+  <div class="table-scroll" style="margin-top:22px"><table>
+    <thead><tr><th>Fase del roadmap</th><th>Entregables de arte</th></tr></thead>
+    <tbody>
+      <tr><td>2 · Refactor</td><td>Tema de UI base (fuentes, colores y paneles) y guía de estilo en <span class="mono">docs/13-art-style.md</span>.</td></tr>
+      <tr><td>4 · Movimiento</td><td>Wilas final con sus expresiones y deformación; shader de la Decoherencia; glow configurado.</td></tr>
+      <tr><td>5 · Tramos</td><td>Tileset de la Capa K (niveles, virtuales, retícula, picos) como atlas generado; fondo orbital 1s en shader.</td></tr>
+      <tr><td>6 · Combate</td><td>Enemigos de la Capa K, proyectiles, impactos y muertes (trazas).</td></tr>
+      <tr><td>7–8 · Objetos</td><td>Recogibles, contenedores y sistema de iconos con los primeros ~40 iconos.</td></tr>
+      <tr><td>9 · Demo</td><td>Par de Pauli, tarjeta de partida y SFX de la Capa K. Demo publicable en itch.io con arte final.</td></tr>
+      <tr><td>10–12 · Juego completo</td><td>Núcleo (lobby), capas L, M y N (tiles, fondos, enemigos y jefes), personajes y el resto de iconos.</td></tr>
+      <tr><td>13–14 · Pulido</td><td>Pasada global de coherencia, VFX de alto impacto, transiciones de capa, accesibilidad (modo daltónico: la forma ya distingue familias y rarezas).</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="cta">
+  <img src="img/wilas_hero.png" alt="">
+  <h2>¿Encendemos la luz?</h2>
+  <p class="lead" style="margin:0 auto">Si esta dirección te convence, la guía de estilo ya está en <span class="mono">docs/13-art-style.md</span> y el siguiente paso es dejar el generador listo para producir los assets de la Fase 4. Todo lo que ves aquí se regenera con un comando:</p>
+  <p class="mono" style="margin-top:18px;color:var(--player)">cd art &amp;&amp; uv run build_art_direction.py</p>
+</section>
+
+</main>
+</body>
+</html>
