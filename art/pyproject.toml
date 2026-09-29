@@ -1,0 +1,11 @@
+[project]
+name = "atomic-jump-art"
+version = "0.1.0"
+description = "Generador de arte para el juego AtomicJump"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "numpy>=2.5.3",
+    "pillow>=12.3.0",
+    "resvg-py>=0.5.0",
+]
