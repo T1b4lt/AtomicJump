@@ -29,7 +29,7 @@ La **v1.0** llegará después de la 0.99.0. Antes faltan cosas que quedan **fuer
 
 **Objetivo:** dejar el repositorio y las herramientas listos para trabajar con seguridad.
 
-- [ ] Commitear la migración a Godot 4.7 (`project.godot`, `*.import`, `*.gd.uid`).
+- [x] Commitear la migración a Godot 4.7 (`project.godot`, `*.import`, `*.gd.uid`).
 - [ ] Revisar `.gitignore` (mantener `.godot/`; añadir `*.tmp`, `export/` y builds).
 - [ ] Añadir `.editorconfig` (tabs en `.gd`, LF, UTF-8).
 - [ ] Activar avisos de GDScript como error: `untyped_declaration`, `unsafe_*` y `unused_*` (ajustar si son demasiado ruidosos).
