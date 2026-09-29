@@ -5,6 +5,6 @@ extends CanvasLayer
 const MAIN_MENU_SCENE = "res://screens/main_menu/main_menu.tscn"
 
 
-func _on_main_menu_button_pressed():
+func _on_main_menu_button_pressed() -> void:
 	# Go back to menu
 	get_tree().change_scene_to_file(MAIN_MENU_SCENE)

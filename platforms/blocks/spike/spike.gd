@@ -2,9 +2,10 @@ class_name Spike
 extends Area2D
 
 # Parameters
-const spike_damage: float = 10.0
+const SPIKE_DAMAGE: float = 10.0
 
-func _on_body_entered(body):
+
+func _on_body_entered(body: Node2D) -> void:
 	if body is Protagonist:
 		# Damage protagonist (use game.pr_defense as damage reducer factor)
-		game.pr_hp = max(0, game.pr_hp - spike_damage * game.pr_defense)
+		game.pr_hp = maxf(0.0, game.pr_hp - SPIKE_DAMAGE * game.pr_defense)

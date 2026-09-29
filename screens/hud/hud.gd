@@ -1,27 +1,28 @@
 class_name HUD
 extends CanvasLayer
 
-
 # Childs
-@onready var game_seed = $seed_panel/MarginContainer/game_seed
+@onready var game_seed: Label = $seed_panel/MarginContainer/game_seed
 
-@onready var altitude = $stats_panel/MarginContainer/GridContainer/altitude_data
+@onready var altitude: Label = $stats_panel/MarginContainer/GridContainer/altitude_data
 
-@onready var coins = $stats_panel/MarginContainer/GridContainer/coins_data
-@onready var keys = $stats_panel/MarginContainer/GridContainer/keys_data
+@onready var coins: Label = $stats_panel/MarginContainer/GridContainer/coins_data
+@onready var keys: Label = $stats_panel/MarginContainer/GridContainer/keys_data
 
 # Protagonist stats
-@onready var luck = $stats_panel/MarginContainer/GridContainer/luck_data
-@onready var speed = $stats_panel/MarginContainer/GridContainer/speed_data
-@onready var jump_force = $stats_panel/MarginContainer/GridContainer/jump_force_data
-@onready var max_jumps = $stats_panel/MarginContainer/GridContainer/max_jumps_data
-@onready var size = $stats_panel/MarginContainer/GridContainer/size_data
-@onready var attack_power = $stats_panel/MarginContainer/GridContainer/attack_power_data
-@onready var attack_haste = $stats_panel/MarginContainer/GridContainer/attack_haste_data
-@onready var attack_distance = $stats_panel/MarginContainer/GridContainer/attack_distance_data
-@onready var defense = $stats_panel/MarginContainer/GridContainer/defense_data
+@onready var luck: Label = $stats_panel/MarginContainer/GridContainer/luck_data
+@onready var speed: Label = $stats_panel/MarginContainer/GridContainer/speed_data
+@onready var jump_force: Label = $stats_panel/MarginContainer/GridContainer/jump_force_data
+@onready var max_jumps: Label = $stats_panel/MarginContainer/GridContainer/max_jumps_data
+@onready var size: Label = $stats_panel/MarginContainer/GridContainer/size_data
+@onready var attack_power: Label = $stats_panel/MarginContainer/GridContainer/attack_power_data
+@onready var attack_haste: Label = $stats_panel/MarginContainer/GridContainer/attack_haste_data
+# gdlint:ignore = max-line-length
+@onready var attack_distance: Label = $stats_panel/MarginContainer/GridContainer/attack_distance_data
+@onready var defense: Label = $stats_panel/MarginContainer/GridContainer/defense_data
 
-func _ready():
+
+func _ready() -> void:
 	# Set game seed
 	game_seed.text = str(game.game_seed)
 
@@ -36,10 +37,11 @@ func _ready():
 	attack_distance.text = "%.2f" % game.pr_attack_distance
 	defense.text = "%.2f" % game.pr_defense
 
-func _process(_delta):
+
+func _process(_delta: float) -> void:
 	# Set stats from game values
 	altitude.text = "%.2f" % game.altitude
-	
+
 	# Currencies
 	coins.text = str(game.actual_coins)
 	keys.text = str(game.actual_keys)
@@ -54,6 +56,3 @@ func _process(_delta):
 	attack_haste.text = "%.2f" % game.pr_attack_haste
 	attack_distance.text = "%.2f" % game.pr_attack_distance
 	defense.text = "%.2f" % game.pr_defense
-
-	
-

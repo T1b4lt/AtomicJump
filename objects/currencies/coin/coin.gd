@@ -2,13 +2,15 @@ class_name Coin
 extends Area2D
 
 # Childs
-@onready var anim = $AnimatedSprite2D
+@onready var anim: AnimatedSprite2D = $AnimatedSprite2D
 
-func _ready():
+
+func _ready() -> void:
 	# Start playing idle animation
 	anim.play("idle")
 
-func _on_body_entered(body):
+
+func _on_body_entered(body: Node2D) -> void:
 	if body is Protagonist:
 		# Increase game coins
 		game.actual_coins += 1
