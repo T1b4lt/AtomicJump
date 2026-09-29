@@ -30,14 +30,14 @@ La **v1.0** llegará después de la 0.99.0. Antes faltan cosas que quedan **fuer
 **Objetivo:** dejar el repositorio y las herramientas listos para trabajar con seguridad.
 
 - [x] Commitear la migración a Godot 4.7 (`project.godot`, `*.import`, `*.gd.uid`).
-- [ ] Revisar `.gitignore` (mantener `.godot/`; añadir `*.tmp`, `export/` y builds).
-- [ ] Añadir `.editorconfig` (tabs en `.gd`, LF, UTF-8).
-- [ ] Activar avisos de GDScript como error: `untyped_declaration`, `unsafe_*` y `unused_*` (ajustar si son demasiado ruidosos).
-- [ ] Instalar **gdtoolkit** (`gdformat`, `gdlint`) con configuración en el repo; formatear el código existente.
-- [ ] Instalar **gdUnit4** y crear un test trivial que pase en modo _headless_.
-- [ ] Workflow de CI: lint + tests en cada PR.
-- [ ] Crear `CLAUDE.md` con convenciones, comandos (ejecutar, testear, lint) y enlace a `docs/`.
-- [ ] Crear presets de exportación (Windows y Linux) y comprobar que el proyecto exporta.
+- [x] Revisar `.gitignore` (mantener `.godot/`; añadir `*.tmp`, `export/` y builds).
+- [x] Añadir `.editorconfig` (tabs en `.gd`, LF, UTF-8).
+- [x] Activar avisos de GDScript como error: `untyped_declaration`, `unsafe_*` y `unused_*` (ajustar si son demasiado ruidosos).
+- [x] Instalar **gdtoolkit** (`gdformat`, `gdlint`) con configuración en el repo; formatear el código existente.
+- [x] Instalar **gdUnit4** y crear un test trivial que pase en modo _headless_.
+- [x] Workflow de CI: lint + tests en cada PR.
+- [x] Ampliar `AGENTS.md` con convenciones, comandos (ejecutar, testear, lint) y enlace a `docs/`.
+- [x] Crear presets de exportación (Windows y Linux) y comprobar que el proyecto exporta.
 
 **Terminado cuando:** CI en verde en una PR de prueba y el juego se ejecuta y exporta con 4.7.
 
@@ -71,7 +71,7 @@ La **v1.0** llegará después de la 0.99.0. Antes faltan cosas que quedan **fuer
 - [ ] Migrar el viewport de 1160×670 a 1280×720 con `canvas_items` / `keep_width` ([13-dirección de arte](docs/13-art-style.md)).
 - [ ] Renombrar acciones de input (`move_left`, `move_right`…) y añadir las de mando.
 - [ ] Localización: CSV de traducción, `tr()` en todos los textos visibles, idioma inicial español.
-- [ ] Tipado estático en todo el código.
+- [x] Tipado estático en todo el código (adelantado a la Fase 0: era necesario al activar los avisos como error).
 - [ ] Tests unitarios de `Stats` y `RunState`.
 
 **Terminado cuando:** el juego se comporta como tras la Fase 1, no quedan avisos de tipado y los tests de estadísticas pasan.
