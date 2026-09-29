@@ -1,9 +1,11 @@
 class_name Protagonist
 extends CharacterBody2D
 
-
 # Parameters
-var GRAVITY = ProjectSettings.get_setting("physics/2d/default_gravity")
+var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
+
+# Variables
+var consecutive_jump_count: int = 0
 
 # Childs
 @onready var body_sprite: Sprite2D = $body
@@ -11,42 +13,41 @@ var GRAVITY = ProjectSettings.get_setting("physics/2d/default_gravity")
 @onready var hp_bar: ProgressBar = $hp_bar
 @onready var hp_data: Label = $hp_bar/hp_data
 
-# Variables
-var consecutive_jump_count = 0
 
-
-func _ready():
+func _ready() -> void:
 	# Set initial scale from game.gd
 	scale = Vector2(game.pr_size, game.pr_size)
-	
+
 	# Set initial values for hp_bar and hp_text from game.gd
 	hp_bar.max_value = game.pr_max_hp
 	hp_bar.value = game.pr_hp
 	hp_data.text = "%.2f" % game.pr_hp + "/" + str(game.pr_max_hp)
 
-func _process(_delta):
+
+func _process(_delta: float) -> void:
 	# Update Health bar and text with game.gd values
 	hp_bar.max_value = game.pr_max_hp
 	hp_bar.value = game.pr_hp
 	hp_data.text = "%.2f" % game.pr_hp + "/" + str(game.pr_max_hp)
 
-func _physics_process(delta):
+
+func _physics_process(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor():
-		velocity.y += GRAVITY * delta
+		velocity.y += gravity * delta
 
 	# Handle jump.
 	if Input.is_action_just_pressed("jump") and consecutive_jump_count < game.pr_max_jumps - 1:
 		velocity.y = game.pr_jump_force
 		consecutive_jump_count += 1
 		game.jump_counter += 1
-		
+
 	# Reset jump count when on floor
 	if is_on_floor():
 		consecutive_jump_count = 0
 
 	# Get the input direction and handle the movement/deceleration.
-	var direction = Input.get_axis("left", "right")
+	var direction: float = Input.get_axis("left", "right")
 	if direction:
 		velocity.x = direction * game.pr_speed
 		# Flip the sprite based on movement direction
@@ -72,7 +73,8 @@ func _physics_process(delta):
 		else:
 			play_animation("idle")
 
-func play_animation(animation_name: String):
+
+func play_animation(animation_name: String) -> void:
 	# If animation is not being played, play it
 	if animation_player.current_animation != animation_name:
 		animation_player.play(animation_name)

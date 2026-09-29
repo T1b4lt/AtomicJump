@@ -1,0 +1,2 @@
+# Herramientas de desarrollo (lint y formato de GDScript)
+gdtoolkit==4.5.0

@@ -6,16 +6,18 @@ const LEVEL_SCENE = "res://screens/level/level.tscn"
 const SETTINGS_MENU_SCENE = "res://screens/settings_menu/settings_menu.tscn"
 
 # Childs
-@onready var game_seed_input = $VBoxContainer/HBoxContainer/game_seed_input
+@onready var game_seed_input: LineEdit = $VBoxContainer/HBoxContainer/game_seed_input
 
-func _on_solo_mode_button_pressed():
+
+func _on_solo_mode_button_pressed() -> void:
 	# Generate a game seed
-	var game_seed = str(Time.get_unix_time_from_system()).hash()
+	var game_seed: int = str(Time.get_unix_time_from_system()).hash()
 	game.game_seed = game_seed
 	# Change to scene level
 	get_tree().change_scene_to_file(LEVEL_SCENE)
 
-func _on_seed_mode_button_pressed():
+
+func _on_seed_mode_button_pressed() -> void:
 	# Check that game seed is correct
 	if game_seed_input.text.length() != 9 or !game_seed_input.text.is_valid_int():
 		# Reset input
@@ -25,11 +27,13 @@ func _on_seed_mode_button_pressed():
 	game.game_seed = int(game_seed_input.text)
 	# Change to scene level
 	get_tree().change_scene_to_file(LEVEL_SCENE)
-	
-func _on_settings_button_pressed():
+
+
+func _on_settings_button_pressed() -> void:
 	# Change to settings menu
 	get_tree().change_scene_to_file(SETTINGS_MENU_SCENE)
 
-func _on_exit_button_pressed():
+
+func _on_exit_button_pressed() -> void:
 	# Exit game
 	get_tree().quit()

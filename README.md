@@ -58,6 +58,13 @@ Prototipo temprano (v0.4): menú, nivel con plataformas aleatorias, recogida de 
 2. Abre `project.godot` desde el gestor de proyectos.
 3. Pulsa **F5**.
 
+## Desarrollo
+
+- Lint y formato: `pip install -r requirements-dev.txt`, después `gdformat .` y `gdlint .`.
+- Tests (gdUnit4, _headless_): `GODOT_BIN=/ruta/a/godot addons/gdUnit4/runtest.sh --headless --ignoreHeadlessMode -a res://tests`.
+- Exportar: presets `Windows Desktop` y `Linux` en `export_presets.cfg` (requieren las plantillas de exportación de la 4.7.2).
+- La CI ejecuta lint y tests en cada PR. Convenciones y comandos completos en [AGENTS.md](AGENTS.md) y [12 · Arquitectura](docs/12-architecture.md#calidad).
+
 ## Controles (objetivo)
 
 | Acción          | Teclado | Mando           |

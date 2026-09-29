@@ -25,11 +25,28 @@ config/icon="res://atomic_jump_icon.png"
 game="*res://scripts/game.gd"
 settings="*res://scripts/settings.gd"
 
+[debug]
+
+gdscript/warnings/untyped_declaration=2
+gdscript/warnings/unsafe_property_access=2
+gdscript/warnings/unsafe_method_access=2
+gdscript/warnings/unsafe_cast=2
+gdscript/warnings/unsafe_call_argument=2
+gdscript/warnings/unused_variable=2
+gdscript/warnings/unused_local_constant=2
+gdscript/warnings/unused_private_class_variable=2
+gdscript/warnings/unused_parameter=2
+gdscript/warnings/unused_signal=2
+
 [display]
 
 window/size/viewport_width=1160
 window/size/viewport_height=670
 window/size/resizable=false
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg")
 
 [input]
 

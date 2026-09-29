@@ -1,0 +1,9 @@
+# Configuración de gdformat (gdtoolkit 4.x). Indentación con tabs.
+excluded_directories: !!set
+  .git: null
+  .godot: null
+  addons: null
+  art: null
+line_length: 100
+safety_checks: null
+use_spaces: null
