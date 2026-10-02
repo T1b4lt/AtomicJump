@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="CharacterData" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://actors/player/character_data.gd" id="1_chara"]
+[ext_resource type="Script" path="res://core/stats/stat_block.gd" id="2_stats"]
+
+[sub_resource type="Resource" id="StatBlock_wilas"]
+script = ExtResource("2_stats")
+max_hp = 100.0
+luck = 0.0
+speed = 300.0
+jump_force = 450.0
+max_jumps = 2.0
+size = 1.0
+attack_power = 5.0
+attack_rate = 2.5
+attack_range = 450.0
+defense = 0.0
+
+[resource]
+script = ExtResource("1_chara")
+id = &"wilas"
+name_key = "CHARACTER_WILAS_NAME"
+base_stats = SubResource("StatBlock_wilas")
