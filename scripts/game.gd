@@ -1,6 +1,11 @@
 class_name Game
 extends Node
 
+# Provisional seed format until Phase 3: always a positive 9-digit number
+const SEED_MIN: int = 100_000_000
+const SEED_MAX: int = 999_999_999
+const SEED_DIGITS: int = 9
+
 # Random number generator seed
 var game_seed: int
 
@@ -26,6 +31,28 @@ var total_coins: int = 0
 var actual_coins: int = 0
 var total_keys: int = 0
 var actual_keys: int = 0
+
+
+## Generates a random seed that can be typed back in the main menu.
+static func generate_seed() -> int:
+	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+	rng.randomize()
+	return rng.randi_range(SEED_MIN, SEED_MAX)
+
+
+## Returns whether the text is a seed the player can type in the main menu.
+static func is_valid_seed_text(text: String) -> bool:
+	var trimmed: String = text.strip_edges()
+	if trimmed.length() != SEED_DIGITS or not trimmed.is_valid_int():
+		return false
+	var value: int = trimmed.to_int()
+	return value >= SEED_MIN and value <= SEED_MAX
+
+
+## Starts a new run from a clean state, whatever screen the previous run ended on.
+func start_run(new_seed: int) -> void:
+	reset_game()
+	game_seed = new_seed
 
 
 func reset_game() -> void:

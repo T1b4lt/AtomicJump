@@ -33,7 +33,5 @@ func _ready() -> void:
 
 
 func _on_menu_button_pressed() -> void:
-	# Reset game values
-	game.reset_game()
 	# Navigate to Main Menu scene
 	get_tree().change_scene_to_file(MAIN_MENU_SCENE)

@@ -45,8 +45,8 @@ La **v1.0** llegará después de la 0.99.0. Antes faltan cosas que quedan **fuer
 
 **Objetivo:** arreglar los fallos detectados antes de refactorizar, para tener una referencia de comportamiento correcto.
 
-- [ ] Reiniciar el estado de partida también al volver al menú desde la pausa (hoy solo se reinicia desde Game Over).
-- [ ] Hacer que las semillas generadas se puedan volver a introducir. Solución provisional hasta la Fase 3: generar siempre números de 9 dígitos positivos, o aceptar cualquier entero.
+- [x] Reiniciar el estado de partida también al volver al menú desde la pausa (hoy solo se reinicia desde Game Over).
+- [x] Hacer que las semillas generadas se puedan volver a introducir. Solución provisional hasta la Fase 3: generar siempre números de 9 dígitos positivos, o aceptar cualquier entero.
 - [ ] Permitir reanudar con Esc desde la pausa (`process_mode` del manejo de input).
 - [ ] Hacer explícita la lógica de saltos: contar los saltos aéreos sin depender de que `is_on_floor()` sea verdadero justo después de saltar.
 - [ ] Pinchos: daño continuo con invulnerabilidad mientras se está en contacto, en lugar de un único golpe al entrar.
