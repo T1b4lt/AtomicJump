@@ -1,68 +1,59 @@
 class_name Chunk
 extends Node2D
+## Prototype chunk: a screen-high block of platforms with object placeholders.
+## Phase 5 turns it into the real chunk format (docs/05-world.md).
 
-# Signals
-signal platform_enter_screen
-signal platform_leave_screen
+signal screen_entered
+signal screen_exited
 
-# Scenes
-const SPIKE_SCENE = "res://world/hazards/spike/spike.tscn"
-const COIN_SCENE = "res://items/pickups/coin/coin.tscn"
-const KEY_SCENE = "res://items/pickups/key/key.tscn"
+## Height of every prototype chunk in px (the old 1160×670 viewport height).
+const HEIGHT: float = 670.0
+## Width of the playable area in px, walls included.
+const WIDTH: float = 1160.0
+const SPIKE_SCENE: PackedScene = preload("res://world/hazards/spike/spike.tscn")
+const COIN_SCENE: PackedScene = preload("res://items/pickups/coin/coin.tscn")
+const KEY_SCENE: PackedScene = preload("res://items/pickups/key/key.tscn")
+## How many of each object a chunk gets: rolled in [min, max].
+const SPIKES_RANGE: Vector2i = Vector2i(0, 1)
+const COINS_RANGE: Vector2i = Vector2i(1, 5)
+const KEYS_RANGE: Vector2i = Vector2i(0, 1)
 
-# Children
-@onready var object_placeholders: Node2D = $object_placeholders
+@onready var _object_placeholders: Node2D = %ObjectPlaceholders
 
 
+## Fills the placeholders with spikes, coins and keys, one object per placeholder.
+## Uses the global RNG seeded by the level (seeded generation arrives in Phase 3).
 func place_objects() -> void:
-	# Place 0 or 1 spikes
-	# Place 1 to 5 coins
-	# Place 0 or 1 keys
-	# aux_placeholders is an array of Node2D objects,
-	# so elements can be placed in any of them (same position)
-	var aux_placeholders: Array[Node] = object_placeholders.get_children()
-	var occupied_idxs: Array[int] = []
-	var num_spikes: int = randi() % 2
-	var num_coins: int = randi() % 5 + 1
-	var num_keys: int = randi() % 2
+	var placeholders: Array[Node] = _object_placeholders.get_children()
+	var occupied: Array[int] = []
+	_place(SPIKE_SCENE, _roll_count(SPIKES_RANGE), placeholders, occupied)
+	_place(COIN_SCENE, _roll_count(COINS_RANGE), placeholders, occupied)
+	_place(KEY_SCENE, _roll_count(KEYS_RANGE), placeholders, occupied)
 
-	# Place spikes
-	var i: int = 0
-	while i < num_spikes:
-		var idx: int = randi() % aux_placeholders.size()
-		if idx not in occupied_idxs:
-			occupied_idxs.append(idx)
-			var spike: Spike = (load(SPIKE_SCENE) as PackedScene).instantiate() as Spike
-			spike.position = (aux_placeholders[idx] as Node2D).position
-			add_child(spike)
-			i += 1
 
-	# Place coins
-	i = 0
-	while i < num_coins:
-		var idx: int = randi() % aux_placeholders.size()
-		if idx not in occupied_idxs:
-			occupied_idxs.append(idx)
-			var coin: Coin = (load(COIN_SCENE) as PackedScene).instantiate() as Coin
-			coin.position = (aux_placeholders[idx] as Node2D).position
-			add_child(coin)
-			i += 1
+## Same formula as the prototype (randi() % n), so a seed keeps its layout.
+func _roll_count(count_range: Vector2i) -> int:
+	return randi() % (count_range.y - count_range.x + 1) + count_range.x
 
-	# Place keys
-	i = 0
-	while i < num_keys:
-		var idx: int = randi() % aux_placeholders.size()
-		if idx not in occupied_idxs:
-			occupied_idxs.append(idx)
-			var key: KeyPickup = (load(KEY_SCENE) as PackedScene).instantiate() as KeyPickup
-			key.position = (aux_placeholders[idx] as Node2D).position
-			add_child(key)
-			i += 1
+
+func _place(
+	scene: PackedScene, count: int, placeholders: Array[Node], occupied: Array[int]
+) -> void:
+	var placed: int = 0
+	while placed < count:
+		var index: int = randi() % placeholders.size()
+		if index in occupied:
+			continue
+		occupied.append(index)
+		var object: Node2D = scene.instantiate() as Node2D
+		object.position = (placeholders[index] as Node2D).position
+		add_child(object)
+		placed += 1
 
 
 func _on_visible_on_screen_notifier_2d_screen_entered() -> void:
-	platform_enter_screen.emit()
+	screen_entered.emit()
 
 
 func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
-	platform_leave_screen.emit()
+	screen_exited.emit()

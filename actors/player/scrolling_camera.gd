@@ -1,10 +1,11 @@
 class_name ScrollingCamera
 extends Camera2D
+## Prototype camera: scrolls upwards at a constant speed. Phase 4 replaces it
+## with a camera that follows the player and the rising threat.
 
-# Parameters
-const CAMERA_SPEED: float = 50.0  # Upward scroll speed in px/s
+## Upward scroll speed in px/s.
+@export var scroll_speed: float = 50.0
 
 
 func _process(delta: float) -> void:
-	# Move camera upwards
-	position.y -= CAMERA_SPEED * delta
+	position.y -= scroll_speed * delta

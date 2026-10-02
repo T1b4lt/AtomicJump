@@ -12,7 +12,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("righthand:position")
+tracks/0/path = NodePath("RightHand:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -24,7 +24,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("lefthand:position")
+tracks/1/path = NodePath("LeftHand:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -41,7 +41,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("righthand:position")
+tracks/0/path = NodePath("RightHand:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -53,7 +53,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("lefthand:position")
+tracks/1/path = NodePath("LeftHand:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -69,7 +69,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("righthand:position")
+tracks/0/path = NodePath("RightHand:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -81,7 +81,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("lefthand:position")
+tracks/1/path = NodePath("LeftHand:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -97,7 +97,7 @@ length = 0.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("righthand:position")
+tracks/0/path = NodePath("RightHand:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -109,7 +109,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("lefthand:position")
+tracks/1/path = NodePath("LeftHand:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -126,7 +126,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("righthand:position")
+tracks/0/path = NodePath("RightHand:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -138,7 +138,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("lefthand:position")
+tracks/1/path = NodePath("LeftHand:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -157,19 +157,20 @@ _data = {
 "walk": SubResource("Animation_cq2qn")
 }
 
-[node name="player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D"]
 collision_layer = 2
-collision_mask = 45
+collision_mask = 129
 script = ExtResource("1_fhl8c")
 
-[node name="body" type="Sprite2D" parent="."]
+[node name="Body" type="Sprite2D" parent="."]
+unique_name_in_owner = true
 texture = ExtResource("1_fdoqc")
 
-[node name="righthand" type="Sprite2D" parent="."]
+[node name="RightHand" type="Sprite2D" parent="."]
 position = Vector2(19, 11)
 texture = ExtResource("2_er4jc")
 
-[node name="lefthand" type="Sprite2D" parent="."]
+[node name="LeftHand" type="Sprite2D" parent="."]
 position = Vector2(-19, 11)
 texture = ExtResource("2_er4jc")
 
@@ -178,19 +179,23 @@ position = Vector2(0, -1)
 shape = SubResource("RectangleShape2D_j5lpt")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
 libraries = {
 "": SubResource("AnimationLibrary_hgwae")
 }
 autoplay = "idle"
 
-[node name="hp_bar" type="ProgressBar" parent="."]
+[node name="HpBar" type="ProgressBar" parent="."]
+unique_name_in_owner = true
 offset_left = -50.0
 offset_top = -51.6667
 offset_right = 50.0
 offset_bottom = -36.6667
 show_percentage = false
 
-[node name="hp_data" type="Label" parent="hp_bar"]
+[node name="HpLabel" type="Label" parent="HpBar"]
+unique_name_in_owner = true
+auto_translate_mode = 2
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

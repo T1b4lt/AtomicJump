@@ -145,6 +145,8 @@ animations = [{
 size = Vector2(28, 25)
 
 [node name="coin_chest" type="Area2D"]
+collision_layer = 8
+collision_mask = 2
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_7sgvx")

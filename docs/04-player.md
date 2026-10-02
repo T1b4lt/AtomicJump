@@ -2,19 +2,20 @@
 
 ## Controles
 
-| Acción                          | Teclado        | Mando                                 | Acción en código                                      |
-| ------------------------------- | -------------- | ------------------------------------- | ----------------------------------------------------- |
-| Moverse                         | A / D          | Stick izq. / cruceta                  | `move_left`, `move_right`                             |
-| Bajar de plataforma atravesable | S (+ salto)    | Abajo + A                             | `move_down`                                           |
-| Saltar                          | Espacio        | A / Cruz                              | `jump`                                                |
-| Disparar ↑ ↓ ← →                | Flechas        | Stick derecho (4 direcciones) / X Y B | `shoot_up`, `shoot_down`, `shoot_left`, `shoot_right` |
-| Túnel (esquiva)                 | Shift          | RB / R1                               | `dash`                                                |
-| Usar operador                   | E              | LB / L1                               | `use_active`                                          |
-| Interactuar (tienda, pedestal)  | W              | Arriba / Y                            | `interact`                                            |
-| Ver build / estadísticas        | Tab (mantener) | Select / Back                         | `show_build`                                          |
-| Pausa                           | Esc            | Start                                 | `pause`                                               |
+| Acción                          | Teclado        | Mando                                      | Acción en código                                      |
+| ------------------------------- | -------------- | ------------------------------------------ | ----------------------------------------------------- |
+| Moverse                         | A / D          | Stick izq. / cruceta                       | `move_left`, `move_right`                             |
+| Bajar de plataforma atravesable | S (+ salto)    | Stick izq. abajo / cruceta abajo (+ A)     | `move_down`                                           |
+| Saltar                          | Espacio        | A / Cruz                                   | `jump`                                                |
+| Disparar ↑ ↓ ← →                | Flechas        | Stick derecho (4 direcciones); X ←, B →    | `shoot_up`, `shoot_down`, `shoot_left`, `shoot_right` |
+| Túnel (esquiva)                 | Shift          | RB / R1                                    | `dash`                                                |
+| Usar operador                   | E              | LB / L1                                    | `use_active`                                          |
+| Interactuar (tienda, pedestal)  | W              | Cruceta arriba / Y                         | `interact`                                            |
+| Ver build / estadísticas        | Tab (mantener) | Select / Back                              | `show_build`                                          |
+| Pausa                           | Esc            | Start                                      | `pause`                                               |
 
-- Todos los controles son **remapeables** desde Opciones.
+- Todos los controles son **remapeables** desde Opciones (Fase 14).
+- Las acciones están definidas en `project.godot` desde la Fase 2, con teclado y mando (cualquier dispositivo). Y no dispara hacia arriba porque ya interactúa; con mando, arriba se dispara con el stick derecho.
 - Con mando, disparar hacia abajo en el aire es un recurso de movilidad (ver "Retroceso del disparo").
 
 ## Movimiento

@@ -5,7 +5,7 @@ Este documento describe **hacia dónde** debe ir el código. El estado actual y 
 ## Motor y configuración
 
 - **Godot 4.7** (GDScript), renderer _Compatibility_.
-- Viewport de referencia **1280×720** (el prototipo usa 1160×670 y se migra en la Fase 2); ver [13-dirección de arte](13-art-style.md).
+- Viewport de referencia **1280×720** (migrado en la Fase 2); ver [13-dirección de arte](13-art-style.md). Los tramos del prototipo siguen midiendo 1160×670 (`Chunk.WIDTH` y `Chunk.HEIGHT`): la cámara centra el área de juego en horizontal y alinea su borde inferior con el del primer tramo, así que el jugador ve un poco más hacia arriba que antes, pero muere en el mismo punto. La Fase 5 rehace los tramos con el tamaño definitivo.
 - `display/window/stretch/mode = canvas_items` y `aspect = keep_width` (el alto se amplía en pantallas más altas).
 - Se trackean en git `*.import` y `*.uid`; se ignora `.godot/`.
 
@@ -20,6 +20,10 @@ Este documento describe **hacia dónde** debe ir el código. El estado actual y 
 - Valores ajustables en `@export` o en recursos de datos, nunca como números mágicos.
 - `preload()` en constantes para escenas conocidas; `load()` solo para cargas dinámicas por ruta.
 - Nada de `_process` para refrescar la UI: se actualiza al recibir una señal.
+- Los nodos de las escenas se nombran en `PascalCase` (convención de Godot).
+- **Navegación entre pantallas** con `SceneRouter.go_to(SceneRouter.LEVEL, params)`, que recibe rutas. Las pantallas (menús, nivel, pantalla final) se apuntan entre sí, y con `preload()` formarían ciclos de dependencias; todo lo que se **instancia** (tramos, recogibles, peligros) sí usa `preload()`.
+- Textos visibles siempre como **claves de traducción**: en las escenas, el `text` del nodo es la clave (los `Control` la traducen solos); en código, `tr("CLAVE")`. Las etiquetas que muestran datos (números, semillas) llevan `auto_translate_mode = Disabled`.
+- Números de capa de física con las constantes de `PhysicsLayers` (`core/physics_layers.gd`), nunca con números sueltos.
 - Formato y lint con **gdtoolkit** 4.5 (`gdformat`, `gdlint`), versión fijada en `requirements-dev.txt` y configuración en `gdformatrc` y `gdlintrc` (tabs, 100 caracteres por línea, se excluyen `addons/`, `art/` y `.godot/`).
 - `.editorconfig`: UTF-8, LF, tabs en `.gd` y dos espacios en el resto; los ficheros que genera Godot (`.tscn`, `.tres`, `.import`…) conservan su formato.
 - Ningún `class_name` puede coincidir con un tipo o enum global de Godot (por ejemplo, la llave es `KeyPickup`, no `Key`, que choca con el enum `Key`).
@@ -27,21 +31,26 @@ Este documento describe **hacia dónde** debe ir el código. El estado actual y 
 
 ## Estructura de carpetas objetivo
 
+La Fase 2 implantó esta estructura; las carpetas sin contenido todavía se crearán en su fase. Estado actual: `core/autoload/` (`events`, `run_manager`, `scene_router` con su `.tscn`, `settings`), `core/run/` (`run_state.gd`, `run_counters.gd`), `core/stats/`, `core/rng/seed_code.gd` (provisional), `core/physics_layers.gd`, `actors/player/` (`player`, `scrolling_camera` y `character_data.gd`), `items/pickups/` y `items/containers/`, `world/level/` (escena de partida), `world/chunks/k/` (tramos del prototipo) y `world/chunks/parts/` (bloques, muros y fondos con los que están hechos), `world/hazards/spike/`, `ui/` (`hud`, `main_menu`, `pause_menu`, `settings_menu`, `game_over`), `data/characters/wilas.tres` y `localization/translations.csv`.
+
 ```
 res://
 ├── core/                    # Autoloads y sistemas transversales
 │   ├── autoload/            # events.gd, run_manager.gd, meta_progress.gd, scene_router.gd, settings.gd, audio.gd
 │   ├── rng/                 # seed_code.gd, seed_hash.gd, world_rng.gd
+│   ├── run/                 # run_state.gd, run_counters.gd
 │   ├── stats/               # stat_block.gd, stat_modifier.gd, stats.gd
-│   └── save/                # save_system.gd, migrations
+│   ├── save/                # save_system.gd, migrations
+│   └── physics_layers.gd    # constantes de las capas de física
 ├── actors/
-│   ├── player/              # player.tscn/.gd, estados, cámara
+│   ├── player/              # player.tscn/.gd, character_data.gd, estados, cámara
 │   ├── enemies/             # enemy_base, un subdirectorio por enemigo
 │   ├── bosses/
 │   └── components/          # health_component, hitbox, hurtbox, knockback, status_effects
 ├── combat/                  # projectile, shooter, damage_info
 ├── world/
-│   ├── chunks/              # chunk.gd (base), chunk_template.tscn, k/, l/, m/, n/, special/
+│   ├── level/               # escena de partida (level.tscn)
+│   ├── chunks/              # chunk.gd (base), chunk_template.tscn, k/, l/, m/, n/, special/, parts/
 │   ├── generation/          # layer_generator.gd, chunk_library.gd
 │   ├── rising_threat/
 │   ├── hazards/             # spike, force_field…
@@ -72,6 +81,12 @@ Se mantienen pocos y con responsabilidades claras:
 | `Settings`     | Opciones, carga y guardado de `settings.cfg`, aplicación a buses de audio y ventana.                                                                                    |
 | `Audio`        | Música y efectos globales.                                                                                                                                              |
 
+Desde la Fase 2 existen `Events`, `Settings`, `RunManager` y `SceneRouter` (en ese orden de carga, en `core/autoload/`); `MetaProgress` llega en la Fase 10 y `Audio` con los SFX. Los scripts de autoload no llevan `class_name` (chocaría con el nombre del autoload).
+
+- **`Events`**: hoy emite `run_started`, `run_ended`, `coin_collected` y `key_collected`. Como sus señales se emiten desde otros scripts, cada una lleva `@warning_ignore("unused_signal")` (el aviso está como error).
+- **`SceneRouter`** (`scene_router.tscn`, una `CanvasLayer` en la capa 100 que funciona también en pausa): `go_to(ruta, params)` funde a negro, cambia de escena y vuelve a fundir; los clics se bloquean durante la transición y una segunda llamada se ignora. La nueva escena lee los parámetros con `SceneRouter.get_param("clave")`. Las rutas de las pantallas son constantes (`MAIN_MENU`, `SETTINGS_MENU`, `LEVEL`, `GAME_OVER`).
+- **`Settings`**: volumen general, de música y de efectos (lineal 0–1) e idioma, en `user://settings.cfg` (secciones `audio` y `game`). Se cargan y aplican al arrancar; los valores ausentes o inválidos conservan el valor por defecto. Los buses `Music` y `Effects` están en `default_bus_layout.tres`. La pantalla de opciones aplica los cambios al momento y guarda al volver.
+
 ## Estado de partida
 
 ```gdscript
@@ -101,11 +116,21 @@ signal coins_changed(value: int)
 - Reiniciar una partida es crear un `RunState` nuevo: **no hay `reset_game()` que mantener sincronizado a mano**.
 - La UI se conecta a las señales de `RunState`.
 
+Implementado en la Fase 2 (`core/run/run_state.gd`), con lo que necesita el prototipo; el resto de campos llega con su sistema:
+
+- `RunManager.start_run(seed, character)` crea el `RunState` (por defecto con Wilas) y emite `Events.run_started`; `end_run()` lo suelta, emite `Events.run_ended` y lo devuelve para que la pantalla final lo reciba por `SceneRouter`. Ir al menú desde la pausa también termina la partida.
+- Campos actuales: `seed_value: int` (provisional: pasa a `seed_code` en la Fase 3), `character`, `stats`, `hp`, `coins`, `keys` (saldo), `altitude` y `counters` (`jumps`, `coins_collected`, `keys_collected`).
+- Señales: `hp_changed(value, max_value)`, `coins_changed`, `keys_changed`, `altitude_changed` y `died`. `take_damage(amount)` aplica el apantallamiento (`daño × (1 − defense)`) y emite `died` una sola vez; si baja la coherencia máxima, la coherencia se recorta.
+- Los recogibles no conocen la partida: emiten `Events.coin_collected` / `Events.key_collected` y `RunManager` lo suma al `RunState` en curso.
+- `Player`, `Hud` y `Level` reciben el `RunState` con `bind_run(run)` (llamar hacia abajo) en lugar de leer un autoload; así se prueban sin partida global. La escena del nivel lanzada sola (F6) empieza una partida aleatoria.
+
 ## Sistema de estadísticas
 
-- `StatBlock` (Resource): valores base por personaje.
-- `StatModifier`: `{stat, type: ADD|MULT, value, source}`.
-- `Stats`: calcula `valor_final` cacheado; se invalida al añadir o quitar modificadores y emite `stat_changed(stat)`.
+- `StatBlock` (Resource): valores base por personaje. Sus propiedades se llaman como los ids de estadística.
+- `StatModifier` (Resource, para poder incluirlo en los `.tres` de objetos): `{stat, type: ADD|MULT, value, source}`. `MULT` es una fracción: `0.25` es +25 %.
+- `Stats` (`RefCounted`): calcula `valor_final` cacheado; al añadir o quitar modificadores recalcula esa estadística y emite `stat_changed(stat, value)` solo si el valor cambia. `remove_modifiers_from(source)` quita todo lo de un origen y `get_modifiers(stat)` da el desglose.
+- Los ids son constantes de `Stats` (`Stats.SPEED`…, lista en `Stats.ALL`) y los límites están en `Stats.MIN_VALUES` y `Stats.MAX_VALUES`.
+- `CharacterData` (Resource): `id`, `name_key` y `base_stats`. Wilas está en `data/characters/wilas.tres`.
 - Fórmula en [04-jugador](04-player.md#cómo-se-calculan-las-estadísticas).
 
 ## Objetos e interacciones: basados en datos y efectos
@@ -140,6 +165,8 @@ signal coins_changed(value: int)
 | 7    | `hazards`            |
 | 8    | `one_way_platforms`  |
 | 9    | `rising_threat`      |
+
+Configuradas en `project.godot` desde la Fase 2 y disponibles en código como `PhysicsLayers.WORLD`, `PhysicsLayers.HAZARDS`… Hoy: muros y suelo en `world`; bloques del prototipo (atravesables desde abajo) en `one_way_platforms`; el jugador en `player` con máscara `world` + `one_way_platforms`; recogibles y cofres en `pickups` y pinchos en `hazards`, ambos con máscara `player`. Los cuerpos estáticos no llevan máscara.
 
 ## Jugador
 

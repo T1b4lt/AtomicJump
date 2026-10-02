@@ -1,33 +1,33 @@
 class_name Spike
 extends Area2D
-## Hurts the protagonist while in contact. The protagonist's invulnerability
-## window sets the rate, so standing on the spikes keeps hurting.
+## Hurts the player while in contact. The player's invulnerability window sets
+## the rate, so standing on the spikes keeps hurting.
 
-# Parameters
-const SPIKE_DAMAGE: float = 10.0
+## Damage of each hit, before defense.
+@export var damage: float = 10.0
 
-# Variables
-var _protagonist: Player = null  # Player in contact, if any
+## Player in contact, if any.
+var _player: Player = null
 
 
 func _ready() -> void:
-	# Only process while the protagonist is in contact
+	# Only process while the player is in contact
 	set_physics_process(false)
 
 
 func _physics_process(_delta: float) -> void:
-	if is_instance_valid(_protagonist):
-		_protagonist.take_damage(SPIKE_DAMAGE)
+	if is_instance_valid(_player):
+		_player.take_damage(damage)
 
 
 func _on_body_entered(body: Node2D) -> void:
 	if body is Player:
-		_protagonist = body as Player
-		_protagonist.take_damage(SPIKE_DAMAGE)
+		_player = body as Player
+		_player.take_damage(damage)
 		set_physics_process(true)
 
 
 func _on_body_exited(body: Node2D) -> void:
-	if body == _protagonist:
-		_protagonist = null
+	if body == _player:
+		_player = null
 		set_physics_process(false)

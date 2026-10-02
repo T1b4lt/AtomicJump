@@ -14,5 +14,8 @@ reports/
 .venv/
 __pycache__/
 
+# Traducciones compiladas (Godot las genera al importar localization/*.csv)
+*.translation
+
 # Mac OS
 .DS_Store

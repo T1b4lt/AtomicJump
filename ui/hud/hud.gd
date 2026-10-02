@@ -1,58 +1,94 @@
-class_name HUD
+class_name Hud
 extends CanvasLayer
+## In-run HUD. Listens to the RunState given in bind_run(): nothing is refreshed
+## every frame.
 
-# Children
-@onready var game_seed: Label = $seed_panel/MarginContainer/game_seed
+## Label font sizes: names of the values and the values themselves.
+const NAME_FONT_SIZE: int = 15
+const VALUE_FONT_SIZE: int = 20
+const OUTLINE_SIZE: int = 5
+## Translation key of each stat name: STAT_ + the stat id in capitals.
+const STAT_KEY_PREFIX: String = "STAT_"
 
-@onready var altitude: Label = $stats_panel/MarginContainer/GridContainer/altitude_data
+var _run: RunState = null
+var _stat_labels: Dictionary[StringName, Label] = {}
 
-@onready var coins: Label = $stats_panel/MarginContainer/GridContainer/coins_data
-@onready var keys: Label = $stats_panel/MarginContainer/GridContainer/keys_data
+@onready var _altitude_value: Label = %AltitudeValue
+@onready var _coins_value: Label = %CoinsValue
+@onready var _keys_value: Label = %KeysValue
+@onready var _stats_grid: GridContainer = %StatsGrid
+@onready var _seed_value: Label = %SeedValue
 
-# Player stats
-@onready var luck: Label = $stats_panel/MarginContainer/GridContainer/luck_data
-@onready var speed: Label = $stats_panel/MarginContainer/GridContainer/speed_data
-@onready var jump_force: Label = $stats_panel/MarginContainer/GridContainer/jump_force_data
-@onready var max_jumps: Label = $stats_panel/MarginContainer/GridContainer/max_jumps_data
-@onready var size: Label = $stats_panel/MarginContainer/GridContainer/size_data
-@onready var attack_power: Label = $stats_panel/MarginContainer/GridContainer/attack_power_data
-@onready var attack_haste: Label = $stats_panel/MarginContainer/GridContainer/attack_haste_data
-# gdlint:ignore = max-line-length
-@onready var attack_distance: Label = $stats_panel/MarginContainer/GridContainer/attack_distance_data
-@onready var defense: Label = $stats_panel/MarginContainer/GridContainer/defense_data
+
+## Formats a stat value for display.
+static func format_stat(stat: StringName, value: float) -> String:
+	match stat:
+		Stats.MAX_JUMPS:
+			return str(roundi(value))
+		Stats.LUCK:
+			return "%.2f %%" % value
+		Stats.DEFENSE:
+			return "%.0f %%" % (value * 100.0)
+		_:
+			return "%.2f" % value
 
 
 func _ready() -> void:
-	# Set game seed
-	game_seed.text = str(game.game_seed)
-
-	# Set protagonist stats
-	luck.text = "%.2f" % game.pr_luck + " %"
-	speed.text = "%.2f" % game.pr_speed
-	jump_force.text = "%.2f" % game.pr_jump_force
-	max_jumps.text = str(game.pr_max_jumps)
-	size.text = "%.2f" % game.pr_size
-	attack_power.text = "%.2f" % game.pr_attack_power
-	attack_haste.text = "%.2f" % game.pr_attack_haste
-	attack_distance.text = "%.2f" % game.pr_attack_distance
-	defense.text = "%.2f" % game.pr_defense
+	for stat: StringName in Stats.ALL:
+		_stats_grid.add_child(
+			_make_label(STAT_KEY_PREFIX + String(stat).to_upper(), NAME_FONT_SIZE)
+		)
+		var value_label: Label = _make_label("", VALUE_FONT_SIZE)
+		value_label.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
+		_stats_grid.add_child(value_label)
+		_stat_labels[stat] = value_label
 
 
-func _process(_delta: float) -> void:
-	# Set stats from game values
-	altitude.text = "%.2f" % game.altitude
+func bind_run(run: RunState) -> void:
+	if _run != null:
+		_run.coins_changed.disconnect(_on_coins_changed)
+		_run.keys_changed.disconnect(_on_keys_changed)
+		_run.altitude_changed.disconnect(_on_altitude_changed)
+		_run.stats.stat_changed.disconnect(_on_stat_changed)
+	_run = run
+	_run.coins_changed.connect(_on_coins_changed)
+	_run.keys_changed.connect(_on_keys_changed)
+	_run.altitude_changed.connect(_on_altitude_changed)
+	_run.stats.stat_changed.connect(_on_stat_changed)
 
-	# Currencies
-	coins.text = str(game.actual_coins)
-	keys.text = str(game.actual_keys)
+	_seed_value.text = str(run.seed_value)
+	_on_coins_changed(run.coins)
+	_on_keys_changed(run.keys)
+	_on_altitude_changed(run.altitude)
+	for stat: StringName in Stats.ALL:
+		_on_stat_changed(stat, run.stats.get_value(stat))
 
-	# Player stats
-	luck.text = "%.2f" % game.pr_luck + " %"
-	speed.text = "%.2f" % game.pr_speed
-	jump_force.text = "%.2f" % game.pr_jump_force
-	max_jumps.text = str(game.pr_max_jumps)
-	size.text = "%.2f" % game.pr_size
-	attack_power.text = "%.2f" % game.pr_attack_power
-	attack_haste.text = "%.2f" % game.pr_attack_haste
-	attack_distance.text = "%.2f" % game.pr_attack_distance
-	defense.text = "%.2f" % game.pr_defense
+
+func get_stat_text(stat: StringName) -> String:
+	return _stat_labels[stat].text
+
+
+func _make_label(text: String, font_size: int) -> Label:
+	var label := Label.new()
+	label.text = text
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_color_override(&"font_outline_color", Color.BLACK)
+	label.add_theme_constant_override(&"outline_size", OUTLINE_SIZE)
+	label.add_theme_font_size_override(&"font_size", font_size)
+	return label
+
+
+func _on_coins_changed(value: int) -> void:
+	_coins_value.text = str(value)
+
+
+func _on_keys_changed(value: int) -> void:
+	_keys_value.text = str(value)
+
+
+func _on_altitude_changed(value: float) -> void:
+	_altitude_value.text = "%.2f" % value
+
+
+func _on_stat_changed(stat: StringName, value: float) -> void:
+	_stat_labels[stat].text = format_stat(stat, value)

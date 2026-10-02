@@ -56,7 +56,9 @@ rm -rf "$TMP_GODOT"
 - Formato con `gdformat` (tabs, líneas de 100 caracteres) y lint con `gdlint` (configuración en `gdformatrc` y `gdlintrc`). `.editorconfig` fija tabs en `.gd`, LF y UTF-8.
 - Nombres funcionales en inglés en el código; `snake_case` en ficheros, variables y funciones, `PascalCase` en `class_name`, `CONSTANT_CASE` en `const`. Evita `class_name` que choquen con tipos globales de Godot (por eso la llave es `KeyPickup` y no `Key`).
 - Orden dentro de un script (lo comprueba `gdlint`): `class_name`, `extends`, señales, enums, constantes, `@export`, variables, `@onready`, funciones.
-- "Llamar hacia abajo, señales hacia arriba"; nombres únicos (`%Nodo`) en la UI; `preload()` para escenas fijas; nada de números mágicos.
+- "Llamar hacia abajo, señales hacia arriba"; nombres únicos (`%Nodo`) en la UI; `preload()` para escenas que se instancian; nada de números mágicos.
+- Autoloads (`core/autoload/`): `Events`, `Settings`, `RunManager` y `SceneRouter`. El estado de la partida vive en un `RunState` nuevo por partida (`RunManager.run`); se cambia de pantalla con `SceneRouter.go_to(...)`, nunca con `change_scene_to_file`.
+- Textos visibles: claves de `localization/translations.csv` (columnas `es` y `en`), nunca texto literal. Capas de física con `PhysicsLayers`.
 - Tests con **gdUnit4** en `tests/`, ficheros `*_test.gd` que extienden `GdUnitTestSuite`.
 - Commits con _Conventional Commits_ (release-please genera versión y CHANGELOG; configuración en `release-please-config.json` y `.release-please-manifest.json`, no edites la versión a mano). Trabaja en ramas con PR a `main`.
 - No edites `addons/gdUnit4/` (dependencia de terceros, v6.2.1) ni `.godot/`.

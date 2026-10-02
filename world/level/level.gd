@@ -1,95 +1,96 @@
 class_name Level
 extends Node2D
+## Prototype level: an auto-scrolling column of random chunks. Plays the run in
+## RunManager and ends it when the player dies or falls below the camera.
 
-# Scenes
-const MAIN_MENU_SCENE = "res://ui/main_menu/main_menu.tscn"
-const GAME_OVER_SCENE = "res://ui/game_over/game_over.tscn"
+const CHUNK_SCENES: Array[PackedScene] = [
+	preload("res://world/chunks/k/platform_1.tscn"),
+	preload("res://world/chunks/k/platform_2.tscn"),
+]
+## Altitude units per chunk height (the prototype counted 11 per screen).
+const ALTITUDE_UNITS_PER_CHUNK: float = 11.0
+## Chunks alive at once: the oldest is freed when another one leaves the screen.
+const KEPT_CHUNKS: int = 3
 
-# Parameters
-const BASE_PLATFORM_RES = "res://world/chunks/k/platform_%s.tscn"
-const NUM_PLATFORMS = 2
+## How far below the bottom edge of the screen the player can fall, in px.
+@export var fall_margin: float = 50.0
 
-# Variables
-var camera_initial_y: int = 0
-var added_platforms: int = 0
-var is_platform_added: bool = false
+var run: RunState = null
+var _camera_start_y: float = 0.0
+var _chunks: Array[Chunk] = []
+var _ending: bool = false
 
-# Children
-@onready var camera: ScrollingCamera = $camera
-@onready var protagonist: Player = $protagonist
+@onready var _camera: ScrollingCamera = %Camera
+@onready var _player: Player = %Player
+@onready var _hud: Hud = %Hud
+@onready var _initial_chunk: Chunk = %InitialChunk
 
 
 func _ready() -> void:
-	# Save camera initial position
-	camera_initial_y = int(camera.position.y)
+	# Running the level scene on its own (F6) starts a random run
+	run = RunManager.run if RunManager.has_run() else RunManager.start_run(SeedCode.generate())
+	seed(run.seed_value)
 
-	# Set game seed
-	seed(game.game_seed)
+	# Bottom of the view on the bottom of the first chunk, play area centered
+	var view_size: Vector2 = get_viewport_rect().size
+	_camera.position = Vector2(Chunk.WIDTH / 2.0, Chunk.HEIGHT - view_size.y / 2.0)
+	_camera_start_y = _camera.position.y
+
+	_player.bind_run(run)
+	_hud.bind_run(run)
+	run.died.connect(_end_run)
 
 
 func _process(_delta: float) -> void:
-	# Check if protagonist falls out of the camera view
-	if protagonist.position.y > camera.position.y + int(get_viewport_rect().size.y) / 2 + 50:
-		# Go to game over screen
-		get_tree().change_scene_to_file(GAME_OVER_SCENE)
+	var screen_bottom: float = _camera.position.y + get_viewport_rect().size.y / 2.0
+	if _player.position.y > screen_bottom + fall_margin:
+		_end_run()
 		return
+	run.set_altitude(
+		(_camera_start_y - _camera.position.y) / (Chunk.HEIGHT / ALTITUDE_UNITS_PER_CHUNK)
+	)
 
-	# Check if protagonist runs out of hp
-	if game.pr_hp <= 0:
-		# Go to game over screen
-		get_tree().change_scene_to_file(GAME_OVER_SCENE)
+
+func _add_chunk() -> void:
+	var scene: PackedScene = CHUNK_SCENES[randi_range(0, CHUNK_SCENES.size() - 1)]
+	var chunk: Chunk = scene.instantiate() as Chunk
+	_chunks.append(chunk)
+	chunk.position.y = -Chunk.HEIGHT * _chunks.size()
+	add_child(chunk)
+	chunk.place_objects()
+	chunk.screen_entered.connect(_add_chunk)
+	chunk.screen_exited.connect(_free_oldest_chunk)
+
+
+func _free_oldest_chunk() -> void:
+	var index: int = _chunks.size() - KEPT_CHUNKS
+	if index >= 0 and is_instance_valid(_chunks[index]):
+		_chunks[index].queue_free()
+
+
+## Ends the run once and shows the end screen. The level stops while it fades.
+func _end_run() -> void:
+	if _ending:
 		return
-
-	# Update altitude
-	game.altitude = (camera_initial_y - camera.position.y) / (int(get_viewport_rect().size.y) / 11)
-
-
-func _add_platform() -> void:
-	# Get a random number
-	var platform_idx: int = randi_range(1, NUM_PLATFORMS)
-	# Instantiate the platform
-	var platform_name: String = BASE_PLATFORM_RES % str(platform_idx)
-	var platform_scene: PackedScene = load(platform_name)
-	var platform: Chunk = platform_scene.instantiate() as Chunk
-	# Give name to new platform
-	platform.name = "platform_" + str(added_platforms)
-	# Add 1 to platform counter
-	added_platforms += 1
-	# Set platform position (670 is viewport height in project settings)
-	platform.position.y = -670 * added_platforms
-	# Add new platform to scene
-	add_child(platform)
-	# Place objects in the platform
-	platform.place_objects()
-	# Add signal observers
-	platform.platform_enter_screen.connect(_add_platform)
-	platform.platform_leave_screen.connect(_remove_platform)
+	_ending = true
+	process_mode = Node.PROCESS_MODE_DISABLED
+	var ended: RunState = RunManager.end_run()
+	SceneRouter.go_to(SceneRouter.GAME_OVER, {"run": ended})
 
 
-func _remove_platform() -> void:
-	if added_platforms >= 3:
-		get_node("platform_" + str(added_platforms - 3)).queue_free()
-
-
-# Pause Menu Signals
 func _on_pause_menu_menu_button_pressed() -> void:
-	# Go back to main menu (the next run starts from a clean state)
-	get_tree().change_scene_to_file(MAIN_MENU_SCENE)
+	RunManager.end_run()
+	SceneRouter.go_to(SceneRouter.MAIN_MENU)
 
 
 func _on_pause_menu_exit_button_pressed() -> void:
-	# Exit game
 	get_tree().quit()
 
 
-# Initial Chunk Signals
-func _on_initial_platform_enter_screen() -> void:
-	# Add second platform
-	_add_platform()
-	# Place objects in initial platform
-	(get_node("initial") as Chunk).place_objects()
+func _on_initial_chunk_screen_entered() -> void:
+	_add_chunk()
+	_initial_chunk.place_objects()
 
 
-func _on_initial_platform_leave_screen() -> void:
-	# Delete initial platform
-	get_node("initial").queue_free()
+func _on_initial_chunk_screen_exited() -> void:
+	_initial_chunk.queue_free()

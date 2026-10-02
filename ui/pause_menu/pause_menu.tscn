@@ -2,12 +2,12 @@
 
 [ext_resource type="Script" path="res://ui/pause_menu/pause_menu.gd" id="1_bn2as"]
 
-[node name="pause_menu" type="CanvasLayer"]
+[node name="PauseMenu" type="CanvasLayer"]
 process_mode = 3
 visible = false
 script = ExtResource("1_bn2as")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="Panel" type="PanelContainer" parent="."]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -20,35 +20,38 @@ offset_bottom = 66.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+[node name="Margin" type="MarginContainer" parent="Panel"]
 layout_mode = 2
 theme_override_constants/margin_left = 15
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 15
 theme_override_constants/margin_bottom = 15
 
-[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+[node name="Buttons" type="VBoxContainer" parent="Panel/Margin"]
 layout_mode = 2
 
-[node name="pause_text" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="Panel/Margin/Buttons"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "PAUSE"
+text = "PAUSE_TITLE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="resume_button" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="ResumeButton" type="Button" parent="Panel/Margin/Buttons"]
+unique_name_in_owner = true
 layout_mode = 2
-text = "Resume"
+text = "PAUSE_RESUME"
 
-[node name="menu_button" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="MenuButton" type="Button" parent="Panel/Margin/Buttons"]
+unique_name_in_owner = true
 layout_mode = 2
-text = "Menu"
+text = "PAUSE_MENU"
 
-[node name="exit_button" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer"]
+[node name="ExitButton" type="Button" parent="Panel/Margin/Buttons"]
+unique_name_in_owner = true
 layout_mode = 2
-text = "Exit"
+text = "PAUSE_EXIT"
 
-[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/resume_button" to="." method="_on_resume_button_pressed"]
-[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/menu_button" to="." method="_on_menu_button_pressed"]
-[connection signal="pressed" from="PanelContainer/MarginContainer/VBoxContainer/exit_button" to="." method="_on_exit_button_pressed"]
+[connection signal="pressed" from="Panel/Margin/Buttons/ResumeButton" to="." method="_on_resume_button_pressed"]
+[connection signal="pressed" from="Panel/Margin/Buttons/MenuButton" to="." method="_on_menu_button_pressed"]
+[connection signal="pressed" from="Panel/Margin/Buttons/ExitButton" to="." method="_on_exit_button_pressed"]
