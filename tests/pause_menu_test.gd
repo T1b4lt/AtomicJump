@@ -2,7 +2,7 @@ extends GdUnitTestSuite
 
 ## Tests del menú de pausa: Esc pausa y también reanuda.
 
-const PAUSE_MENU_SCENE: PackedScene = preload("res://screens/pause_menu/pause_menu.tscn")
+const PAUSE_MENU_SCENE: PackedScene = preload("res://ui/pause_menu/pause_menu.tscn")
 
 
 func after_test() -> void:

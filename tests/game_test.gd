@@ -2,7 +2,7 @@ extends GdUnitTestSuite
 
 ## Tests del estado de partida del prototipo (autoload `game`).
 
-const GameScript: GDScript = preload("res://scripts/game.gd")
+const GameScript: GDScript = preload("res://core/autoload/game.gd")
 
 
 func test_generated_seeds_are_valid_seed_text() -> void:

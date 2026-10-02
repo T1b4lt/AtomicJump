@@ -59,7 +59,7 @@ La **v1.0** llegará después de la 0.99.0. Antes faltan cosas que quedan **fuer
 
 **Objetivo:** sustituir los patrones del prototipo por la arquitectura de [12-arquitectura](docs/12-architecture.md), manteniendo la misma jugabilidad.
 
-- [ ] Reorganizar carpetas según la estructura objetivo (mover escenas desde el editor de Godot para que se actualicen las referencias).
+- [x] Reorganizar carpetas según la estructura objetivo (mover escenas desde el editor de Godot para que se actualicen las referencias).
 - [ ] Sustituir el autoload `game` por `RunManager` + `RunState` (se crea uno nuevo por partida; se elimina `reset_game()`).
 - [ ] Sistema de estadísticas: `StatBlock`, `StatModifier`, `Stats` con caché y señal `stat_changed`; `CharacterData` para Wilas.
 - [ ] HUD y barra de vida actualizados por **señales**; eliminar el refresco en `_process`.

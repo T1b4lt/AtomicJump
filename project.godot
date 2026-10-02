@@ -15,15 +15,15 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="AtomicJump"
-run/main_scene="res://screens/main_menu/main_menu.tscn"
+run/main_scene="res://ui/main_menu/main_menu.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 boot_splash/image="res://assets/readme/atomic_jump_cover.png"
 config/icon="res://atomic_jump_icon.png"
 
 [autoload]
 
-game="*res://scripts/game.gd"
-settings="*res://scripts/settings.gd"
+game="*res://core/autoload/game.gd"
+settings="*res://core/autoload/settings.gd"
 
 [debug]
 

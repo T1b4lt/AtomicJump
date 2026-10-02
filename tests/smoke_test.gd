@@ -3,7 +3,7 @@ extends GdUnitTestSuite
 ## Tests de humo: comprueban que el proyecto carga y compila con los avisos como error.
 
 const SCRIPT_DIRS: Array[String] = [
-	"res://characters", "res://objects", "res://platforms", "res://screens", "res://scripts"
+	"res://actors", "res://core", "res://items", "res://ui", "res://world"
 ]
 
 
