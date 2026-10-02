@@ -2,10 +2,15 @@ class_name Protagonist
 extends CharacterBody2D
 
 # Parameters
+const INVULNERABILITY_TIME: float = 1.0  # Seconds without taking damage after a hit
+const BLINK_FREQUENCY: float = 15.0  # Blinks per second while invulnerable
+const BLINK_ALPHA: float = 0.3  # Opacity in the "off" half of each blink
+
 var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 # Variables
 var air_jumps_used: int = 0  # Jumps done in the air since last touching the floor
+var invulnerability_left: float = 0.0  # Seconds of invulnerability remaining
 
 # Childs
 @onready var body_sprite: Sprite2D = $body
@@ -32,6 +37,8 @@ func _process(_delta: float) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	_update_invulnerability(delta)
+
 	# Add the gravity.
 	if not is_on_floor():
 		velocity.y += gravity * delta
@@ -88,6 +95,29 @@ func try_jump(on_floor: bool) -> bool:
 		air_jumps_used += 1
 		return true
 	return false
+
+
+func is_invulnerable() -> bool:
+	return invulnerability_left > 0.0
+
+
+## Applies damage reduced by game.pr_defense and starts the invulnerability window.
+## Damage taken while invulnerable is ignored. Returns whether it was applied.
+func take_damage(amount: float) -> bool:
+	if is_invulnerable():
+		return false
+	game.pr_hp = maxf(0.0, game.pr_hp - amount * game.pr_defense)
+	invulnerability_left = INVULNERABILITY_TIME
+	return true
+
+
+func _update_invulnerability(delta: float) -> void:
+	if not is_invulnerable():
+		return
+	invulnerability_left = maxf(0.0, invulnerability_left - delta)
+	# Blink while invulnerable, back to fully opaque when it ends
+	var blink_off: bool = fmod(invulnerability_left * BLINK_FREQUENCY, 1.0) < 0.5
+	modulate.a = BLINK_ALPHA if is_invulnerable() and blink_off else 1.0
 
 
 func play_animation(animation_name: String) -> void:
