@@ -14,10 +14,9 @@ var camera_initial_y: int = 0
 var added_platforms: int = 0
 var is_platform_added: bool = false
 
-# Childs
+# Children
 @onready var camera: Camera = $camera
 @onready var protagonist: Protagonist = $protagonist
-@onready var pause_menu: PauseMenu = $pause_menu
 
 
 func _ready() -> void:
@@ -29,24 +28,17 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	# Check if protagonist fall off out of camera view
+	# Check if protagonist falls out of the camera view
 	if protagonist.position.y > camera.position.y + int(get_viewport_rect().size.y) / 2 + 50:
 		# Go to game over screen
 		get_tree().change_scene_to_file(GAME_OVER_SCENE)
 		return
 
-	# Check if protagonist run out of hp
+	# Check if protagonist runs out of hp
 	if game.pr_hp <= 0:
 		# Go to game over screen
 		get_tree().change_scene_to_file(GAME_OVER_SCENE)
 		return
-
-	# Check if user press pause button
-	if Input.is_action_just_pressed("pause"):
-		# Pause everything in the scene
-		get_tree().paused = true
-		# Show pause menu
-		pause_menu.visible = true
 
 	# Update altitude
 	game.altitude = (camera_initial_y - camera.position.y) / (int(get_viewport_rect().size.y) / 11)
@@ -80,17 +72,8 @@ func _remove_platform() -> void:
 
 
 # Pause Menu Signals
-func _on_pause_menu_resume_button_pressed() -> void:
-	# Hide pause menu
-	pause_menu.visible = false
-	# Resume activity in scene
-	get_tree().paused = false
-
-
 func _on_pause_menu_menu_button_pressed() -> void:
-	# Resume activity in scene
-	get_tree().paused = false
-	# Go to game over screen
+	# Go back to main menu (the next run starts from a clean state)
 	get_tree().change_scene_to_file(MAIN_MENU_SCENE)
 
 
@@ -103,10 +86,10 @@ func _on_pause_menu_exit_button_pressed() -> void:
 func _on_initial_platform_enter_screen() -> void:
 	# Add second platform
 	_add_platform()
-	# Place objects intial platform
+	# Place objects in initial platform
 	(get_node("initial") as Platform).place_objects()
 
 
 func _on_initial_platform_leave_screen() -> void:
-	# Delete intial platform
+	# Delete initial platform
 	get_node("initial").queue_free()

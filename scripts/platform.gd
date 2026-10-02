@@ -10,7 +10,7 @@ const SPIKE_SCENE = "res://platforms/blocks/spike/spike.tscn"
 const COIN_SCENE = "res://objects/currencies/coin/coin.tscn"
 const KEY_SCENE = "res://objects/currencies/key/key.tscn"
 
-# Childs
+# Children
 @onready var object_placeholders: Node2D = $object_placeholders
 
 

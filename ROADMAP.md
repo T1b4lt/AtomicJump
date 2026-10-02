@@ -45,13 +45,13 @@ La **v1.0** llegará después de la 0.99.0. Antes faltan cosas que quedan **fuer
 
 **Objetivo:** arreglar los fallos detectados antes de refactorizar, para tener una referencia de comportamiento correcto.
 
-- [ ] Reiniciar el estado de partida también al volver al menú desde la pausa (hoy solo se reinicia desde Game Over).
-- [ ] Hacer que las semillas generadas se puedan volver a introducir. Solución provisional hasta la Fase 3: generar siempre números de 9 dígitos positivos, o aceptar cualquier entero.
-- [ ] Permitir reanudar con Esc desde la pausa (`process_mode` del manejo de input).
-- [ ] Hacer explícita la lógica de saltos: contar los saltos aéreos sin depender de que `is_on_floor()` sea verdadero justo después de saltar.
-- [ ] Pinchos: daño continuo con invulnerabilidad mientras se está en contacto, en lugar de un único golpe al entrar.
-- [ ] Corregir la vida inicial (100) frente a la máxima (110), o documentar por qué son distintas.
-- [ ] Corregir comentarios erróneos (por ejemplo, "Go to game over screen" al ir al menú en `level.gd`).
+- [x] Reiniciar el estado de partida también al volver al menú desde la pausa (hoy solo se reinicia desde Game Over).
+- [x] Hacer que las semillas generadas se puedan volver a introducir. Solución provisional hasta la Fase 3: generar siempre números de 9 dígitos positivos, o aceptar cualquier entero.
+- [x] Permitir reanudar con Esc desde la pausa (`process_mode` del manejo de input).
+- [x] Hacer explícita la lógica de saltos: contar los saltos aéreos sin depender de que `is_on_floor()` sea verdadero justo después de saltar.
+- [x] Pinchos: daño continuo con invulnerabilidad mientras se está en contacto, en lugar de un único golpe al entrar.
+- [x] Corregir la vida inicial (100) frente a la máxima (110), o documentar por qué son distintas.
+- [x] Corregir comentarios erróneos (por ejemplo, "Go to game over screen" al ir al menú en `level.gd`).
 
 **Terminado cuando:** todos los bugs de la lista están corregidos y comprobados jugando.
 

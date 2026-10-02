@@ -5,26 +5,25 @@ extends CanvasLayer
 const LEVEL_SCENE = "res://screens/level/level.tscn"
 const SETTINGS_MENU_SCENE = "res://screens/settings_menu/settings_menu.tscn"
 
-# Childs
+# Children
 @onready var game_seed_input: LineEdit = $VBoxContainer/HBoxContainer/game_seed_input
 
 
 func _on_solo_mode_button_pressed() -> void:
-	# Generate a game seed
-	var game_seed: int = str(Time.get_unix_time_from_system()).hash()
-	game.game_seed = game_seed
+	# Start a new run with a seed that can be typed back later
+	game.start_run(Game.generate_seed())
 	# Change to scene level
 	get_tree().change_scene_to_file(LEVEL_SCENE)
 
 
 func _on_seed_mode_button_pressed() -> void:
 	# Check that game seed is correct
-	if game_seed_input.text.length() != 9 or !game_seed_input.text.is_valid_int():
+	if not Game.is_valid_seed_text(game_seed_input.text):
 		# Reset input
 		game_seed_input.text = ""
 		return
-	# Set game seed
-	game.game_seed = int(game_seed_input.text)
+	# Start a new run with the typed seed
+	game.start_run(game_seed_input.text.strip_edges().to_int())
 	# Change to scene level
 	get_tree().change_scene_to_file(LEVEL_SCENE)
 

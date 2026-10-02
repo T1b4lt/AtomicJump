@@ -4,7 +4,7 @@ extends CanvasLayer
 # Scenes
 const MAIN_MENU_SCENE = "res://screens/main_menu/main_menu.tscn"
 
-# Childs
+# Children
 @onready var game_seed: Label = $VBoxContainer/game_seed
 
 @onready var final_score: Label = $VBoxContainer/final_score
@@ -33,7 +33,5 @@ func _ready() -> void:
 
 
 func _on_menu_button_pressed() -> void:
-	# Reset game values
-	game.reset_game()
 	# Navigate to Main Menu scene
 	get_tree().change_scene_to_file(MAIN_MENU_SCENE)
