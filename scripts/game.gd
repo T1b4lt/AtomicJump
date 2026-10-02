@@ -11,7 +11,7 @@ var game_seed: int
 
 # Protagonist stats
 var pr_hp: float = 100.0  # Protagonist life
-var pr_max_hp: float = 110.0  # Protagonist max life
+var pr_max_hp: float = 100.0  # Protagonist max life (runs start at full hp)
 var pr_luck: int = 1  # 1 to 100 % of luck
 var pr_speed: float = 300.0  # Speed
 var pr_jump_force: float = -450.0  # Jump force
@@ -61,7 +61,7 @@ func reset_game() -> void:
 
 	# Protagonist stats
 	pr_hp = 100.0
-	pr_max_hp = 110.0
+	pr_max_hp = 100.0
 	pr_luck = 1
 	pr_speed = 300.0
 	pr_jump_force = -450.0

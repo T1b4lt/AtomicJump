@@ -35,8 +35,14 @@ func test_start_run_resets_previous_run_state() -> void:
 	state.start_run(123456789)
 
 	assert_int(state.game_seed).is_equal(123456789)
-	assert_float(state.pr_hp).is_equal(100.0)
+	assert_float(state.pr_hp).is_equal(state.pr_max_hp)
 	assert_float(state.altitude).is_equal(0.0)
 	assert_int(state.jump_counter).is_equal(0)
 	assert_int(state.actual_coins).is_equal(0)
 	assert_int(state.total_keys).is_equal(0)
+
+
+func test_runs_start_at_full_hp() -> void:
+	var state: Game = auto_free(GameScript.new())
+	assert_float(state.pr_hp).is_equal(state.pr_max_hp)
+	assert_float(state.pr_max_hp).is_equal(100.0)
