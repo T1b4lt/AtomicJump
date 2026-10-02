@@ -15,12 +15,12 @@ var pr_max_hp: float = 100.0  # Protagonist max life (runs start at full hp)
 var pr_luck: int = 1  # 1 to 100 % of luck
 var pr_speed: float = 300.0  # Speed
 var pr_jump_force: float = -450.0  # Jump force
-var pr_max_jumps: int = 2  # Allow double jump
+var pr_max_jumps: int = 2  # Chained jumps, ground jump included (2 = double jump)
 var pr_size: float = 1.0  # Protagonist size
 var pr_attack_power: float = 5.0  # Base damage
-var pr_attack_haste: float = 1.0  # Shoots per second
-var pr_attack_distance: float = 5.0  # Distance shoot
-var pr_defense: float = 1.0  # Protagonist damage reducer factor, decreasing to 0.5
+var pr_attack_haste: float = 1.0  # Shots per second
+var pr_attack_distance: float = 5.0  # Shot distance
+var pr_defense: float = 1.0  # Damage taken multiplier (1 = full damage), down to 0.5
 
 # Game stats
 var altitude: float = 0.0

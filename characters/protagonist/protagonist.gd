@@ -12,7 +12,7 @@ var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 var air_jumps_used: int = 0  # Jumps done in the air since last touching the floor
 var invulnerability_left: float = 0.0  # Seconds of invulnerability remaining
 
-# Childs
+# Children
 @onready var body_sprite: Sprite2D = $body
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var hp_bar: ProgressBar = $hp_bar
@@ -23,14 +23,14 @@ func _ready() -> void:
 	# Set initial scale from game.gd
 	scale = Vector2(game.pr_size, game.pr_size)
 
-	# Set initial values for hp_bar and hp_text from game.gd
+	# Set initial values for hp_bar and hp_data from game.gd
 	hp_bar.max_value = game.pr_max_hp
 	hp_bar.value = game.pr_hp
 	hp_data.text = "%.2f" % game.pr_hp + "/" + str(game.pr_max_hp)
 
 
 func _process(_delta: float) -> void:
-	# Update Health bar and text with game.gd values
+	# Update health bar and text with game.gd values
 	hp_bar.max_value = game.pr_max_hp
 	hp_bar.value = game.pr_hp
 	hp_data.text = "%.2f" % game.pr_hp + "/" + str(game.pr_max_hp)

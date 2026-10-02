@@ -5,7 +5,7 @@ extends CanvasLayer
 const LEVEL_SCENE = "res://screens/level/level.tscn"
 const SETTINGS_MENU_SCENE = "res://screens/settings_menu/settings_menu.tscn"
 
-# Childs
+# Children
 @onready var game_seed_input: LineEdit = $VBoxContainer/HBoxContainer/game_seed_input
 
 

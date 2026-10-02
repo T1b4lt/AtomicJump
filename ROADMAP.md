@@ -51,7 +51,7 @@ La **v1.0** llegará después de la 0.99.0. Antes faltan cosas que quedan **fuer
 - [x] Hacer explícita la lógica de saltos: contar los saltos aéreos sin depender de que `is_on_floor()` sea verdadero justo después de saltar.
 - [x] Pinchos: daño continuo con invulnerabilidad mientras se está en contacto, en lugar de un único golpe al entrar.
 - [x] Corregir la vida inicial (100) frente a la máxima (110), o documentar por qué son distintas.
-- [ ] Corregir comentarios erróneos (por ejemplo, "Go to game over screen" al ir al menú en `level.gd`).
+- [x] Corregir comentarios erróneos (por ejemplo, "Go to game over screen" al ir al menú en `level.gd`).
 
 **Terminado cuando:** todos los bugs de la lista están corregidos y comprobados jugando.
 

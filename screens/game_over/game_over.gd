@@ -4,7 +4,7 @@ extends CanvasLayer
 # Scenes
 const MAIN_MENU_SCENE = "res://screens/main_menu/main_menu.tscn"
 
-# Childs
+# Children
 @onready var game_seed: Label = $VBoxContainer/game_seed
 
 @onready var final_score: Label = $VBoxContainer/final_score

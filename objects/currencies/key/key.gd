@@ -1,7 +1,7 @@
 class_name KeyPickup
 extends Area2D
 
-# Childs
+# Children
 @onready var anim: AnimatedSprite2D = $AnimatedSprite2D
 
 

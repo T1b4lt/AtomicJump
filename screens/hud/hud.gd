@@ -1,7 +1,7 @@
 class_name HUD
 extends CanvasLayer
 
-# Childs
+# Children
 @onready var game_seed: Label = $seed_panel/MarginContainer/game_seed
 
 @onready var altitude: Label = $stats_panel/MarginContainer/GridContainer/altitude_data
