@@ -17,7 +17,6 @@ var is_platform_added: bool = false
 # Childs
 @onready var camera: Camera = $camera
 @onready var protagonist: Protagonist = $protagonist
-@onready var pause_menu: PauseMenu = $pause_menu
 
 
 func _ready() -> void:
@@ -40,13 +39,6 @@ func _process(_delta: float) -> void:
 		# Go to game over screen
 		get_tree().change_scene_to_file(GAME_OVER_SCENE)
 		return
-
-	# Check if user press pause button
-	if Input.is_action_just_pressed("pause"):
-		# Pause everything in the scene
-		get_tree().paused = true
-		# Show pause menu
-		pause_menu.visible = true
 
 	# Update altitude
 	game.altitude = (camera_initial_y - camera.position.y) / (int(get_viewport_rect().size.y) / 11)
@@ -80,16 +72,7 @@ func _remove_platform() -> void:
 
 
 # Pause Menu Signals
-func _on_pause_menu_resume_button_pressed() -> void:
-	# Hide pause menu
-	pause_menu.visible = false
-	# Resume activity in scene
-	get_tree().paused = false
-
-
 func _on_pause_menu_menu_button_pressed() -> void:
-	# Resume activity in scene
-	get_tree().paused = false
 	# Go to game over screen
 	get_tree().change_scene_to_file(MAIN_MENU_SCENE)
 
