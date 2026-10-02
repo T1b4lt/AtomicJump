@@ -52,6 +52,15 @@ El plan de desarrollo, fase a fase, está en el **[ROADMAP](ROADMAP.md)**.
 
 Prototipo temprano (v0.4): menú, nivel con plataformas aleatorias, recogida de monedas y llaves, pinchos, HUD, pausa y pantalla final con semilla. Los assets son **provisionales**. Consulta el [ROADMAP](ROADMAP.md) para ver en qué fase está el proyecto.
 
+Con la Fase 1 (corrección de bugs) el prototipo sirve de referencia de comportamiento para el refactor:
+
+- Cada partida empieza desde un estado limpio, se llegue al menú desde la pausa o desde la pantalla final.
+- Las semillas son números positivos de 9 dígitos, así que cualquier semilla mostrada se puede volver a introducir (formato provisional hasta la Fase 3, ver [08 · Semillas](docs/08-seeds.md)).
+- Esc pausa y también reanuda.
+- Doble salto: `pr_max_jumps` cuenta el salto desde el suelo; solo se cuentan los saltos en el aire.
+- Los pinchos hacen daño mientras se está en contacto, con 1 s de invulnerabilidad (parpadeo) tras cada golpe.
+- La coherencia inicial y la máxima son 100.
+
 ## Ejecutar el proyecto
 
 1. Instala [Godot 4.7](https://godotengine.org/download).
