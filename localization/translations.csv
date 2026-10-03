@@ -1,0 +1,40 @@
+keys,es,en
+GAME_TITLE,AtomicJump,AtomicJump
+CHARACTER_WILAS_NAME,Wilas,Wilas
+MENU_PLAY,Jugar,Play
+MENU_PLAY_SEED,Jugar con semilla,Play with seed
+MENU_SEED_PLACEHOLDER,Semilla (9 dígitos),Seed (9 digits)
+MENU_SETTINGS,Opciones,Settings
+MENU_EXIT,Salir,Quit
+SETTINGS_TITLE,Opciones,Settings
+SETTINGS_MASTER_VOLUME,Volumen general,Master volume
+SETTINGS_MUSIC_VOLUME,Música,Music
+SETTINGS_EFFECTS_VOLUME,Efectos,Effects
+SETTINGS_LANGUAGE,Idioma,Language
+SETTINGS_BACK,Volver,Back
+LANGUAGE_ES,Español,Español
+LANGUAGE_EN,English,English
+PAUSE_TITLE,PAUSA,PAUSED
+PAUSE_RESUME,Continuar,Resume
+PAUSE_MENU,Menú principal,Main menu
+PAUSE_EXIT,Salir del juego,Quit game
+GAME_OVER_TITLE,DECOHERENCIA,DECOHERENCE
+GAME_OVER_SEED,Semilla: %s,Seed: %s
+GAME_OVER_SCORE,Puntuación: %s,Score: %s
+GAME_OVER_JUMPS,Saltos: %s,Jumps: %s
+GAME_OVER_COINS,Fotones: %s,Photons: %s
+GAME_OVER_KEYS,Positrones: %s,Positrons: %s
+GAME_OVER_MENU,Menú principal,Main menu
+HUD_ALTITUDE,Altura,Altitude
+HUD_COINS,Fotones,Photons
+HUD_KEYS,Positrones,Positrons
+STAT_MAX_HP,Coherencia máxima,Max coherence
+STAT_LUCK,Amplitud,Amplitude
+STAT_SPEED,Momento,Momentum
+STAT_JUMP_FORCE,Impulso,Impulse
+STAT_MAX_JUMPS,Saltos cuánticos,Quantum jumps
+STAT_SIZE,Longitud de onda,Wavelength
+STAT_ATTACK_POWER,Carga,Charge
+STAT_ATTACK_RATE,Frecuencia,Frequency
+STAT_ATTACK_RANGE,Alcance,Range
+STAT_DEFENSE,Apantallamiento,Shielding

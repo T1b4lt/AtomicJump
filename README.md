@@ -56,10 +56,12 @@ Con la Fase 1 (corrección de bugs) el prototipo sirve de referencia de comporta
 
 - Cada partida empieza desde un estado limpio, se llegue al menú desde la pausa o desde la pantalla final.
 - Las semillas son números positivos de 9 dígitos, así que cualquier semilla mostrada se puede volver a introducir (formato provisional hasta la Fase 3, ver [08 · Semillas](docs/08-seeds.md)).
-- Esc pausa y también reanuda.
-- Doble salto: `pr_max_jumps` cuenta el salto desde el suelo; solo se cuentan los saltos en el aire.
+- Esc (o Start en el mando) pausa y también reanuda.
+- Doble salto: los saltos cuánticos (`max_jumps`) cuentan el salto desde el suelo; solo se cuentan los saltos en el aire.
 - Los pinchos hacen daño mientras se está en contacto, con 1 s de invulnerabilidad (parpadeo) tras cada golpe.
 - La coherencia inicial y la máxima son 100.
+
+La Fase 2 (refactor de fundamentos) mantiene esa jugabilidad sobre la arquitectura de [12 · Arquitectura](docs/12-architecture.md): partida en `RunManager`/`RunState`, estadísticas con modificadores, HUD por señales, transiciones entre pantallas, opciones guardadas (volumen e idioma), textos traducidos (español por defecto, también inglés), viewport 1280×720 y controles de mando.
 
 ## Ejecutar el proyecto
 

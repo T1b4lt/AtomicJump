@@ -1,0 +1,105 @@
+[gd_scene load_steps=2 format=3 uid="uid://v0li1tt8875t"]
+
+[ext_resource type="Script" path="res://ui/hud/hud.gd" id="1_ldeaq"]
+
+[node name="Hud" type="CanvasLayer"]
+script = ExtResource("1_ldeaq")
+
+[node name="StatsPanel" type="PanelContainer" parent="."]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 63.0
+offset_bottom = 100.0
+
+[node name="Margin" type="MarginContainer" parent="StatsPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="StatsGrid" type="GridContainer" parent="StatsPanel/Margin"]
+unique_name_in_owner = true
+layout_mode = 2
+columns = 2
+
+[node name="AltitudeName" type="Label" parent="StatsPanel/Margin/StatsGrid"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 15
+text = "HUD_ALTITUDE"
+vertical_alignment = 1
+
+[node name="AltitudeValue" type="Label" parent="StatsPanel/Margin/StatsGrid"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 20
+text = "0"
+vertical_alignment = 1
+
+[node name="CoinsName" type="Label" parent="StatsPanel/Margin/StatsGrid"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 15
+text = "HUD_COINS"
+vertical_alignment = 1
+
+[node name="CoinsValue" type="Label" parent="StatsPanel/Margin/StatsGrid"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 20
+text = "0"
+vertical_alignment = 1
+
+[node name="KeysName" type="Label" parent="StatsPanel/Margin/StatsGrid"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 15
+text = "HUD_KEYS"
+vertical_alignment = 1
+
+[node name="KeysValue" type="Label" parent="StatsPanel/Margin/StatsGrid"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 20
+text = "0"
+vertical_alignment = 1
+
+[node name="SeedPanel" type="PanelContainer" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = -30.0
+offset_right = 139.0
+offset_bottom = -7.0
+grow_vertical = 0
+
+[node name="Margin" type="MarginContainer" parent="SeedPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="SeedValue" type="Label" parent="SeedPanel/Margin"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+text = "000000000"
+horizontal_alignment = 1
+vertical_alignment = 1

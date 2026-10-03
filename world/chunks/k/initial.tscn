@@ -1,0 +1,78 @@
+[gd_scene load_steps=8 format=3 uid="uid://bi1jigid8vavc"]
+
+[ext_resource type="PackedScene" uid="uid://c04xqp021bidx" path="res://world/chunks/parts/backgrounds/background_1.tscn" id="1_7aq7b"]
+[ext_resource type="Script" path="res://world/chunks/chunk.gd" id="1_rpahe"]
+[ext_resource type="PackedScene" uid="uid://cyjms55c37j6" path="res://world/chunks/parts/walls/wall_normal.tscn" id="2_k6wek"]
+[ext_resource type="PackedScene" uid="uid://dbg8rkmdd53ti" path="res://world/chunks/parts/walls/floor_initial.tscn" id="3_jth3w"]
+[ext_resource type="PackedScene" uid="uid://cco7ci7mxskjp" path="res://world/chunks/parts/blocks/block_2.tscn" id="4_u7sq0"]
+[ext_resource type="PackedScene" uid="uid://bxdu7kcv0hily" path="res://world/chunks/parts/blocks/block_3.tscn" id="5_0pnu1"]
+[ext_resource type="PackedScene" uid="uid://honufl5gkksg" path="res://world/chunks/parts/blocks/block_4.tscn" id="6_1hyhw"]
+
+[node name="initial" type="Node2D"]
+script = ExtResource("1_rpahe")
+
+[node name="background_1" parent="." instance=ExtResource("1_7aq7b")]
+position = Vector2(0, 21)
+
+[node name="wall_normal" parent="." instance=ExtResource("2_k6wek")]
+position = Vector2(0, 22)
+
+[node name="wall_normal2" parent="." instance=ExtResource("2_k6wek")]
+position = Vector2(854, 22)
+
+[node name="floor_initial" parent="." instance=ExtResource("3_jth3w")]
+position = Vector2(0, 21)
+
+[node name="block_2" parent="." instance=ExtResource("4_u7sq0")]
+position = Vector2(367, 518)
+
+[node name="block_3" parent="." instance=ExtResource("5_0pnu1")]
+position = Vector2(580, 398)
+
+[node name="block_4" parent="." instance=ExtResource("6_1hyhw")]
+position = Vector2(733, 212)
+
+[node name="block_5" parent="." instance=ExtResource("4_u7sq0")]
+position = Vector2(368, 90)
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(1150, 10)
+
+[node name="ObjectPlaceholders" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="random_0" type="Node2D" parent="ObjectPlaceholders"]
+position = Vector2(339, 467)
+
+[node name="random_1" type="Node2D" parent="ObjectPlaceholders"]
+position = Vector2(395, 465)
+
+[node name="random_2" type="Node2D" parent="ObjectPlaceholders"]
+position = Vector2(518, 345)
+
+[node name="random_3" type="Node2D" parent="ObjectPlaceholders"]
+position = Vector2(577, 344)
+
+[node name="random_4" type="Node2D" parent="ObjectPlaceholders"]
+position = Vector2(645, 341)
+
+[node name="random_5" type="Node2D" parent="ObjectPlaceholders"]
+position = Vector2(639, 157)
+
+[node name="random_6" type="Node2D" parent="ObjectPlaceholders"]
+position = Vector2(700, 157)
+
+[node name="random_7" type="Node2D" parent="ObjectPlaceholders"]
+position = Vector2(762, 157)
+
+[node name="random_8" type="Node2D" parent="ObjectPlaceholders"]
+position = Vector2(826, 153)
+
+[node name="random_9" type="Node2D" parent="ObjectPlaceholders"]
+position = Vector2(338, 40)
+
+[node name="random_10" type="Node2D" parent="ObjectPlaceholders"]
+position = Vector2(400, 38)
+
+[connection signal="screen_entered" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

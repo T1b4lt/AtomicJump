@@ -1,0 +1,61 @@
+[gd_scene load_steps=2 format=3 uid="uid://bi8kjc8ehqxk2"]
+
+[ext_resource type="Script" path="res://ui/main_menu/main_menu.gd" id="1_fnywm"]
+
+[node name="MainMenu" type="CanvasLayer"]
+script = ExtResource("1_fnywm")
+
+[node name="Buttons" type="VBoxContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="Buttons"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "GAME_TITLE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PlayButton" type="Button" parent="Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "MENU_PLAY"
+
+[node name="SeedRow" type="HBoxContainer" parent="Buttons"]
+layout_mode = 2
+
+[node name="SeedInput" type="LineEdit" parent="Buttons/SeedRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+placeholder_text = "MENU_SEED_PLACEHOLDER"
+max_length = 9
+
+[node name="PlaySeedButton" type="Button" parent="Buttons/SeedRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "MENU_PLAY_SEED"
+
+[node name="SettingsButton" type="Button" parent="Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "MENU_SETTINGS"
+
+[node name="ExitButton" type="Button" parent="Buttons"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "MENU_EXIT"
+
+[connection signal="pressed" from="Buttons/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="Buttons/SeedRow/PlaySeedButton" to="." method="_on_play_seed_button_pressed"]
+[connection signal="pressed" from="Buttons/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="Buttons/ExitButton" to="." method="_on_exit_button_pressed"]

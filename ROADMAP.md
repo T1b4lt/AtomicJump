@@ -59,20 +59,20 @@ La **v1.0** llegará después de la 0.99.0. Antes faltan cosas que quedan **fuer
 
 **Objetivo:** sustituir los patrones del prototipo por la arquitectura de [12-arquitectura](docs/12-architecture.md), manteniendo la misma jugabilidad.
 
-- [ ] Reorganizar carpetas según la estructura objetivo (mover escenas desde el editor de Godot para que se actualicen las referencias).
-- [ ] Sustituir el autoload `game` por `RunManager` + `RunState` (se crea uno nuevo por partida; se elimina `reset_game()`).
-- [ ] Sistema de estadísticas: `StatBlock`, `StatModifier`, `Stats` con caché y señal `stat_changed`; `CharacterData` para Wilas.
-- [ ] HUD y barra de vida actualizados por **señales**; eliminar el refresco en `_process`.
-- [ ] Autoloads `Events`, `SceneRouter` (con transición) y `Settings` (con carga y guardado, aunque las opciones aún sean pocas).
-- [ ] Sustituir números mágicos (`670`, `/11`, `+50`) por constantes o `@export`; `get_viewport_rect()` en lugar de `get_viewport().size`.
-- [ ] `preload()` para escenas fijas.
-- [ ] Nodos con nombre único (`%Nombre`) en la UI.
-- [ ] Capas de física según la tabla de la arquitectura.
-- [ ] Migrar el viewport de 1160×670 a 1280×720 con `canvas_items` / `keep_width` ([13-dirección de arte](docs/13-art-style.md)).
-- [ ] Renombrar acciones de input (`move_left`, `move_right`…) y añadir las de mando.
-- [ ] Localización: CSV de traducción, `tr()` en todos los textos visibles, idioma inicial español.
+- [x] Reorganizar carpetas según la estructura objetivo (mover escenas desde el editor de Godot para que se actualicen las referencias).
+- [x] Sustituir el autoload `game` por `RunManager` + `RunState` (se crea uno nuevo por partida; se elimina `reset_game()`).
+- [x] Sistema de estadísticas: `StatBlock`, `StatModifier`, `Stats` con caché y señal `stat_changed`; `CharacterData` para Wilas.
+- [x] HUD y barra de vida actualizados por **señales**; eliminar el refresco en `_process`.
+- [x] Autoloads `Events`, `SceneRouter` (con transición) y `Settings` (con carga y guardado, aunque las opciones aún sean pocas).
+- [x] Sustituir números mágicos (`670`, `/11`, `+50`) por constantes o `@export`; `get_viewport_rect()` en lugar de `get_viewport().size`.
+- [x] `preload()` para escenas fijas.
+- [x] Nodos con nombre único (`%Nombre`) en la UI.
+- [x] Capas de física según la tabla de la arquitectura.
+- [x] Migrar el viewport de 1160×670 a 1280×720 con `canvas_items` / `keep_width` ([13-dirección de arte](docs/13-art-style.md)).
+- [x] Renombrar acciones de input (`move_left`, `move_right`…) y añadir las de mando.
+- [x] Localización: CSV de traducción, `tr()` en todos los textos visibles, idioma inicial español.
 - [x] Tipado estático en todo el código (adelantado a la Fase 0: era necesario al activar los avisos como error).
-- [ ] Tests unitarios de `Stats` y `RunState`.
+- [x] Tests unitarios de `Stats` y `RunState`.
 
 **Terminado cuando:** el juego se comporta como tras la Fase 1, no quedan avisos de tipado y los tests de estadísticas pasan.
 
@@ -121,7 +121,7 @@ La **v1.0** llegará después de la 0.99.0. Antes faltan cosas que quedan **fuer
 - [ ] Validador `@tool` en el editor (marcadores obligatorios, límites, huecos solapados).
 - [ ] Variación: espejo y plataformas opcionales.
 - [ ] `LayerData` para la Capa K y `LayerGenerator` (secuencia, ramas y compatibilidad entrada/salida).
-- [ ] Instanciación perezosa y liberación de tramos (sustituye al sistema actual de `platform_enter/leave_screen`).
+- [ ] Instanciación perezosa y liberación de tramos (sustituye al sistema actual de las señales `screen_entered`/`screen_exited` de `Chunk`).
 - [ ] Tramos de bifurcación con dos salidas, iconos de recompensa y colapso de la rama no elegida.
 - [ ] Tramos especiales: entrada de capa, recompensa y descanso.
 - [ ] **Arte:** shader del fondo orbital 1s de la Capa K.

@@ -1,0 +1,72 @@
+[gd_scene load_steps=2 format=3 uid="uid://css1c8np2ebui"]
+
+[ext_resource type="Script" path="res://ui/game_over/game_over.gd" id="1_3077n"]
+
+[node name="GameOver" type="CanvasLayer"]
+script = ExtResource("1_3077n")
+
+[node name="Rows" type="VBoxContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="Rows"]
+layout_mode = 2
+text = "GAME_OVER_TITLE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SeedLabel" type="Label" parent="Rows"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+text = "-"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ScoreLabel" type="Label" parent="Rows"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+text = "-"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="JumpsLabel" type="Label" parent="Rows"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+text = "-"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CoinsLabel" type="Label" parent="Rows"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+text = "-"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="KeysLabel" type="Label" parent="Rows"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+text = "-"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MenuButton" type="Button" parent="Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "GAME_OVER_MENU"
+
+[connection signal="pressed" from="Rows/MenuButton" to="." method="_on_menu_button_pressed"]
