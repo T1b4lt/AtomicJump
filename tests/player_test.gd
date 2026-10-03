@@ -70,7 +70,7 @@ func test_size_stat_scales_the_player() -> void:
 
 
 func _add_player(max_jumps: int = 2) -> Player:
-	var run := RunState.new(1, WILAS)
+	var run := RunState.new("A", WILAS)
 	var extra_jumps: float = max_jumps - run.stats.get_value(Stats.MAX_JUMPS)
 	if extra_jumps != 0.0:
 		run.stats.add_modifier(

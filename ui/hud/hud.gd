@@ -56,7 +56,7 @@ func bind_run(run: RunState) -> void:
 	_run.altitude_changed.connect(_on_altitude_changed)
 	_run.stats.stat_changed.connect(_on_stat_changed)
 
-	_seed_value.text = str(run.seed_value)
+	_seed_value.text = run.get_seed_label()
 	_on_coins_changed(run.coins)
 	_on_keys_changed(run.keys)
 	_on_altitude_changed(run.altitude)

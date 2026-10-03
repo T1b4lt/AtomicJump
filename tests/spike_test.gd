@@ -57,5 +57,5 @@ func _player() -> Player:
 	var player: Player = auto_free(PLAYER_SCENE.instantiate())
 	add_child(player)
 	player.set_physics_process(false)
-	player.bind_run(RunState.new(1, WILAS))
+	player.bind_run(RunState.new("A", WILAS))
 	return player

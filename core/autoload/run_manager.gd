@@ -13,8 +13,12 @@ func _ready() -> void:
 	Events.key_collected.connect(_on_key_collected)
 
 
-func start_run(seed_value: int, character: CharacterData = DEFAULT_CHARACTER) -> RunState:
-	run = RunState.new(seed_value, character)
+## Starts a run with the seed typed by the player. Without a usable seed (empty
+## text) it starts a random one.
+func start_run(seed_text: String = "", character: CharacterData = DEFAULT_CHARACTER) -> RunState:
+	if not SeedCode.is_valid_text(seed_text):
+		seed_text = SeedCode.generate()
+	run = RunState.new(seed_text, character)
 	Events.run_started.emit(run)
 	return run
 

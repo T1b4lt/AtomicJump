@@ -14,24 +14,29 @@ func after_test() -> void:
 
 
 func test_start_run_creates_a_new_state() -> void:
-	var first: RunState = RunManager.start_run(111111111)
+	var first: RunState = RunManager.start_run("AAAA-1111")
 	first.take_damage(50.0)
-	var second: RunState = RunManager.start_run(222222222)
+	var second: RunState = RunManager.start_run("BBBB-2222")
 	assert_object(second).is_not_same(first)
-	assert_int(second.seed_value).is_equal(222222222)
+	assert_str(second.seed_code).is_equal("BBBB-2222")
 	assert_float(second.hp).is_equal(second.get_max_hp())
 	assert_object(second.character).is_same(RunManager.DEFAULT_CHARACTER)
 
 
+func test_start_run_without_seed_is_random() -> void:
+	var run: RunState = RunManager.start_run("  - ")
+	assert_bool(SeedCode.is_code(SeedCode.normalize(run.seed_code))).is_true()
+
+
 func test_end_run_returns_the_run_and_clears_it() -> void:
-	var run: RunState = RunManager.start_run(111111111)
+	var run: RunState = RunManager.start_run("AAAA-1111")
 	assert_object(RunManager.end_run()).is_same(run)
 	assert_bool(RunManager.has_run()).is_false()
 	assert_object(RunManager.end_run()).is_null()
 
 
 func test_pickup_events_reach_the_current_run() -> void:
-	var run: RunState = RunManager.start_run(111111111)
+	var run: RunState = RunManager.start_run("AAAA-1111")
 	Events.coin_collected.emit(5)
 	Events.key_collected.emit(1)
 	assert_int(run.coins).is_equal(5)

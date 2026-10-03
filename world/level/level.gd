@@ -1,12 +1,9 @@
 class_name Level
 extends Node2D
-## Prototype level: an auto-scrolling column of random chunks. Plays the run in
-## RunManager and ends it when the player dies or falls below the camera.
+## Prototype level: an auto-scrolling column of chunks chosen by the seed with
+## PrototypeGenerator. Plays the run in RunManager and ends it when the player
+## dies or falls below the camera.
 
-const CHUNK_SCENES: Array[PackedScene] = [
-	preload("res://world/chunks/k/platform_1.tscn"),
-	preload("res://world/chunks/k/platform_2.tscn"),
-]
 ## Altitude units per chunk height (the prototype counted 11 per screen).
 const ALTITUDE_UNITS_PER_CHUNK: float = 11.0
 ## Chunks alive at once: the oldest is freed when another one leaves the screen.
@@ -28,8 +25,7 @@ var _ending: bool = false
 
 func _ready() -> void:
 	# Running the level scene on its own (F6) starts a random run
-	run = RunManager.run if RunManager.has_run() else RunManager.start_run(SeedCode.generate())
-	seed(run.seed_value)
+	run = RunManager.run if RunManager.has_run() else RunManager.start_run()
 
 	# Bottom of the view on the bottom of the first chunk, play area centered
 	var view_size: Vector2 = get_viewport_rect().size
@@ -52,14 +48,22 @@ func _process(_delta: float) -> void:
 
 
 func _add_chunk() -> void:
-	var scene: PackedScene = CHUNK_SCENES[randi_range(0, CHUNK_SCENES.size() - 1)]
-	var chunk: Chunk = scene.instantiate() as Chunk
+	# Index 0 is the initial chunk, so the n-th added chunk has index n
+	var index: int = _chunks.size() + 1
+	var id: StringName = PrototypeGenerator.pick_chunk(run.world_rng, index)
+	var chunk: Chunk = PrototypeGenerator.CHUNK_SCENES[id].instantiate() as Chunk
 	_chunks.append(chunk)
-	chunk.position.y = -Chunk.HEIGHT * _chunks.size()
+	chunk.position.y = -Chunk.HEIGHT * index
 	add_child(chunk)
-	chunk.place_objects()
+	_place_objects(chunk, index)
 	chunk.screen_entered.connect(_add_chunk)
 	chunk.screen_exited.connect(_free_oldest_chunk)
+
+
+func _place_objects(chunk: Chunk, index: int) -> void:
+	chunk.place_objects(
+		PrototypeGenerator.plan_objects(run.world_rng, index, chunk.get_slot_count())
+	)
 
 
 func _free_oldest_chunk() -> void:
@@ -89,7 +93,7 @@ func _on_pause_menu_exit_button_pressed() -> void:
 
 func _on_initial_chunk_screen_entered() -> void:
 	_add_chunk()
-	_initial_chunk.place_objects()
+	_place_objects(_initial_chunk, 0)
 
 
 func _on_initial_chunk_screen_exited() -> void:
