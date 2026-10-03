@@ -42,7 +42,7 @@ Cada capa es una secuencia de **tramos** (una pantalla de alto cada uno, ver [05
 - Al cruzar una salida, la otra **colapsa** (se cierra con un efecto visual).
 - La recompensa aparece en el siguiente tramo (el **tramo de recompensa**, al final de la rama) y se obtiene al superarlo.
 - Cada rama puede ser de distinta longitud y dificultad. Las recompensas mejores tienden a estar tras las ramas más difíciles.
-- Hasta elegir, por encima de la bifurcación no hay nada: la rama no existe hasta que se observa. Sus tramos aparecen (con un fundido) al cruzar la salida. Implementación en [05-mundo](05-world.md#implementación-fase-5); de momento hay recompensas de fotones y de positrón.
+- Hasta elegir, por encima de la bifurcación no hay nada: la rama no existe hasta que se observa. Sus tramos aparecen (con un fundido) al cruzar la salida. Implementación en [05-mundo](05-world.md#implementación-fase-5); de momento hay recompensas de fotones, de positrón y de observable (desde la Fase 7).
 
 ### Tipos de recompensa de rama
 

@@ -15,7 +15,7 @@ Todo el arte del juego es **vectorial, geométrico y luminoso sobre un fondo cas
 | Estilo | Vectorial geométrico con brillo ("neón de cámara de burbujas"). |
 | Resolución | Referencia **1280×720**, `stretch/mode = canvas_items`, `aspect = keep_width`. |
 | Producción | Todo el arte se genera con código Python en `art/` (paleta central + generadores). No hay arte pintado a mano. |
-| Arte provisional | Desaparece: cada asset nace con el estilo final. Los assets de Kenney se eliminan a medida que se sustituyen (la Fase 5 quitó los de los tramos; quedan los de fotones, positrones y cofres). |
+| Arte provisional | Desaparece: cada asset nace con el estilo final. Los assets de Kenney se eliminaron a medida que se sustituían (la Fase 5 quitó los de los tramos y la Fase 7 los de fotones, positrones y cofres): ya no queda ninguno. |
 | Brillo (*glow*) | Lo pone el motor, no el SVG: el importador SVG de Godot no soporta filtros. Verificado en la Fase 4: HDR 2D + glow del `WorldEnvironment` funcionan en *Compatibility*. |
 | Animación | En el motor (tweens, AnimationPlayer, shaders y partículas) sobre formas vectoriales. No hay hojas de sprites. |
 | Fondos | Shaders que calculan el orbital de cada capa en tiempo real. Las imágenes generadas con NumPy son la referencia. |
@@ -186,6 +186,10 @@ Cada salida del techo tiene una línea discontinua del acento de capa y el icono
 | Pozo cuántico | Pozo de potencial en U con tres niveles de energía y el objeto en el fondo; precio encima |
 | Electrón ligado | Objeto dentro de dos órbitas cian con su electrón; icono de e⁺ encima |
 | Superposición | Dos objetos semitransparentes solapados bajo \|ψ⟩ y una onda cuántica |
+| Pedestal | Nivel de energía corto con un haz punteado hacia arriba; el icono del objeto flota encima |
+| Pión (tendero) | Pareja quark–antiquark naranja (relleno y hueco) unida por un muelle de gluón, con ojos rasgados |
+
+En el juego (Fase 7) todo se exporta sin filtros ni texto: los fotones ×1/×5/×10, el positrón y los cuantos de energía (la ħ se dibuja con trazos) en `pickups/`; el pozo cuántico en dos piezas (`quantum_well` y sus niveles encendidos `quantum_well_lit`, que se funden encima al pagar; el precio es un `Label`), el electrón ligado sin su electrón (el motor mueve el de `enemies/decay_electron.svg` por la órbita), el pedestal y la onda \|ψ⟩ de la Superposición en `containers/`, y el Pión en `shop/`. En la Superposición del juego los dos objetos van en dos pedestales separados bajo la onda, para poder elegir uno. Brillan con `modulate` HDR (×1,3–1,6).
 
 ## Iconografía
 
@@ -204,6 +208,8 @@ Gramática fija para los más de 100 iconos: **marco + glifo + joya**.
 - **Glifo:** el efecto, preferiblemente como **mini diagrama de Feynman** (fermión = línea recta, fotón/W/Z = onda, gluón = muelle, Higgs = discontinua) o un símbolo físico (espiral, flechas de espín, ondas).
 - **Joya:** rombo de 8 px bajo el marco con el color de la rareza.
 - Un icono nuevo es una combinación nueva de piezas existentes; solo hace falta un glifo nuevo cuando el efecto no encaja en ninguno.
+- **Unificaciones:** el marco de la primera familia con el de la segunda dentro, más pequeño y sin relleno.
+- **En el juego** (Fase 7): `items.game_icon(id)` exporta cada icono (`icons/<id>.svg`, 64 × 72 px) con su marco y su glifo, **sin la joya**: la rareza de una interacción no es fija, así que el motor dibuja la joya (`icons/icon_gem.svg`, blanca) teñida con el color de la rareza (`ItemIcon` en el mundo, `ItemIconRect` en la UI). Los glifos del juego (`GAME_GLYPHS`) no llevan texto. Hay iconos para los 16 observables y los 2 operadores de la Fase 7, el Paquete de ondas, las dos elecciones del Estado fundamental, el reintento de la tienda y las 20 interacciones previstas para la Fase 8 (4 por familia, 2 cuánticas y las unificaciones Electrodébil y Lente gravitatoria).
 
 ## Efectos visuales
 
@@ -326,7 +332,7 @@ uv add <paquete>                         # añadir dependencias
 
 `art/build_game_assets.py` (desde la Fase 4) exporta el arte del juego:
 
-- A `assets/generated/` (sí importado por Godot) los SVG **sin filtros ni texto**, con nombres funcionales en inglés agrupados por carpeta (`player/player_core.svg`…). Hoy: las piezas de Wilas (`player_core`, `player_orbital`, `player_orbital_front`, `player_electron` y `player_eyes_<expresión>`), que comparten el centro del núcleo para colocarlas sin cálculos; el atlas de tiles de la Capa K (`tilesets/layer_k_tiles.svg`), el pico de potencial (`hazards/potential_spikes.svg`), los iconos de recompensa de bifurcación (`rewards/`), los enemigos de la Capa K (`enemies/`: `orbital_electron`, `decay_electron`, `free_neutron`, `alpha_particle` y las líneas de velocidad `alpha_speed_lines`, que se muestran al embestir) y el proyectil del jugador (`combat/player_projectile.svg`, con la cabeza a 16 px del centro del lienzo). Para reutilizar en el juego una función de previsualización que lleva brillo, `svg.without_glow()` le quita los filtros.
+- A `assets/generated/` (sí importado por Godot) los SVG **sin filtros ni texto**, con nombres funcionales en inglés agrupados por carpeta (`player/player_core.svg`…). Hoy: las piezas de Wilas (`player_core`, `player_orbital`, `player_orbital_front`, `player_electron` y `player_eyes_<expresión>`), que comparten el centro del núcleo para colocarlas sin cálculos; el atlas de tiles de la Capa K (`tilesets/layer_k_tiles.svg`), el pico de potencial (`hazards/potential_spikes.svg`), los iconos de recompensa de bifurcación (`rewards/`), los enemigos de la Capa K (`enemies/`: `orbital_electron`, `decay_electron`, `free_neutron`, `alpha_particle` y las líneas de velocidad `alpha_speed_lines`, que se muestran al embestir) y el proyectil del jugador (`combat/player_projectile.svg`, con la cabeza a 16 px del centro del lienzo) y, desde la Fase 7, los recogibles (`pickups/`), los contenedores y el pedestal (`containers/`), el Pión (`shop/`), los iconos (`icons/`) y el icono de la recompensa de observable (`rewards/reward_item.svg`). Para reutilizar en el juego una función de previsualización que lleva brillo, `svg.without_glow()` le quita los filtros.
 - Cada pieza animable se exporta **por partes** para animarlas por separado en Godot.
 - Los SVG se importan con `svg/scale = 2` (en su `.import`) y se dibujan con escala 0,5: quedan nítidos aunque la ventana sea mayor que 1280×720. Para un SVG nuevo, el script escribe un `.import` mínimo con esa escala que Godot completa al importar.
 - Un manifiesto (`assets/generated/manifest.json`) lista cada asset con su tamaño y su origen; `tests/generated_assets_test.gd` comprueba que coincide con los ficheros, que no hay filtros ni texto y que se importan al doble de tamaño. Al regenerar se borran los `.import` de los assets que ya no existen.

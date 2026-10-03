@@ -50,7 +50,7 @@ El plan de desarrollo, fase a fase, está en el **[ROADMAP](ROADMAP.md)**.
 
 ## Estado actual
 
-Prototipo temprano (v0.4): menú, nivel con plataformas aleatorias, recogida de monedas y llaves, pinchos, HUD, pausa y pantalla final con semilla. Los assets son **provisionales**. Consulta el [ROADMAP](ROADMAP.md) para ver en qué fase está el proyecto.
+El punto de partida fue un prototipo temprano (v0.4): menú, nivel con plataformas aleatorias, recogida de monedas y llaves, pinchos, HUD, pausa y pantalla final con semilla, con assets provisionales. Consulta el [ROADMAP](ROADMAP.md) para ver en qué fase está el proyecto.
 
 Con la Fase 1 (corrección de bugs) el prototipo sirve de referencia de comportamiento para el refactor:
 
@@ -70,6 +70,8 @@ La Fase 4 (movimiento, cámara y Decoherencia) cambia la sensación de juego ([0
 La Fase 5 (tramos y generación de capas) sustituye la columna aleatoria del prototipo por una **Capa K generada** ([05 · Mundo](docs/05-world.md)): tramos de una pantalla diseñados con TileMapLayers sobre un tileset generado (niveles de energía, niveles virtuales atravesables, retícula y picos de potencial) y encadenados según sus entradas y salidas, con espejo y plataformas opcionales por semilla. Cada partida recorre la entrada de capa, dos **bifurcaciones** con el icono de su recompensa (al cruzar una salida la otra colapsa), un descanso y un jefe provisional; al salir por arriba se completa la capa. El fondo es la nube del orbital 1s calculada en un shader. Hay una plantilla de tramo con validador en el editor y una sala para jugar un tramo suelto (`world/debug/chunk_test_room.tscn`). La generación cambió, así que las semillas pasan a `g2`.
 
 La Fase 6 (combate y enemigos) trae el **disparo** en 4 direcciones (flechas o stick derecho) con la Frecuencia, el Alcance y la Carga de Wilas; los proyectiles heredan algo de su velocidad, se detienen en las paredes y disparar hacia abajo en el aire frena la caída ([04 · Jugador](docs/04-player.md#disparo)). La Capa K se puebla con sus tres enemigos ([09 · Enemigos](docs/09-enemies.md)): el **electrón orbital**, el **neutrón libre** (que al morir decae en un electrón efímero) y la **partícula alfa** (que avisa y embiste). Aparecen en los huecos de los tramos según la semilla, sueltan fotones con tiradas direccionadas y los impactos y muertes dejan trazas de cámara de burbujas, con un _hitstop_ breve. La pantalla final cuenta los enemigos eliminados y la causa de la muerte. Hay una sala de pruebas de combate (`world/debug/combat_test_room.tscn`). La generación cambió: las semillas pasan a `g3`.
+
+La Fase 7 (economía y objetos) llena la Capa K de cosas que recoger y en qué gastarlas ([06 · Economía](docs/06-economy.md) y [07 · Objetos](docs/07-items.md)): **fotones** de valor 1, 5 y 10 que vuelan hacia Wilas, **positrones** y **cuantos de energía**; **pozos cuánticos** que se excitan pagando fotones, **electrones ligados** que se aniquilan con un positrón, **pedestales** y **Superposiciones** (coges uno y el otro colapsa). Hay 16 **observables** (de estadísticas y con efectos: ráfagas de proyectiles, fotones al impactar, daño por Doppler, enemigos Inestables…), la transformación **Paquete de ondas** al reunir 3 de onda y 2 **operadores** (Efecto Zenón y Colapso) que se recargan subiendo tramos. A mitad de capa espera el **Intercambio** del Pión (tienda por semilla con reintento) y el **Estado fundamental** deja elegir entre curar o subir la coherencia máxima. Se interactúa con W, el operador se usa con E y Tab muestra la **pantalla de build** con el desglose de estadísticas. Todo el arte de esta fase (recogibles, contenedores, el Pión e iconos de marco + glifo + joya, también los de las interacciones de la Fase 8) es generado; se eliminan los assets de Kenney. Hay una sala de pruebas de objetos (`world/debug/item_test_room.tscn`). La generación cambió: las semillas pasan a `g4`.
 
 ## Ejecutar el proyecto
 
@@ -93,6 +95,7 @@ La Fase 6 (combate y enemigos) trae el **disparo** en 4 direcciones (flechas o s
 | Bajar plataforma | S + Espacio | Abajo + A   |
 | Disparar        | Flechas | Stick derecho   |
 | Túnel (esquiva) | Shift   | RB              |
+| Interactuar     | W       | Y / Arriba      |
 | Operador        | E       | LB              |
 | Build           | Tab     | Select          |
 | Pausa           | Esc     | Start           |

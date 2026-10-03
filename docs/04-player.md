@@ -15,6 +15,7 @@
 | Pausa                           | Esc            | Start                                      | `pause`                                               |
 
 - Todos los controles son **remapeables** desde Opciones (Fase 14).
+- Desde la Fase 7, **interactuar** usa el `Interactable` más cercano de los que toca el `InteractionArea` de Wilas (radio 40 px), que muestra su aviso encima; **usar operador** gasta su carga (ver [07-objetos](07-items.md#operadores)) y **ver build** muestra la pantalla de build mientras se mantiene. `PlayerInput` lee `interact_pressed` y `use_active_pressed`.
 - Las acciones están definidas en `project.godot` desde la Fase 2, con teclado y mando (cualquier dispositivo). Y no dispara hacia arriba porque ya interactúa; con mando, arriba se dispara con el stick derecho.
 - Con mando, disparar hacia abajo en el aire es un recurso de movilidad (ver "Retroceso del disparo").
 
@@ -108,6 +109,7 @@ Los nombres temáticos y los de código están en [02-universo](02-universe.md#p
 | Frecuencia        | `attack_rate`  | 2,5 disp/s   | 10      |                                                                     |
 | Alcance           | `attack_range` | 450 px       | 1200    |                                                                     |
 | Apantallamiento   | `defense`      | 0 %          | 60 %    |                                                                     |
+| Atracción         | `pickup_radius`| 80 px        | 480     | Radio al que los fotones vuelan hacia Wilas (Fase 7)                |
 
 ### Cómo se calculan las estadísticas
 
