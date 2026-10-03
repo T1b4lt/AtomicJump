@@ -34,6 +34,13 @@ GLOW_DEFS = "".join(
 )
 
 
+def without_glow(body: str) -> str:
+    """Quita los filtros de brillo de un fragmento, para reutilizar en el juego un asset de previsualización."""
+    import re
+
+    return re.sub(r' filter="url\(#glow\d+\)"', "", body)
+
+
 def g(body: str, *, x: float = 0, y: float = 0, scale: float = 1, rotate: float = 0, glow: int | None = None, opacity: float = 1, extra: str = "") -> str:
     t = f"translate({x:.2f},{y:.2f})"
     if rotate:

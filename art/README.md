@@ -23,7 +23,7 @@ El arte del juego (`assets/generated/`, con su `manifest.json`) y `core/palette.
 | `atomic_art/characters.py` | Wilas y los personajes desbloqueables |
 | `atomic_art/enemies.py` | Enemigos por capa y jefes |
 | `atomic_art/items.py` | Recogibles, contenedores y sistema de iconos (marco + glifo + joya) |
-| `atomic_art/world.py` | Fondos orbitales (NumPy), tiles, Decoherencia y trazas de cámara de burbujas |
+| `atomic_art/world.py` | Fondos orbitales (NumPy), tiles y atlas de tiles del juego, Decoherencia y trazas de cámara de burbujas |
 | `atomic_art/mockups.py` | Composiciones: captura simulada, tarjeta de partida, hoja de modelo |
 | `build_game_assets.py` | Exportación a Godot: SVG sin filtros ni texto por piezas, manifiesto y paleta en GDScript |
 | `atomic_art/anim.py` | Animaciones de referencia (escenas `t → SVG` en bucle, exportadas a WebP). Sus tiempos y curvas son la referencia para implementarlas en Godot |
