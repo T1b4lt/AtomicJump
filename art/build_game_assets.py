@@ -15,6 +15,7 @@ from collections.abc import Callable
 from pathlib import Path
 
 from atomic_art import characters as C
+from atomic_art import enemies as E
 from atomic_art import items as I
 from atomic_art import palette as P
 from atomic_art import world as W
@@ -33,6 +34,13 @@ ELECTRON_CANVAS = (8, 8)
 ATLAS_CANVAS = (W.ATLAS_COLUMNS * W.TILE, W.ATLAS_ROWS * W.TILE)
 SPIKES_CANVAS = (2 * W.TILE, 20)
 REWARD_ICON_CANVAS = (48, 48)
+# Enemigos de la Capa K y proyectil del jugador (Fase 6)
+ORBITAL_ELECTRON_CANVAS = (28, 28)
+DECAY_ELECTRON_CANVAS = (18, 18)
+FREE_NEUTRON_CANVAS = (40, 48)
+ALPHA_PARTICLE_CANVAS = (44, 44)
+ALPHA_LINES_CANVAS = (48, 28)
+PROJECTILE_CANVAS = (64, 16)
 # Capas con tileset exportado (se añaden según llegan al juego)
 TILESET_LAYERS = ("K",)
 
@@ -52,6 +60,14 @@ ASSETS: list[Asset] = [
     for layer in TILESET_LAYERS
 ] + [
     ("hazards/potential_spikes.svg", SPIKES_CANVAS, W.potential_spikes_sprite, "world.potential_spikes_sprite"),
+] + [
+    ("enemies/orbital_electron.svg", ORBITAL_ELECTRON_CANVAS, E.orbital_electron_sprite, "enemies.orbital_electron_sprite"),
+    ("enemies/decay_electron.svg", DECAY_ELECTRON_CANVAS, E.decay_electron_sprite, "enemies.decay_electron_sprite"),
+    ("enemies/free_neutron.svg", FREE_NEUTRON_CANVAS, E.free_neutron_sprite, "enemies.free_neutron_sprite"),
+    ("enemies/alpha_particle.svg", ALPHA_PARTICLE_CANVAS, E.alpha_particle_sprite, "enemies.alpha_particle_sprite"),
+    # Las líneas se dibujan a la izquierda de (0, 0): se desplazan para que el lienzo las contenga
+    ("enemies/alpha_speed_lines.svg", ALPHA_LINES_CANVAS, (lambda: g(E.alpha_speed_lines(), x=ALPHA_LINES_CANVAS[0] / 2)), "enemies.alpha_speed_lines"),
+    ("combat/player_projectile.svg", PROJECTILE_CANVAS, W.projectile_sprite, "world.projectile_sprite"),
 ] + [
     (f"rewards/reward_{reward}.svg", REWARD_ICON_CANVAS, (lambda r=reward: I.reward_icon(r)), f"items.reward_icon('{reward}')")
     for reward in I.REWARD_GLYPHS

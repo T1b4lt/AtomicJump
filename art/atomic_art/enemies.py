@@ -10,7 +10,7 @@ Reglas de diseño:
 import math
 
 from . import palette as P
-from .svg import circle, coil, ellipse, g, path, polyline, radial
+from .svg import circle, coil, ellipse, g, path, polyline, radial, without_glow
 
 
 def _slit(w: float = 10, y: float = 0, color: str = P.VOID, angry: bool = True) -> str:
@@ -175,3 +175,40 @@ ROSTER = {
     "M": [("Neutrino", neutrino_enemy, "0"), ("Partículas virtuales", virtual_pair, "±"), ("Monopolo", monopole, "N/S")],
     "N": [("Trío de quarks", quark_triplet, "color"), ("Tau", tau_enemy, "−"), ("Bosón Z", z_boson, "0")],
 }
+
+
+# --- Piezas para el juego (Fase 6) ------------------------------------------
+# Sin filtros: el brillo lo pone el motor. La traza de cada enemigo (órbita,
+# líneas de velocidad) se exporta aparte o se dibuja en el motor, porque se
+# anima o depende del movimiento.
+
+
+def orbital_electron_sprite(uid: str = "goe") -> str:
+    """Cuerpo del electrón orbital centrado en (0, 0). La órbita y la estela las dibuja el motor."""
+    return _sphere(11, P.NEGATIVE, uid) + _slit(9, 1)
+
+
+def decay_electron_sprite(uid: str = "gde") -> str:
+    """Electrón de la desintegración beta de un neutrón: un electrón orbital pequeño."""
+    return _sphere(7, P.NEGATIVE, uid) + _slit(6, 1)
+
+
+def free_neutron_sprite(uid: str = "gfn") -> str:
+    """Neutrón libre centrado en el centro de la cápsula; los pies llegan a y = 22."""
+    return without_glow(free_neutron(uid))
+
+
+def alpha_particle_sprite(uid: str = "gap") -> str:
+    """Partícula alfa (2 protones + 2 neutrones) sin las líneas de velocidad."""
+    balls = (
+        g(_sphere(11, P.POSITIVE, uid + "a"), x=-8, y=-8)
+        + g(_sphere(11, P.NEUTRAL, uid + "b"), x=8, y=-8)
+        + g(_sphere(11, P.NEUTRAL, uid + "c"), x=-8, y=8)
+        + g(_sphere(11, P.POSITIVE, uid + "d"), x=8, y=8)
+    )
+    return balls + _slit(14, -1)
+
+
+def alpha_speed_lines() -> str:
+    """Líneas de velocidad de la alfa al embestir, detrás de ella (hacia la izquierda de (0, 0))."""
+    return "".join(path(f"M{-i * 4},{y} l-{16 + i * 6},0", stroke=P.POSITIVE, sw=2, opacity=0.8 - i * 0.2) for i, y in enumerate((-10, 0, 10)))
