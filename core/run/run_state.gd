@@ -9,7 +9,10 @@ signal keys_changed(value: int)
 signal altitude_changed(value: float)
 signal died
 
-var seed_value: int
+## Seed as shown to the player ("K7QX-2MPA" or a normalized text).
+var seed_code: String
+## Addressed rolls of this run's world, from the seed.
+var world_rng: WorldRng
 var character: CharacterData
 var stats: Stats
 var hp: float
@@ -20,12 +23,19 @@ var altitude: float = 0.0
 var counters := RunCounters.new()
 
 
-func _init(p_seed: int, p_character: CharacterData) -> void:
-	seed_value = p_seed
+## Takes the seed as typed by the player; see SeedCode.normalize().
+func _init(p_seed_text: String, p_character: CharacterData) -> void:
+	seed_code = SeedCode.from_text(p_seed_text)
+	world_rng = WorldRng.new(SeedCode.to_int(p_seed_text))
 	character = p_character
 	stats = Stats.new(character.base_stats)
 	hp = get_max_hp()
 	stats.stat_changed.connect(_on_stat_changed)
+
+
+## Seed with its generation version, as shown in the HUD: "K7QX-2MPA · g1".
+func get_seed_label() -> String:
+	return "%s · %s" % [seed_code, WorldRng.version_label()]
 
 
 func get_max_hp() -> float:

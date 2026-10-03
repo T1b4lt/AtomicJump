@@ -18,7 +18,7 @@ func after_test() -> void:
 
 
 func test_coin_and_key_add_to_the_run() -> void:
-	var run: RunState = RunManager.start_run(123456789)
+	var run: RunState = RunManager.start_run("K7QX-2MPA")
 	var player: Player = auto_free(PLAYER_SCENE.instantiate())
 	var coin: Coin = auto_free(COIN_SCENE.instantiate())
 	var key: KeyPickup = auto_free(KEY_SCENE.instantiate())
@@ -30,7 +30,7 @@ func test_coin_and_key_add_to_the_run() -> void:
 
 
 func test_other_bodies_are_ignored() -> void:
-	var run: RunState = RunManager.start_run(123456789)
+	var run: RunState = RunManager.start_run("K7QX-2MPA")
 	var coin: Coin = auto_free(COIN_SCENE.instantiate())
 	var body: Node2D = auto_free(Node2D.new())
 	coin._on_body_entered(body)

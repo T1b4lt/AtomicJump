@@ -1,12 +1,16 @@
 class_name GameOver
 extends CanvasLayer
-## End-of-run screen. Shows the RunState passed by SceneRouter as "run".
+## End-of-run screen. Shows the RunState passed by SceneRouter as "run", with
+## a button that copies its seed.
+
+var _seed_code: String = ""
 
 @onready var _seed_label: Label = %SeedLabel
 @onready var _score_label: Label = %ScoreLabel
 @onready var _jumps_label: Label = %JumpsLabel
 @onready var _coins_label: Label = %CoinsLabel
 @onready var _keys_label: Label = %KeysLabel
+@onready var _copy_seed_button: Button = %CopySeedButton
 
 
 func _ready() -> void:
@@ -17,11 +21,22 @@ func _ready() -> void:
 
 
 func show_run(run: RunState) -> void:
-	_seed_label.text = tr("GAME_OVER_SEED") % run.seed_value
+	_seed_code = run.seed_code
+	_copy_seed_button.disabled = false
+	_seed_label.text = tr("GAME_OVER_SEED") % run.get_seed_label()
 	_score_label.text = tr("GAME_OVER_SCORE") % ("%.2f" % run.altitude)
 	_jumps_label.text = tr("GAME_OVER_JUMPS") % run.counters.jumps
 	_coins_label.text = tr("GAME_OVER_COINS") % run.counters.coins_collected
 	_keys_label.text = tr("GAME_OVER_KEYS") % run.counters.keys_collected
+
+
+## Seed that the copy button puts in the clipboard ("" without a run).
+func get_seed_code() -> String:
+	return _seed_code
+
+
+func _on_copy_seed_button_pressed() -> void:
+	DisplayServer.clipboard_set(_seed_code)
 
 
 func _on_menu_button_pressed() -> void:

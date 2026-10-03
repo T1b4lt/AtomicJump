@@ -13,9 +13,9 @@ func test_does_not_refresh_every_frame() -> void:
 
 func test_shows_the_run_on_bind() -> void:
 	var hud: Hud = _add_hud()
-	var run := RunState.new(123456789, WILAS)
+	var run := RunState.new("K7QX-2MPA", WILAS)
 	hud.bind_run(run)
-	assert_str(_text(hud, "%SeedValue")).is_equal("123456789")
+	assert_str(_text(hud, "%SeedValue")).is_equal("K7QX-2MPA · g%d" % WorldRng.GENERATION_VERSION)
 	assert_str(_text(hud, "%CoinsValue")).is_equal("0")
 	assert_str(hud.get_stat_text(Stats.SPEED)).is_equal("300.00")
 	assert_str(hud.get_stat_text(Stats.MAX_JUMPS)).is_equal("2")
@@ -23,7 +23,7 @@ func test_shows_the_run_on_bind() -> void:
 
 func test_updates_on_run_signals() -> void:
 	var hud: Hud = _add_hud()
-	var run := RunState.new(1, WILAS)
+	var run := RunState.new("A", WILAS)
 	hud.bind_run(run)
 	run.add_coins(3)
 	run.add_keys(1)
@@ -37,9 +37,9 @@ func test_updates_on_run_signals() -> void:
 
 func test_rebinding_ignores_the_old_run() -> void:
 	var hud: Hud = _add_hud()
-	var old_run := RunState.new(1, WILAS)
+	var old_run := RunState.new("A", WILAS)
 	hud.bind_run(old_run)
-	hud.bind_run(RunState.new(2, WILAS))
+	hud.bind_run(RunState.new("B", WILAS))
 	old_run.add_coins(7)
 	assert_str(_text(hud, "%CoinsValue")).is_equal("0")
 

@@ -3,7 +3,9 @@ GAME_TITLE,AtomicJump,AtomicJump
 CHARACTER_WILAS_NAME,Wilas,Wilas
 MENU_PLAY,Jugar,Play
 MENU_PLAY_SEED,Jugar con semilla,Play with seed
-MENU_SEED_PLACEHOLDER,Semilla (9 dígitos),Seed (9 digits)
+MENU_SEED_PLACEHOLDER,Semilla (cualquier texto),Seed (any text)
+MENU_SEED_RANDOM,Aleatoria,Random
+MENU_SEED_PASTE,Pegar,Paste
 MENU_SETTINGS,Opciones,Settings
 MENU_EXIT,Salir,Quit
 SETTINGS_TITLE,Opciones,Settings
@@ -20,6 +22,7 @@ PAUSE_MENU,Menú principal,Main menu
 PAUSE_EXIT,Salir del juego,Quit game
 GAME_OVER_TITLE,DECOHERENCIA,DECOHERENCE
 GAME_OVER_SEED,Semilla: %s,Seed: %s
+GAME_OVER_COPY_SEED,Copiar semilla,Copy seed
 GAME_OVER_SCORE,Puntuación: %s,Score: %s
 GAME_OVER_JUMPS,Saltos: %s,Jumps: %s
 GAME_OVER_COINS,Fotones: %s,Photons: %s

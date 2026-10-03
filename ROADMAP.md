@@ -80,14 +80,14 @@ La **v1.0** llegará después de la 0.99.0. Antes faltan cosas que quedan **fuer
 
 **Objetivo:** reproducibilidad real según [08-semillas](docs/08-seeds.md).
 
-- [ ] `SeedCode`: generación de 8 caracteres en base32 Crockford, formato `XXXX-XXXX`, normalización de texto libre y conversión a entero de 64 bits.
-- [ ] `SeedHash`: hash estable propio (FNV-1a + SplitMix64) con tests de valores conocidos.
-- [ ] `WorldRng`: `roll`, `roll_int`, `pick_weighted` (_rendezvous hashing_) y `local_rng`.
-- [ ] Constante `GENERATION_VERSION`.
-- [ ] Migrar la generación actual (elección de plataforma y colocación de objetos) a tiradas direccionadas.
-- [ ] Colocación de objetos sin bucles potencialmente infinitos (barajar huecos de forma determinista).
-- [ ] UI de semilla: campo que acepta texto libre, botones Aleatoria y Pegar; mostrar `semilla · gN` en HUD y Game Over, con botón Copiar.
-- [ ] Tests: semillas doradas, monotonía e independencia del orden.
+- [x] `SeedCode`: generación de 8 caracteres en base32 Crockford, formato `XXXX-XXXX`, normalización de texto libre y conversión a entero de 64 bits.
+- [x] `SeedHash`: hash estable propio (FNV-1a + SplitMix64) con tests de valores conocidos.
+- [x] `WorldRng`: `roll`, `roll_int`, `pick_weighted` (_rendezvous hashing_) y `local_rng`.
+- [x] Constante `GENERATION_VERSION`.
+- [x] Migrar la generación actual (elección de plataforma y colocación de objetos) a tiradas direccionadas.
+- [x] Colocación de objetos sin bucles potencialmente infinitos (barajar huecos de forma determinista).
+- [x] UI de semilla: campo que acepta texto libre, botones Aleatoria y Pegar; mostrar `semilla · gN` en HUD y Game Over, con botón Copiar.
+- [x] Tests: semillas doradas, monotonía e independencia del orden.
 
 **Terminado cuando:** la misma semilla produce la misma partida en dos ejecuciones y los tres tipos de test pasan.
 

@@ -32,6 +32,12 @@ text = "-"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="CopySeedButton" type="Button" parent="Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+disabled = true
+text = "GAME_OVER_COPY_SEED"
+
 [node name="ScoreLabel" type="Label" parent="Rows"]
 unique_name_in_owner = true
 auto_translate_mode = 2
@@ -69,4 +75,5 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "GAME_OVER_MENU"
 
+[connection signal="pressed" from="Rows/CopySeedButton" to="." method="_on_copy_seed_button_pressed"]
 [connection signal="pressed" from="Rows/MenuButton" to="." method="_on_menu_button_pressed"]
