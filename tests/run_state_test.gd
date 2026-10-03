@@ -42,6 +42,13 @@ func test_damage_is_reduced_by_defense() -> void:
 	assert_float(run.hp).is_equal(85.0)
 
 
+func test_unreducible_damage_ignores_defense() -> void:
+	var run := RunState.new("A", WILAS)
+	run.stats.add_modifier(StatModifier.create(Stats.DEFENSE, StatModifier.Type.ADD, 0.25, &"a"))
+	assert_float(run.take_damage(25.0, false)).is_equal(25.0)
+	assert_float(run.hp).is_equal(75.0)
+
+
 func test_hp_never_goes_below_zero_and_dies_once() -> void:
 	var run := RunState.new("A", WILAS)
 	run.died.connect(func() -> void: _died_count += 1)
@@ -96,6 +103,16 @@ func test_altitude_only_signals_changes() -> void:
 	run.set_altitude(1.5)
 	run.set_altitude(2.0)
 	assert_array(altitudes).is_equal([1.5, 2.0])
+
+
+func test_threat_distance_only_signals_changes() -> void:
+	var run := RunState.new("A", WILAS)
+	var distances: Array[float] = []
+	run.threat_distance_changed.connect(func(value: float) -> void: distances.append(value))
+	run.set_threat_distance(3.0)
+	run.set_threat_distance(3.0)
+	run.set_threat_distance(1.0)
+	assert_array(distances).is_equal([3.0, 1.0])
 
 
 func _record_hp(value: float, max_value: float) -> void:

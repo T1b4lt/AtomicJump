@@ -3,13 +3,13 @@ extends Node2D
 ## Prototype chunk: a screen-high block of platforms with object placeholders.
 ## Phase 5 turns it into the real chunk format (docs/05-world.md).
 
-signal screen_entered
-signal screen_exited
-
 ## Height of every prototype chunk in px (the old 1160×670 viewport height).
 const HEIGHT: float = 670.0
 ## Width of the playable area in px, walls included.
 const WIDTH: float = 1160.0
+## Inner sides of the prototype walls: where the player can stand.
+const INNER_LEFT: float = 305.0
+const INNER_RIGHT: float = 857.0
 ## Object kinds a slot (object placeholder) can hold.
 const SPIKE: StringName = &"spike"
 const COIN: StringName = &"coin"
@@ -19,6 +19,10 @@ const OBJECT_SCENES: Dictionary[StringName, PackedScene] = {
 	COIN: preload("res://items/pickups/coin/coin.tscn"),
 	KEY: preload("res://items/pickups/key/key.tscn"),
 }
+
+## Safe chunk (layer entry, rest, shop): the Decoherence stops while the player
+## is in it.
+@export var safe: bool = false
 
 @onready var _object_placeholders: Node2D = %ObjectPlaceholders
 
@@ -37,11 +41,3 @@ func place_objects(plan: Array[StringName]) -> void:
 		var object: Node2D = OBJECT_SCENES[plan[slot]].instantiate() as Node2D
 		object.position = (_object_placeholders.get_child(slot) as Node2D).position
 		add_child(object)
-
-
-func _on_visible_on_screen_notifier_2d_screen_entered() -> void:
-	screen_entered.emit()
-
-
-func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
-	screen_exited.emit()

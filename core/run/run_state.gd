@@ -7,6 +7,8 @@ signal hp_changed(value: float, max_value: float)
 signal coins_changed(value: int)
 signal keys_changed(value: int)
 signal altitude_changed(value: float)
+## Distance (pm) from the player's feet down to the Decoherence.
+signal threat_distance_changed(value: float)
 signal died
 
 ## Seed as shown to the player ("K7QX-2MPA" or a normalized text).
@@ -19,7 +21,9 @@ var hp: float
 ## Current balance (spent in shops from Phase 7); totals live in counters.
 var coins: int = 0
 var keys: int = 0
+## Highest altitude reached, in pm.
 var altitude: float = 0.0
+var threat_distance: float = INF
 var counters := RunCounters.new()
 
 
@@ -46,11 +50,14 @@ func is_dead() -> bool:
 	return hp <= 0.0
 
 
-## Applies damage reduced by defense. Returns the damage actually taken.
-func take_damage(amount: float) -> float:
+## Applies damage, reduced by defense unless `reducible` is false (the
+## Decoherence). Returns the damage actually taken.
+func take_damage(amount: float, reducible: bool = true) -> float:
 	if is_dead() or amount <= 0.0:
 		return 0.0
-	var final_damage: float = minf(hp, amount * (1.0 - stats.get_value(Stats.DEFENSE)))
+	if reducible:
+		amount *= 1.0 - stats.get_value(Stats.DEFENSE)
+	var final_damage: float = minf(hp, amount)
 	hp -= final_damage
 	hp_changed.emit(hp, get_max_hp())
 	if is_dead():
@@ -86,6 +93,13 @@ func set_altitude(value: float) -> void:
 		return
 	altitude = value
 	altitude_changed.emit(altitude)
+
+
+func set_threat_distance(value: float) -> void:
+	if is_equal_approx(value, threat_distance):
+		return
+	threat_distance = value
+	threat_distance_changed.emit(threat_distance)
 
 
 func _on_stat_changed(stat: StringName, value: float) -> void:

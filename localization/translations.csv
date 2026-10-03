@@ -31,6 +31,7 @@ GAME_OVER_MENU,Menú principal,Main menu
 HUD_ALTITUDE,Altura,Altitude
 HUD_COINS,Fotones,Photons
 HUD_KEYS,Positrones,Positrons
+HUD_THREAT,Decoherencia ↓,Decoherence ↓
 STAT_MAX_HP,Coherencia máxima,Max coherence
 STAT_LUCK,Amplitud,Amplitude
 STAT_SPEED,Momento,Momentum
@@ -41,3 +42,4 @@ STAT_ATTACK_POWER,Carga,Charge
 STAT_ATTACK_RATE,Frecuencia,Frequency
 STAT_ATTACK_RANGE,Alcance,Range
 STAT_DEFENSE,Apantallamiento,Shielding
+DEBUG_MOVEMENT_ROOM_HELP,"R: volver al inicio · T: Decoherencia · F: trayectoria","R: back to start · T: Decoherence · F: trajectory"
