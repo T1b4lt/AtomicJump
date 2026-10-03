@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bc28pv650t3ko"]
 
 [ext_resource type="Script" path="res://world/level/level.gd" id="1_5va7a"]
-[ext_resource type="PackedScene" uid="uid://bi1jigid8vavc" path="res://world/chunks/k/initial.tscn" id="2_8oa34"]
+[ext_resource type="PackedScene" path="res://world/backgrounds/orbital_background.tscn" id="2_bg"]
 [ext_resource type="Environment" path="res://world/environment/glow_environment.tres" id="3_env"]
 [ext_resource type="PackedScene" path="res://actors/player/player_camera.tscn" id="4_nknsb"]
 [ext_resource type="PackedScene" uid="uid://bj2fndebqtlg5" path="res://actors/player/player.tscn" id="5_4iv76"]
@@ -15,7 +15,9 @@ script = ExtResource("1_5va7a")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("3_env")
 
-[node name="InitialChunk" parent="." instance=ExtResource("2_8oa34")]
+[node name="OrbitalBackground" parent="." instance=ExtResource("2_bg")]
+
+[node name="Chunks" type="Node2D" parent="."]
 unique_name_in_owner = true
 
 [node name="Camera" parent="." instance=ExtResource("4_nknsb")]
@@ -24,7 +26,7 @@ unique_name_in_owner = true
 [node name="Player" parent="." instance=ExtResource("5_4iv76")]
 unique_name_in_owner = true
 z_index = 2
-position = Vector2(585, 560)
+position = Vector2(640, 600)
 
 [node name="RisingThreat" parent="." instance=ExtResource("8_threat")]
 unique_name_in_owner = true

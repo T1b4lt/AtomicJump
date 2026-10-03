@@ -1,19 +1,19 @@
 class_name GoldenSeeds
 extends RefCounted
-## Golden seeds (docs/08-seeds.md): what a few fixed seeds generate, saved in a
-## JSON file per generation version. generation_test.gd compares the current
-## generation with it, or rewrites it when UPDATE_ENV is "1".
+## Golden seeds (docs/08-seeds.md): what a few fixed seeds generate in Layer K,
+## saved in a JSON file per generation version. generation_test.gd compares the
+## current generation with it, or rewrites it when UPDATE_ENV is "1".
 
 const SEEDS: Array[String] = [
 	"K7QX-2MPA", "0000-0000", "ZZZZ-ZZZZ", "hola mundo", "AtomicJump", "ñandú 42"
 ]
-## Chunks of the column saved per seed, initial chunk included.
-const CHUNK_COUNT: int = 12
 const FILE_PATH: String = "res://tests/golden/generation_g%d.json"
 ## Environment variable that makes the golden test rewrite the file.
 const UPDATE_ENV: String = "UPDATE_GOLDEN_SEEDS"
-const INITIAL_CHUNK_SCENE: PackedScene = preload("res://world/chunks/k/initial.tscn")
-## One character per slot in the saved object plans.
+const LAYER: LayerData = preload("res://data/layers/layer_k.tres")
+## Suffix of a mirrored chunk in the saved sequences.
+const MIRRORED: String = "~m"
+## One character per slot in the saved slot plans.
 const EMPTY_SLOT: String = "."
 
 
@@ -33,49 +33,70 @@ static func save(snapshot: Dictionary) -> void:
 
 ## What every golden seed generates, as JSON-ready data.
 static func take_all() -> Dictionary:
+	var library: ChunkLibrary = ChunkLibrary.from_layers([LAYER])
 	var snapshot: Dictionary = {}
-	var slot_counts: Dictionary[StringName, int] = _slot_counts()
 	for seed_text: String in SEEDS:
-		snapshot[seed_text] = take(seed_text, slot_counts)
+		snapshot[seed_text] = take(seed_text, library)
 	return snapshot
 
 
 ## What one seed generates: its value (as text, JSON numbers are not 64-bit),
-## the chunk ids of the column and their object plans, one character per slot.
-static func take(seed_text: String, slot_counts: Dictionary[StringName, int]) -> Dictionary:
+## the main path and the branches of Layer K, the fork rewards, and the slots
+## and optional parts of every chunk.
+static func take(seed_text: String, library: ChunkLibrary) -> Dictionary:
 	var rng := WorldRng.new(SeedCode.to_int(seed_text))
-	var chunks: Array[String] = []
-	var objects: Array[String] = []
-	for index: int in CHUNK_COUNT:
-		var id: StringName = PrototypeGenerator.pick_chunk(rng, index)
-		chunks.append(String(id))
-		objects.append(plan_to_text(PrototypeGenerator.plan_objects(rng, index, slot_counts[id])))
+	var plan: LayerPlan = LayerGenerator.new(library).generate(LAYER, rng)
+	var branches: Dictionary = {}
+	for branch: String in plan.branches:
+		branches[branch] = describe(plan.branches[branch], library, rng)
+	var rewards: Dictionary = {}
+	for branch: String in plan.rewards:
+		rewards[branch] = String(plan.rewards[branch])
 	return {
 		"code": SeedCode.from_text(seed_text),
 		"value": str(rng.seed_value),
-		"chunks": chunks,
-		"objects": objects,
+		"main": describe(plan.main, library, rng),
+		"branches": branches,
+		"rewards": rewards,
 	}
 
 
-static func plan_to_text(plan: Array[StringName]) -> String:
+## One line per chunk: "id[~m] slots [optional parts]".
+static func describe(placements: Array, library: ChunkLibrary, rng: WorldRng) -> Array[String]:
+	var lines: Array[String] = []
+	for placement: ChunkPlacement in placements:
+		var info: ChunkInfo = library.get_info(placement.chunk_id)
+		var plan: Dictionary[StringName, StringName] = SlotFiller.plan(
+			rng, LAYER, placement.key(), info.slots
+		)
+		var parts: Array[StringName] = LayerGenerator.pick_optional_parts(
+			rng, placement.key(), info.optional_parts, LAYER.optional_part_chance
+		)
+		(
+			lines
+			. append(
+				(
+					(
+						"%s%s %s %s"
+						% [
+							placement.chunk_id,
+							MIRRORED if placement.mirrored else "",
+							slots_to_text(info.slots, plan),
+							",".join(parts),
+						]
+					)
+					. strip_edges()
+				)
+			)
+		)
+	return lines
+
+
+## One character per slot, in name order: the first letter of its object or EMPTY_SLOT.
+static func slots_to_text(
+	slots: Dictionary[StringName, StringName], plan: Dictionary[StringName, StringName]
+) -> String:
 	var text: String = ""
-	for kind: StringName in plan:
-		text += EMPTY_SLOT if kind.is_empty() else String(kind).left(1)
+	for slot_name: StringName in slots:
+		text += String(plan[slot_name]).left(1) if plan.has(slot_name) else EMPTY_SLOT
 	return text
-
-
-## Slots of every chunk the generator can pick, read from the scenes.
-static func _slot_counts() -> Dictionary[StringName, int]:
-	var counts: Dictionary[StringName, int] = {}
-	counts[PrototypeGenerator.INITIAL_CHUNK] = _count_slots(INITIAL_CHUNK_SCENE)
-	for id: StringName in PrototypeGenerator.CHUNK_SCENES:
-		counts[id] = _count_slots(PrototypeGenerator.CHUNK_SCENES[id])
-	return counts
-
-
-static func _count_slots(scene: PackedScene) -> int:
-	var chunk: Node = scene.instantiate()
-	var count: int = chunk.get_node(^"%ObjectPlaceholders").get_child_count()
-	chunk.free()
-	return count

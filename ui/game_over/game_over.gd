@@ -1,10 +1,14 @@
 class_name GameOver
 extends CanvasLayer
 ## End-of-run screen. Shows the RunState passed by SceneRouter as "run", with
-## a button that copies its seed.
+## a button that copies its seed. With "completed" (the top of the layer was
+## reached) the title says so instead of the Decoherence.
+
+const COMPLETED_TITLE: String = "GAME_OVER_TITLE_COMPLETED"
 
 var _seed_code: String = ""
 
+@onready var _title: Label = %Title
 @onready var _seed_label: Label = %SeedLabel
 @onready var _score_label: Label = %ScoreLabel
 @onready var _jumps_label: Label = %JumpsLabel
@@ -18,6 +22,8 @@ func _ready() -> void:
 	if param is RunState:
 		var run: RunState = param
 		show_run(run)
+	if SceneRouter.get_param("completed") == true:
+		_title.text = COMPLETED_TITLE
 
 
 func show_run(run: RunState) -> void:
