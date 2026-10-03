@@ -20,27 +20,40 @@
 
 ## Movimiento
 
-El objetivo es un movimiento **preciso y agradable**, a la altura de un plataformas moderno.
+El objetivo es un movimiento **preciso y agradable**, a la altura de un plataformas moderno. Los valores viven en el recurso `MovementConfig` (`data/movement/wilas_movement.tres`); la velocidad, el impulso y los saltos cuánticos son estadísticas (`speed`, `jump_force`, `max_jumps`), así que los objetos los modifican.
 
-| Mecánica                 | Valor inicial                     | Descripción                                                                                           |
-| ------------------------ | --------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| Aceleración / frenado    | ~0,08 s hasta la velocidad máxima | No instantáneo, pero con respuesta inmediata                                                          |
-| Salto de altura variable | —                                 | Soltar el botón antes corta el salto                                                                  |
-| _Coyote time_            | 0,1 s                             | Se puede saltar poco después de dejar un borde                                                        |
-| _Jump buffer_            | 0,12 s                            | Un salto pulsado justo antes de tocar el suelo se ejecuta al aterrizar                                |
-| Saltos cuánticos         | 2                                 | El primer salto en el aire consume un salto extra; salir de un borde sin saltar no consume el primero |
-| Gravedad de caída        | ×1,6                              | Se cae más rápido de lo que se sube: sensación de peso                                                |
-| Velocidad terminal       | limitada                          | Evita atravesar plataformas y caídas incontrolables                                                   |
-| Plataformas atravesables | —                                 | Se atraviesan desde abajo; Abajo + salto para bajar                                                   |
+| Mecánica                 | Valor                                              | Descripción                                                                                           |
+| ------------------------ | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| Aceleración / frenado    | 0,08 s / 0,06 s en el suelo; 0,12 s / 0,16 s en el aire | Tiempo de 0 a la velocidad máxima (y al revés). No instantáneo, pero con respuesta inmediata; en el aire hay algo menos de agarre |
+| Gravedad de subida       | 980 px/s²                                          | Con el impulso base (450 px/s) un salto desde el suelo sube unos 100 px                               |
+| Gravedad de caída        | ×1,6                                               | Se cae más rápido de lo que se sube: sensación de peso                                                |
+| Velocidad terminal       | 820 px/s                                           | Evita atravesar plataformas y caídas incontrolables                                                   |
+| Salto de altura variable | conserva el 45 %                                   | Soltar el botón mientras se sube recorta la velocidad vertical una vez (también en los saltos aéreos) |
+| _Coyote time_            | 0,1 s                                              | Se puede saltar desde el suelo poco después de dejar un borde, sin gastar saltos aéreos               |
+| _Jump buffer_            | 0,12 s                                             | Un salto pulsado justo antes de tocar el suelo se ejecuta al aterrizar                                |
+| Saltos cuánticos         | 2 (`max_jumps`)                                    | Cuentan el salto desde el suelo: hay `max_jumps − 1` saltos en el aire, con el 92 % del impulso. Salir de un borde sin saltar no gasta ninguno |
+| Plataformas atravesables | 0,2 s                                              | Se atraviesan desde abajo; Abajo + salto sobre una de ellas la ignora 0,2 s (y hasta haberla cruzado del todo). Abajo + salto en suelo sólido es un salto normal |
+
+- Un salto pulsado en el aire usa un salto cuántico en ese momento si queda alguno; si no queda, se guarda en el _buffer_ para el aterrizaje.
+- Al tocar el suelo se recuperan los saltos cuánticos y el Túnel aéreo.
 
 ### Túnel (esquiva)
 
 Mecánica base: una esquiva horizontal corta que Wilas recorre en "estado de onda".
 
-- 0,15 s de duración con invulnerabilidad (_i-frames_), 0,6 s de recarga.
-- Atraviesa enemigos y proyectiles, pero no paredes (salvo con ciertas interacciones u observables).
+- 0,15 s a 900 px/s (unos 135 px) con invulnerabilidad (_i-frames_) y sin gravedad; 0,6 s de recarga desde que termina. Sale del Túnel a la velocidad de carrera, no frenado en seco.
+- Va en la dirección pulsada o, sin dirección, hacia donde mira Wilas. En el aire solo se puede hacer **un Túnel** hasta volver a tocar el suelo (`air_dashes`).
+- Atraviesa enemigos y proyectiles (es invulnerable), pero no paredes (salvo con ciertas interacciones u observables).
 - También sirve para revelar **tramos secretos**: las paredes sospechosas se atraviesan con el Túnel.
 - Es una ranura de interacción (como el dash de Hades), así que da mucho juego a los builds.
+
+### Estados
+
+El jugador es una máquina de estados pequeña: `idle`, `run`, `jump` (sube), `fall` (cae), `dash` (Túnel), `hurt` (retroceso tras un golpe) y `dead`. Cada cambio emite `state_changed` y decide la expresión y la animación de Wilas.
+
+### Sala de pruebas de movimiento
+
+`world/debug/movement_test_room.tscn` (ejecútala con F6) sirve para ajustar el movimiento: plataformas a 60, 100, 150 y 190 px de altura (un salto llega a ~100; con el salto cuántico, a ~190), huecos de 140, 200 y 240 px, un hueco de 470 px que pide doble salto y Túnel, una pila de plataformas atravesables y pinchos. Muestra el estado del jugador (velocidad, _coyote_, _buffer_, saltos y recarga del Túnel) y dibuja su trayectoria. **R** vuelve al inicio, **T** activa o desactiva la Decoherencia y **F** muestra u oculta la trayectoria. En la sala no se muere: la coherencia se rellena al bajar de la mitad.
 
 ## Combate
 
@@ -54,7 +67,8 @@ Mecánica base: una esquiva horizontal corta que Wilas recorre en "estado de ond
 ### Recibir daño
 
 - Daño de contacto con enemigos, proyectiles enemigos, peligros y la Decoherencia.
-- Tras recibir daño: 1 s de invulnerabilidad con parpadeo y un pequeño retroceso.
+- Tras recibir daño: 1 s de invulnerabilidad con parpadeo y un pequeño retroceso (0,2 s sin control, alejándose del golpe y un poco hacia arriba).
+- La Decoherencia es la excepción: quita siempre el 25 % de la coherencia máxima, sin apantallamiento ni invulnerabilidad (ver [03-partida](03-run.md#la-decoherencia-amenaza-ascendente)).
 - `daño_final = daño × (1 − apantallamiento)`, con el apantallamiento limitado al 60 %.
 
 ### Ranuras de interacción

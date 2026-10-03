@@ -16,7 +16,7 @@ Todo el arte del juego es **vectorial, geométrico y luminoso sobre un fondo cas
 | Resolución | Referencia **1280×720**, `stretch/mode = canvas_items`, `aspect = keep_width`. |
 | Producción | Todo el arte se genera con código Python en `art/` (paleta central + generadores). No hay arte pintado a mano. |
 | Arte provisional | Desaparece: cada asset nace con el estilo final. Los assets de Kenney se eliminan a medida que se sustituyen. |
-| Brillo (*glow*) | Lo pone el motor, no el SVG: el importador SVG de Godot no soporta filtros. |
+| Brillo (*glow*) | Lo pone el motor, no el SVG: el importador SVG de Godot no soporta filtros. Verificado en la Fase 4: HDR 2D + glow del `WorldEnvironment` funcionan en *Compatibility*. |
 | Animación | En el motor (tweens, AnimationPlayer, shaders y partículas) sobre formas vectoriales. No hay hojas de sprites. |
 | Fondos | Shaders que calculan el orbital de cada capa en tiempo real. Las imágenes generadas con NumPy son la referencia. |
 | Tipografía | **Space Grotesk** (títulos, UI) y **JetBrains Mono** (números, datos, semillas). Ambas con licencia OFL (Google Fonts). |
@@ -31,7 +31,7 @@ Todo el arte del juego es **vectorial, geométrico y luminoso sobre un fondo cas
 
 ## Paleta
 
-**Fuente de verdad:** `art/atomic_art/palette.py`. Las tablas de aquí la reflejan; si hay discrepancia, manda el código. En Godot, la paleta se replicará en un recurso (`data/palette.tres`) o en el tema, generado desde el mismo fichero.
+**Fuente de verdad:** `art/atomic_art/palette.py`. Las tablas de aquí la reflejan; si hay discrepancia, manda el código. En Godot, la paleta es la clase `Palette` (`core/palette.gd`, constantes `Color` como `Palette.PLAYER` o `Palette.LAYER_K_ACCENT`), que **genera** `art/build_game_assets.py` desde el mismo fichero: no se edita a mano.
 
 ### Vacío y luz
 
@@ -106,6 +106,7 @@ Reglas complementarias:
 - **Expresiones:** `neutral`, `blink`, `happy`, `jump`, `focus`, `hurt`.
 - **Deformación:** el núcleo se aplasta y estira (*squash & stretch*) anclado a la base; el orbital no se deforma.
 - **Daño:** destello blanco sobre el núcleo (parámetro `flash`).
+- **En el juego** (Fase 4): Wilas se compone de piezas exportadas por separado (núcleo con halo, orbital, mitad delantera del orbital, electrón y unos ojos por expresión) y `PlayerVisual` las anima: el electrón da 1 vuelta/s y pasa por detrás del núcleo en la mitad superior del orbital, el núcleo respira en reposo y se aplasta o estira anclado a la base, los ojos miran hacia donde va y cambian con el estado (`jump` al subir, `focus` en el Túnel, `hurt` al recibir daño, `happy` al aterrizar, `blink` cada 2–4 s). El salto cuántico lanza un anillo elíptico bajo Wilas y el Túnel lo vuelve semitransparente con una estela. El núcleo, el orbital y el electrón brillan (HDR).
 
 ### Personajes desbloqueables
 
@@ -163,7 +164,7 @@ La densidad se comprime con `pow(d, 0.45)`, se tiñe con el color de la capa y s
 
 ### Decoherencia
 
-Lo contrario del resto del juego: **ausencia de forma**. Un frente de ruido pálido (`DECOHERENCE`) con un borde ondulado brillante, bloques de 4 px que se desprenden por delante y líneas de escaneo. En el juego: shader de ruido animado con el frente como suma de senoidales desfasadas.
+Lo contrario del resto del juego: **ausencia de forma**. Un frente de ruido pálido (`DECOHERENCE`) con un borde ondulado brillante, bloques de 4 px que se desprenden por delante y líneas de escaneo. En el juego: shader de ruido animado con el frente como suma de senoidales desfasadas (`world/rising_threat/decoherence.gdshader`, Fase 4: traducción directa de `decoherence_strip()`; el ruido y los bloques cambian 12 veces por segundo y el borde brilla en HDR).
 
 ### Bifurcaciones
 
@@ -227,7 +228,7 @@ Las animaciones de la propuesta (`art/atomic_art/anim.py`) son la referencia vis
 | Órbita del electrón de Wilas | 1 vuelta/s |
 | Respiración en reposo | ±2,5 % de escala, 2 s por ciclo |
 | Parpadeo | Cada 2–4 s, 100 ms |
-| Anticipación del salto | 60 ms, escala (1,25 ; 0,78) |
+| Anticipación del salto | 60 ms, escala (1,25 ; 0,78). En el juego se omite: retrasaría el salto, y la respuesta inmediata manda |
 | Estiramiento al subir | (0,84 ; 1,22) → (1 ; 1) con *ease-out* |
 | Aterrizaje | 80 ms, hasta (1,28 ; 0,75) |
 | Pulso del salto cuántico | Anillo elíptico que se expande en 150 ms |
@@ -249,7 +250,7 @@ Las animaciones de la propuesta (`art/atomic_art/anim.py`) son la referencia vis
 | Fondos orbitales, Decoherencia | `.gdshader` (CanvasItem) |
 | Trazas, polvo, estelas | `GPUParticles2D` / `CPUParticles2D` + `Line2D` |
 | Muelles de gluón, líneas de campo | `Line2D` recalculado en código |
-| Brillo | Glow del `WorldEnvironment` en 2D o, si el renderer *Compatibility* no lo ofrece como necesitamos, un shader de *bloom* propio. **Pendiente de verificar en la Fase 4.** |
+| Brillo | Glow del `WorldEnvironment` en 2D (**verificado en la Fase 4** con *Compatibility*, sin shader de *bloom* propio): `rendering/viewport/hdr_2d = true`, `Environment` con fondo `Canvas`, glow aditivo y umbral HDR 1,0 (`world/environment/glow_environment.tres`). Solo brilla lo que se pinta por encima de 1: el brillo se elige por pieza multiplicando su color (`modulate`/`self_modulate` > 1 o colores HDR en los shaders), así que la UI y el arte normal no brillan |
 
 ## Interfaz
 
@@ -281,6 +282,7 @@ cd art
 uv sync                                  # instala dependencias
 uv run build_art_direction.py            # regenera imágenes y animaciones de la propuesta (~2 min)
 uv run build_art_direction.py --anim     # solo las animaciones
+uv run build_game_assets.py              # exporta el arte del juego a assets/generated/ y la paleta a core/palette.gd
 uv add <paquete>                         # añadir dependencias
 ```
 
@@ -297,6 +299,7 @@ uv add <paquete>                         # añadir dependencias
 | `atomic_art/mockups.py` | Composiciones: escena de juego, tarjeta de partida, hoja de modelo |
 | `atomic_art/anim.py` | Escenas animadas `t → SVG` en bucle, curvas de *easing* y exportación a WebP |
 | `build_art_direction.py` | Genera la propuesta en `docs/assets/art-direction/img/` |
+| `build_game_assets.py` | Exporta el arte del juego a `assets/generated/` y la paleta a `core/palette.gd` |
 
 ### Convenciones
 
@@ -304,7 +307,7 @@ uv add <paquete>                         # añadir dependencias
 - **Los colores salen siempre de `palette.py`.** Nunca se escribe un hexadecimal en un generador.
 - Los degradados necesitan un **`uid` único** por documento (parámetro `uid`), porque los ids SVG son globales.
 - Todo es **determinista**: lo aleatorio usa `numpy.random.default_rng(seed)` con semilla fija.
-- Los filtros de brillo (`glow=`) son **solo para previsualizar**. Los SVG destinados a Godot se generarán sin filtros (`doc(..., glow=False)`), y sin texto (en el juego se usan `Label` con las fuentes del tema).
+- Los filtros de brillo (`glow=`) son **solo para previsualizar**. Los SVG destinados a Godot se generan sin filtros (`doc(..., glow=False)`), y sin texto (en el juego se usan `Label` con las fuentes del tema).
 - Una línea horizontal tiene alto 0 y su caja de filtro se recorta: se le añade un `rect` invisible que le dé alto.
 - Las animaciones son funciones de `t ∈ [0, 1)` que hacen bucle; se construyen con `seg`, `ease_in/out/io`, `lerp` y `bump`.
 
@@ -312,25 +315,28 @@ uv add <paquete>                         # añadir dependencias
 
 1. Escribir la función en el módulo que corresponda, respetando las reglas del lenguaje visual.
 2. Renderizarla en una hoja de prueba (PNG) y **revisarla visualmente**, también junto a assets existentes para comprobar la coherencia.
-3. Si es un asset del juego, añadirlo a la exportación a Godot (ver siguiente apartado).
+3. Si es un asset del juego, añadirlo a `ASSETS` en `build_game_assets.py`, regenerar y comprobar en Godot (ver siguiente apartado).
 4. Si introduce una regla o un color nuevos, actualizar primero `palette.py` y este documento.
 
-### Exportación a Godot (pendiente, Fase 4)
+### Exportación a Godot
 
-Todavía no existe: hoy el generador solo produce la propuesta. El plan:
+`art/build_game_assets.py` (desde la Fase 4) exporta el arte del juego:
 
-- `build_game_assets.py` exportará a `assets/generated/` (sí importado por Godot) los SVG sin filtros ni texto y las texturas PNG (ruido, atlas), con nombres funcionales en inglés (`player.svg`, `enemy_orbital_electron.svg`, `tiles_layer_k.svg`…).
-- Cada pieza animable se exportará **por partes** (por ejemplo, el núcleo, el orbital trasero, el orbital delantero y los ojos de Wilas) para animarlas por separado en Godot.
-- Los SVG se importan con la escala adecuada (`svg/scale` en el importador) para que queden nítidos a la resolución de referencia.
-- Un manifiesto (`assets/generated/manifest.json`) listará cada asset con su tamaño y su origen, para detectar assets huérfanos.
-- La salida es regenerable, pero **se versiona en git**: así quien abra el proyecto en Godot no necesita Python.
+- A `assets/generated/` (sí importado por Godot) los SVG **sin filtros ni texto**, con nombres funcionales en inglés agrupados por carpeta (`player/player_core.svg`…). Hoy: las piezas de Wilas (`player_core`, `player_orbital`, `player_orbital_front`, `player_electron` y `player_eyes_<expresión>`), que comparten el centro del núcleo para colocarlas sin cálculos.
+- Cada pieza animable se exporta **por partes** para animarlas por separado en Godot.
+- Los SVG se importan con `svg/scale = 2` (en su `.import`) y se dibujan con escala 0,5: quedan nítidos aunque la ventana sea mayor que 1280×720.
+- Un manifiesto (`assets/generated/manifest.json`) lista cada asset con su tamaño y su origen; `tests/generated_assets_test.gd` comprueba que coincide con los ficheros, que no hay filtros ni texto y que se importan al doble de tamaño. Al regenerar se borran los `.import` de los assets que ya no existen.
+- `core/palette.gd`: la paleta como clase `Palette` de GDScript.
+- La salida es regenerable, pero **se versiona en git**: así quien abra el proyecto en Godot no necesita Python. Los `.import` también se versionan (guardan la escala y el uid de cada asset).
+
+Las texturas de ruido o atlas aún no hacen falta: la Decoherencia y los fondos son shaders.
 
 ## Limitaciones y riesgos
 
 | Riesgo | Mitigación |
 |---|---|
 | Techo minimalista: no habrá ilustraciones ni retratos detallados | Asumido como identidad; la personalidad sale de la forma, la animación y el *game feel* |
-| El brillo depende del motor y del renderer *Compatibility* | Verificarlo al inicio de la Fase 4; alternativa: shader de *bloom* propio |
+| El brillo depende del motor y del renderer *Compatibility* | Verificado en la Fase 4: el glow del `WorldEnvironment` con HDR 2D funciona en *Compatibility* |
 | El importador SVG de Godot (ThorVG) no soporta filtros y tiene soporte limitado de algunas funciones SVG | SVG de juego simples: formas, trazos y degradados radiales, sin filtros ni texto |
 | Rendimiento con muchos elementos brillantes y partículas | Perfilar en la Fase 6 (combate) con el peor caso de enemigos y proyectiles |
 | Ruido (Decoherencia, fondos) pesado como imagen | En el juego son shaders, no texturas |

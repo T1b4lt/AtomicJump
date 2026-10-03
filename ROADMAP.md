@@ -97,17 +97,17 @@ La **v1.0** llegará después de la 0.99.0. Antes faltan cosas que quedan **fuer
 
 **Objetivo:** que moverse sea un placer y sustituir la cámara con auto-scroll por la amenaza ascendente.
 
-- [ ] Máquina de estados del jugador (`idle`, `run`, `jump`, `fall`, `dash`, `hurt`, `dead`).
-- [ ] `MovementConfig` (recurso): aceleración, frenado, gravedad de subida y de caída, velocidad terminal.
-- [ ] Salto variable, _coyote time_, _jump buffer_ y saltos cuánticos configurables.
-- [ ] Plataformas atravesables y bajar con Abajo + salto.
-- [ ] Túnel (esquiva): 0,15 s con invulnerabilidad, 0,6 s de recarga ([04-jugador](docs/04-player.md#túnel-esquiva)).
-- [ ] Cámara que sigue al jugador con _look-ahead_ vertical y límites laterales.
-- [ ] `RisingThreat`: velocidad base, goma elástica, pausa en tramos seguros, daño del 25 % y reaparición en plataforma segura.
-- [ ] Indicador de distancia a la Decoherencia en el HUD.
-- [ ] Escena de depuración de movimiento (sala de pruebas con distintos saltos).
-- [ ] **Arte:** `build_game_assets.py` que exporta a `assets/generated/` (SVG sin filtros ni texto, manifiesto).
-- [ ] **Arte:** Wilas final por piezas (núcleo, orbital, electrón, ojos) con sus animaciones en el motor; verificar el glow en *Compatibility* (o shader de bloom); shader de la Decoherencia.
+- [x] Máquina de estados del jugador (`idle`, `run`, `jump`, `fall`, `dash`, `hurt`, `dead`).
+- [x] `MovementConfig` (recurso): aceleración, frenado, gravedad de subida y de caída, velocidad terminal.
+- [x] Salto variable, _coyote time_, _jump buffer_ y saltos cuánticos configurables.
+- [x] Plataformas atravesables y bajar con Abajo + salto.
+- [x] Túnel (esquiva): 0,15 s con invulnerabilidad, 0,6 s de recarga ([04-jugador](docs/04-player.md#túnel-esquiva)).
+- [x] Cámara que sigue al jugador con _look-ahead_ vertical y límites laterales.
+- [x] `RisingThreat`: velocidad base, goma elástica, pausa en tramos seguros, daño del 25 % y reaparición en plataforma segura.
+- [x] Indicador de distancia a la Decoherencia en el HUD.
+- [x] Escena de depuración de movimiento (sala de pruebas con distintos saltos).
+- [x] **Arte:** `build_game_assets.py` que exporta a `assets/generated/` (SVG sin filtros ni texto, manifiesto).
+- [x] **Arte:** Wilas final por piezas (núcleo, orbital, electrón, ojos) con sus animaciones en el motor; verificar el glow en *Compatibility* (o shader de bloom); shader de la Decoherencia.
 
 **Terminado cuando:** el movimiento se siente preciso en la sala de pruebas y morir por la Decoherencia funciona según [03-partida](docs/03-run.md#la-decoherencia-amenaza-ascendente).
 
@@ -121,7 +121,7 @@ La **v1.0** llegará después de la 0.99.0. Antes faltan cosas que quedan **fuer
 - [ ] Validador `@tool` en el editor (marcadores obligatorios, límites, huecos solapados).
 - [ ] Variación: espejo y plataformas opcionales.
 - [ ] `LayerData` para la Capa K y `LayerGenerator` (secuencia, ramas y compatibilidad entrada/salida).
-- [ ] Instanciación perezosa y liberación de tramos (sustituye al sistema actual de las señales `screen_entered`/`screen_exited` de `Chunk`).
+- [ ] Instanciación perezosa y liberación de tramos a partir de la secuencia de `LayerGenerator` (la Fase 4 ya sustituyó las señales `screen_entered`/`screen_exited` de `Chunk` por una gestión por índice en `Level`).
 - [ ] Tramos de bifurcación con dos salidas, iconos de recompensa y colapso de la rama no elegida.
 - [ ] Tramos especiales: entrada de capa, recompensa y descanso.
 - [ ] **Arte:** shader del fondo orbital 1s de la Capa K.

@@ -59,13 +59,16 @@ Cada capa es una secuencia de **tramos** (una pantalla de alto cada uno, ver [05
 ## La Decoherencia (amenaza ascendente)
 
 - Es una franja que sube desde abajo. Tocarla quita **el 25 % de la coherencia máxima** y teletransporta a Wilas a la última plataforma segura sobre ella. Si ya no tiene coherencia, muere.
+  - Ese daño **no** se reduce con el apantallamiento ni lo evita la invulnerabilidad (tampoco la del Túnel): si no, se podría hundir uno en ella.
+  - La plataforma segura es el último punto de suelo que pisó Wilas (se recuerdan los 16 más recientes, separados al menos 48 px y nunca durante la invulnerabilidad) que queda **al menos 96 px por encima** del frente y que **todavía tiene suelo**. Si no hay ninguno, se busca el suelo más cercano por encima del frente. Tras reaparecer, 1 s de invulnerabilidad.
 - **La velocidad es variable**:
-  - Velocidad base por capa (K lenta → N rápida).
-  - Si el jugador está muy por encima, se acelera para acercarse ("goma elástica"); lejos nunca da respiro, cerca no es injusta.
-  - **Se detiene** en los tramos seguros (entrada de capa, Estado fundamental, Intercambio) y en los jefes.
+  - Velocidad base por capa (K lenta → N rápida). En la Capa K, 45 px/s.
+  - Si el jugador está muy por encima, se acelera para acercarse ("goma elástica"): a más de 900 px, +0,6 px/s por cada píxel de más, hasta 420 px/s. Cerca (menos de 220 px) va más despacio, hasta la mitad de la base. Lejos nunca da respiro, cerca no es injusta.
+  - **Se detiene** en los tramos seguros (entrada de capa, Estado fundamental, Intercambio) y en los jefes. Hoy el único tramo seguro es el inicial, que hace de entrada de capa: la Decoherencia espera, 500 px por debajo del suelo, a que Wilas salga de él.
   - Las perturbaciones de Entropía y algunas mejoras la modifican.
-- En el HUD, un **indicador de distancia** en el borde inferior muestra lo cerca que está.
-- La cámara **sigue al jugador** (con _look-ahead_ vertical). La Decoherencia es la que mete prisa, no la cámara.
+- En el HUD, un **indicador de distancia** en el borde inferior muestra lo cerca que está: la distancia en pm desde los pies de Wilas y un brillo que se intensifica por debajo de 8 pm.
+- La cámara **sigue al jugador** con suavizado, un poco por encima de él (en un juego vertical importa más ver hacia arriba) y con _look-ahead_ vertical: mira hacia donde se mueve, más al caer que al subir. No enseña más allá de los lados del área de juego ni por debajo del fondo del nivel. La Decoherencia es la que mete prisa, no la cámara: caer ya no mata por salirse de la pantalla.
+- Valores en `RisingThreat` (`world/rising_threat/`); la velocidad base pasará a `LayerData` con la generación de capas (Fase 5).
 
 ## Jefes
 
