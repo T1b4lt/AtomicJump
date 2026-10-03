@@ -10,6 +10,8 @@ extends Node2D
 signal player_hit(player: Player)
 
 ## Floors looked at in one column when searching for a respawn spot.
+## Cause of death when it kills the player.
+const SOURCE_ID: StringName = &"rising_threat"
 const MAX_FLOORS_PER_COLUMN: int = 16
 
 @export_group("Speed")
@@ -81,7 +83,7 @@ func speed_for_distance(distance: float) -> float:
 ## Hurts the player and, if it survives, moves it to a safe floor above the front.
 func hit(target: Player) -> void:
 	_hit_cooldown_left = hit_cooldown
-	target.take_unavoidable_damage(target.run.get_max_hp() * damage_ratio)
+	target.take_unavoidable_damage(target.run.get_max_hp() * damage_ratio, SOURCE_ID)
 	if target.state != Player.State.DEAD:
 		target.respawn_at(find_respawn_spot(target))
 	player_hit.emit(target)

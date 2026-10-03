@@ -24,6 +24,8 @@ const OPENING_ROWS: int = 2
 const EDGE_TOLERANCE: float = Chunk.TILE
 ## Physics layer of the tileset with the solid (not one-way) collisions.
 const SOLID_PHYSICS_LAYER: int = 0
+## Physics layer of the tileset with the one-way platforms.
+const ONE_WAY_PHYSICS_LAYER: int = 1
 
 
 static func validate(chunk: Chunk) -> PackedStringArray:
@@ -56,6 +58,20 @@ static func is_solid(layer: TileMapLayer, cell: Vector2i) -> bool:
 ## Whether any of the chunk's required layers (walls, platforms) is solid at the cell.
 static func is_solid_at(chunk: Chunk, cell: Vector2i) -> bool:
 	return is_solid(chunk.get_walls(), cell) or is_solid(chunk.get_platforms(), cell)
+
+
+## Whether a point in chunk px is on the surface of a platform or wall (the
+## cell under it has a tile with collision, solid or one-way).
+static func has_floor_at(chunk: Chunk, point: Vector2) -> bool:
+	var cell: Vector2i = cell_at(point + Vector2.DOWN)
+	for layer: TileMapLayer in [chunk.get_walls(), chunk.get_platforms()]:
+		var tile: TileData = layer.get_cell_tile_data(cell)
+		if tile == null:
+			continue
+		for physics_layer: int in [SOLID_PHYSICS_LAYER, ONE_WAY_PHYSICS_LAYER]:
+			if tile.get_collision_polygons_count(physics_layer) > 0:
+				return true
+	return false
 
 
 ## Cell that contains a point in chunk px.
@@ -168,6 +184,11 @@ static func _check_slots(chunk: Chunk, problems: PackedStringArray) -> void:
 		# A point just above the slot: hazards stand on the surface of a platform
 		elif is_solid_at(chunk, cell_at(position + Vector2.UP)):
 			problems.append("%s is inside a solid tile." % slot.name)
+		elif (
+			Chunk.slot_kind(slot.name) == Chunk.SLOT_ENEMY_GROUND
+			and not has_floor_at(chunk, position)
+		):
+			problems.append("%s must stand on a platform (its marker on the surface)." % slot.name)
 	for i: int in slots.size():
 		for j: int in range(i + 1, slots.size()):
 			var radius_i: float = SLOT_RADIUS.get(Chunk.slot_kind(slots[i].name), 0.0)

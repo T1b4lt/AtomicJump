@@ -115,5 +115,19 @@ func test_threat_distance_only_signals_changes() -> void:
 	assert_array(distances).is_equal([3.0, 1.0])
 
 
+func test_death_records_its_cause_and_kills_are_counted() -> void:
+	var run := RunState.new("A", WILAS)
+	run.take_damage(10.0, true, &"spike")
+	assert_str(run.counters.death_cause).is_empty()
+	run.take_damage(1000.0, false, &"rising_threat")
+	assert_str(run.counters.death_cause).is_equal(&"rising_threat")
+	assert_str(RunCounters.cause_key(&"rising_threat")).is_equal("CAUSE_RISING_THREAT")
+	run.register_kill(&"free_neutron")
+	run.register_kill(&"free_neutron")
+	run.register_kill(&"orbital_electron")
+	assert_int(run.counters.enemies_killed).is_equal(3)
+	assert_int(run.counters.kills_by_enemy[&"free_neutron"]).is_equal(2)
+
+
 func _record_hp(value: float, max_value: float) -> void:
 	_hp_events.append([value, max_value])

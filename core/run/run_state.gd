@@ -57,8 +57,9 @@ func is_dead() -> bool:
 
 
 ## Applies damage, reduced by defense unless `reducible` is false (the
-## Decoherence). Returns the damage actually taken.
-func take_damage(amount: float, reducible: bool = true) -> float:
+## Decoherence). `source_id` (an enemy, &"spike"…) is the cause of death if it
+## kills. Returns the damage actually taken.
+func take_damage(amount: float, reducible: bool = true, source_id: StringName = &"") -> float:
 	if is_dead() or amount <= 0.0:
 		return 0.0
 	if reducible:
@@ -67,6 +68,7 @@ func take_damage(amount: float, reducible: bool = true) -> float:
 	hp -= final_damage
 	hp_changed.emit(hp, get_max_hp())
 	if is_dead():
+		counters.death_cause = source_id
 		died.emit()
 	return final_damage
 
@@ -92,6 +94,12 @@ func add_keys(amount: int) -> void:
 
 func register_jump() -> void:
 	counters.jumps += 1
+
+
+## An enemy was killed (its EnemyData id).
+func register_kill(enemy_id: StringName) -> void:
+	counters.enemies_killed += 1
+	counters.kills_by_enemy[enemy_id] = counters.kills_by_enemy.get(enemy_id, 0) + 1
 
 
 func choose_branch(branch: String) -> void:

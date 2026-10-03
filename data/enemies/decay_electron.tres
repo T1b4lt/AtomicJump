@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://actors/enemies/enemy_data.gd" id="1_data"]
+
+[resource]
+script = ExtResource("1_data")
+id = &"decay_electron"
+name_key = "ENEMY_DECAY_ELECTRON"
+max_hp = 4.0
+contact_damage = 5.0
+speed = 0.0
+knockback_resistance = 0.0
+coin_drop_chance = 0.0
+decay_lifetime = 0.0

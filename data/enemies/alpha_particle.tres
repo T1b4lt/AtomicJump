@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" path="res://actors/enemies/enemy_data.gd" id="1_data"]
+
+[resource]
+script = ExtResource("1_data")
+id = &"alpha_particle"
+name_key = "ENEMY_ALPHA_PARTICLE"
+max_hp = 30.0
+contact_damage = 15.0
+speed = 35.0
+knockback_resistance = 0.8
+coin_drop_chance = 0.3
+coin_drop_count = Vector2i(1, 3)

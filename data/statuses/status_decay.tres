@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="StatusEffectData" format=3]
+
+[ext_resource type="Script" path="res://combat/status_effect_data.gd" id="1_status"]
+
+[resource]
+script = ExtResource("1_status")
+id = &"status_decay"
+name_key = "STATUS_DECAY"
+duration = 4.0
+max_stacks = 5
+damage_per_tick = 1.0
+tick_interval = 0.5

@@ -11,6 +11,7 @@ var run: RunState = null
 func _ready() -> void:
 	Events.coin_collected.connect(_on_coin_collected)
 	Events.key_collected.connect(_on_key_collected)
+	Events.enemy_killed.connect(_on_enemy_killed)
 
 
 ## Starts a run with the seed typed by the player. Without a usable seed (empty
@@ -44,3 +45,8 @@ func _on_coin_collected(amount: int) -> void:
 func _on_key_collected(amount: int) -> void:
 	if has_run():
 		run.add_keys(amount)
+
+
+func _on_enemy_killed(enemy_id: StringName, _position: Vector2) -> void:
+	if has_run():
+		run.register_kill(enemy_id)

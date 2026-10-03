@@ -86,4 +86,12 @@ gizmo_extents = 12.0
 position = Vector2(880, 528)
 gizmo_extents = 12.0
 
+[node name="slot_enemy_ground_1" type="Marker2D" parent="Slots" unique_id=1803684863]
+position = Vector2(480, 352)
+gizmo_extents = 12.0
+
+[node name="slot_enemy_air_1" type="Marker2D" parent="Slots" unique_id=1332269300]
+position = Vector2(640, 256)
+gizmo_extents = 12.0
+
 [node name="Props" type="Node2D" parent="." unique_id=901083304]

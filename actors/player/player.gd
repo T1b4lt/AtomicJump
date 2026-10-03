@@ -2,8 +2,9 @@ class_name Player
 extends CharacterBody2D
 ## Wilas. A small state machine (State) moved by a MovementConfig: acceleration,
 ## variable jump, coyote time, jump buffer, quantum jumps, one-way platforms and
-## the Tunnel (dash). Reads its stats from the RunState given in bind_run() and
-## reports jumps and damage to it. See docs/04-player.md#movimiento.
+## the Tunnel (dash). Shoots in 4 directions with its Shooter and takes hits
+## through its Hurtbox. Reads its stats from the RunState given in bind_run()
+## and reports jumps and damage to it. See docs/04-player.md.
 
 signal state_changed(from: State, to: State)
 signal jumped(in_air: bool)
@@ -11,8 +12,14 @@ signal landed
 signal dashed(direction: float)
 signal hurt
 signal respawned
+signal shot(direction: Vector2)
 
 enum State { IDLE, RUN, JUMP, FALL, DASH, HURT, DEAD }
+
+## Group of the player: enemies find their target with it.
+const GROUP: StringName = &"player"
+## Cause of death of the damage that has no source (take_damage()).
+const UNKNOWN_SOURCE: StringName = &"unknown"
 
 ## Floor spots remembered for respawning after touching the Decoherence.
 const SAFE_SPOT_COUNT: int = 16
@@ -59,6 +66,8 @@ var _jump_cut_available: bool = false
 var _was_on_floor: bool = false
 
 @onready var _collision_shape: CollisionShape2D = %CollisionShape
+@onready var _hurtbox: Hurtbox = %Hurtbox
+@onready var _shooter: Shooter = %Shooter
 @onready var _visual: PlayerVisual = %Visual
 @onready var _hp_bar: ProgressBar = %HpBar
 @onready var _hp_label: Label = %HpLabel
@@ -68,6 +77,11 @@ var _was_on_floor: bool = false
 ## (2 = double jump). Walking off a ledge keeps all of them.
 static func max_air_jumps(max_jumps: int) -> int:
 	return maxi(max_jumps - 1, 0)
+
+
+func _ready() -> void:
+	add_to_group(GROUP)
+	_hurtbox.handler = take_hit
 
 
 ## Connects the player to the run it plays. Call it before the first physics frame.
@@ -80,6 +94,7 @@ func bind_run(new_run: RunState) -> void:
 	run.hp_changed.connect(_on_hp_changed)
 	run.died.connect(_on_died)
 	run.stats.stat_changed.connect(_on_stat_changed)
+	_shooter.stats = run.stats
 	_apply_size(run.stats.get_value(Stats.SIZE))
 	_on_hp_changed(run.hp, run.get_max_hp())
 
@@ -94,6 +109,7 @@ func _physics_process(delta: float) -> void:
 ## the input actions; tests and the movement test room call it directly.
 func physics_step(delta: float, input: PlayerInput) -> void:
 	_tick_timers(delta)
+	_shooter.tick(delta)
 	match state:
 		State.DEAD:
 			velocity = Vector2.ZERO
@@ -132,24 +148,50 @@ func get_air_jumps_left() -> int:
 	return max_air_jumps(run.stats.get_int(Stats.MAX_JUMPS)) - air_jumps_used
 
 
-## Damages the run (reduced by defense), knocks the player back from
-## `source_position` and starts the invulnerability window. Damage taken while
-## invulnerable is ignored. Returns whether it was applied.
-func take_damage(amount: float, source_position: Vector2 = Vector2.INF) -> bool:
-	if is_invulnerable() or run == null or state == State.DEAD:
+## Node that receives the player's projectiles (the level).
+func set_projectile_parent(parent: Node) -> void:
+	_shooter.projectile_parent = parent
+
+
+func get_shooter() -> Shooter:
+	return _shooter
+
+
+func get_hurtbox() -> Hurtbox:
+	return _hurtbox
+
+
+## Applies a hit (its Hurtbox calls it): damages the run (reduced by defense
+## unless the hit says otherwise), knocks the player back from the source and
+## starts the invulnerability window. Hits taken while invulnerable are
+## ignored. Returns whether it was applied.
+func take_hit(info: DamageInfo) -> bool:
+	if run == null or state == State.DEAD:
 		return false
-	run.take_damage(amount)
+	if info.ignores_invulnerability:
+		take_unavoidable_damage(info.amount, info.source_id)
+		return true
+	if is_invulnerable():
+		return false
+	run.take_damage(info.amount, info.reducible, info.source_id)
 	invulnerability_left = invulnerability_time
 	if state != State.DEAD:
-		_knock_back(source_position)
+		_knock_back(info.source_position)
 	return true
 
 
+## take_hit() with only an amount and where it comes from.
+func take_damage(amount: float, source_position: Vector2 = Vector2.INF) -> bool:
+	return take_hit(
+		DamageInfo.create(amount, DamageInfo.Kind.HAZARD, UNKNOWN_SOURCE, source_position)
+	)
+
+
 ## Damage that ignores invulnerability and defense (the Decoherence).
-func take_unavoidable_damage(amount: float) -> void:
+func take_unavoidable_damage(amount: float, source_id: StringName = UNKNOWN_SOURCE) -> void:
 	if run == null or state == State.DEAD:
 		return
-	run.take_damage(amount, false)
+	run.take_damage(amount, false, source_id)
 	if state != State.DEAD:
 		_visual.play_hurt()
 		hurt.emit()
@@ -181,6 +223,21 @@ func _process_control(delta: float, input: PlayerInput) -> void:
 	if not input.jump_held:
 		_cut_jump()
 	_apply_horizontal(delta, input.move_axis)
+	_try_shoot(input.shoot_direction)
+
+
+## Shoots if a direction is held and the rate allows it. Shooting down in the
+## air slows the fall a little (docs/04-player.md#disparo): never a jump.
+func _try_shoot(direction: Vector2) -> void:
+	var projectile: Projectile = _shooter.try_shoot(direction, velocity)
+	if projectile == null:
+		return
+	var aim: Vector2 = Shooter.snap_direction(direction)
+	if aim.x != 0.0:
+		facing = aim.x
+	if aim.y > 0.0 and not is_on_floor() and velocity.y > 0.0:
+		velocity.y = maxf(0.0, velocity.y - movement.shoot_down_recoil)
+	shot.emit(aim)
 
 
 func _apply_gravity(delta: float) -> void:

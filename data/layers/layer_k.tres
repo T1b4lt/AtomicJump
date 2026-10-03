@@ -30,6 +30,8 @@ fork_rewards = Dictionary[StringName, float]({
 })
 optional_part_chance = 0.5
 slot_chances = Dictionary[StringName, float]({
+&"slot_enemy_air": 0.5,
+&"slot_enemy_ground": 0.55,
 &"slot_hazard": 0.5,
 &"slot_pickup": 0.4
 })
@@ -39,5 +41,12 @@ pickup_weights = Dictionary[StringName, float]({
 })
 hazard_weights = Dictionary[StringName, float]({
 &"spike": 1.0
+})
+enemy_ground_weights = Dictionary[StringName, float]({
+&"alpha_particle": 1.0,
+&"free_neutron": 2.0
+})
+enemy_air_weights = Dictionary[StringName, float]({
+&"orbital_electron": 1.0
 })
 threat_speed = 45.0

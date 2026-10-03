@@ -45,6 +45,11 @@ extends Resource
 ## Tunnels allowed in the air before touching the floor again.
 @export var air_dashes: int = 1
 
+@export_group("Shooting")
+## Falling speed (px/s) each shot downwards takes away in the air. It never
+## pushes upwards: it slows the fall, it is not a jump.
+@export var shoot_down_recoil: float = 140.0
+
 @export_group("Hurt")
 ## Seconds of knockback (no control) after taking damage.
 @export var hurt_time: float = 0.2
