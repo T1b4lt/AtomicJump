@@ -1,0 +1,78 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://actors/enemies/enemy.gd" id="1_enemy"]
+[ext_resource type="Resource" path="res://data/enemies/decay_electron.tres" id="2_data"]
+[ext_resource type="Script" path="res://actors/components/health_component.gd" id="3_health"]
+[ext_resource type="Script" path="res://actors/components/status_effects.gd" id="4_status"]
+[ext_resource type="Script" path="res://actors/components/hurtbox.gd" id="5_hurt"]
+[ext_resource type="Script" path="res://actors/components/hitbox.gd" id="6_hit"]
+[ext_resource type="Script" path="res://actors/enemies/behaviors/orbit_behavior.gd" id="7_behavior"]
+[ext_resource type="Texture2D" path="res://assets/generated/enemies/decay_electron.svg" id="8_sprite"]
+
+[sub_resource type="CircleShape2D" id="Shape_body"]
+radius = 6.0
+
+[sub_resource type="CircleShape2D" id="Shape_hurt"]
+radius = 10.0
+
+[sub_resource type="CircleShape2D" id="Shape_contact"]
+radius = 6.0
+
+[node name="DecayElectron" type="CharacterBody2D"]
+collision_layer = 0
+collision_mask = 129
+script = ExtResource("1_enemy")
+data = ExtResource("2_data")
+death_trace_radius = 14.0
+
+[node name="CollisionShape" type="CollisionShape2D" parent="."]
+position = Vector2(0, 0)
+shape = SubResource("Shape_body")
+
+[node name="Health" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("3_health")
+
+[node name="StatusEffects" type="Node" parent="." node_paths=PackedStringArray("health")]
+unique_name_in_owner = true
+script = ExtResource("4_status")
+health = NodePath("../Health")
+
+[node name="Hurtbox" type="Area2D" parent="." node_paths=PackedStringArray("health")]
+unique_name_in_owner = true
+collision_layer = 4
+collision_mask = 0
+monitoring = false
+script = ExtResource("5_hurt")
+health = NodePath("../Health")
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, 0)
+shape = SubResource("Shape_hurt")
+
+[node name="ContactHitbox" type="Area2D" parent="."]
+unique_name_in_owner = true
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("6_hit")
+
+[node name="CollisionShape" type="CollisionShape2D" parent="ContactHitbox"]
+position = Vector2(0, 0)
+shape = SubResource("Shape_contact")
+
+[node name="Visual" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="Body" type="Node2D" parent="Visual"]
+unique_name_in_owner = true
+position = Vector2(0, 0)
+
+[node name="Sprite" type="Sprite2D" parent="Visual/Body"]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("8_sprite")
+
+[node name="Behavior" type="Node" parent="."]
+script = ExtResource("7_behavior")
+radius = 28.0
+period = 1.0
+ellipse_chance = 0.0

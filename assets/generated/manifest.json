@@ -85,6 +85,48 @@
       ],
       "source": "world.potential_spikes_sprite"
     },
+    "enemies/orbital_electron.svg": {
+      "size": [
+        28,
+        28
+      ],
+      "source": "enemies.orbital_electron_sprite"
+    },
+    "enemies/decay_electron.svg": {
+      "size": [
+        18,
+        18
+      ],
+      "source": "enemies.decay_electron_sprite"
+    },
+    "enemies/free_neutron.svg": {
+      "size": [
+        40,
+        48
+      ],
+      "source": "enemies.free_neutron_sprite"
+    },
+    "enemies/alpha_particle.svg": {
+      "size": [
+        44,
+        44
+      ],
+      "source": "enemies.alpha_particle_sprite"
+    },
+    "enemies/alpha_speed_lines.svg": {
+      "size": [
+        48,
+        28
+      ],
+      "source": "enemies.alpha_speed_lines"
+    },
+    "combat/player_projectile.svg": {
+      "size": [
+        64,
+        16
+      ],
+      "source": "world.projectile_sprite"
+    },
     "rewards/reward_coins.svg": {
       "size": [
         48,

@@ -43,6 +43,25 @@ Todos los enemigos son partículas (o fenómenos) subatómicas. Cada tipo tiene 
 | **Tau**            | `tau_enemy`     | Élite. Rápida y agresiva; al morir decae en un muón.                                                                                                                                             | 60     | 20   |
 | **Bosón Z**        | `z_boson`       | Torreta pesada. Dispara ráfagas en abanico y es inmóvil.                                                                                                                                         | 50     | 15   |
 
+### Implementación de la Capa K (Fase 6)
+
+| Enemigo | Escena | Comportamiento | Detalles |
+| --- | --- | --- | --- |
+| Electrón orbital | `actors/enemies/orbital_electron/` | `OrbitBehavior` | Órbita de 56 px de radio alrededor de su hueco, 1,5 s por vuelta. La fase inicial, el sentido y si es una elipse (35 %, con 0,55 de proporción) salen de su hueco. Dibuja su traza: la órbita punteada y un arco que se desvanece detrás. Atraviesa los tiles |
+| Neutrón libre | `actors/enemies/free_neutron/` | `PatrolBehavior` | 50 px/s; da la vuelta en paredes y bordes (nunca cae de su plataforma) con una pausa de 0,25 s. Al morir **decae** en un electrón de desintegración (`decay_electron`: 4 de vida, 5 de daño, órbita de 28 px en 1 s) que vive 5 s y se desvanece sin contar como eliminado ni soltar nada |
+| Partícula alfa | `actors/enemies/alpha_particle/` | `ChargeBehavior` | Patrulla a 35 px/s. Si ve a Wilas en su fila (±40 px, hasta 560 px y sin paredes en medio) parpadea 0,45 s (aviso), embiste a 520 px/s con líneas de velocidad y se queda aturdida 0,9 s al chocar con una pared (o descansa 0,6 s si llega a un borde). Resiste el 80 % del retroceso |
+
+- **Datos**: `EnemyData` (`data/enemies/*.tres`): id, clave de nombre, vida, daño por contacto, velocidad, resistencia al retroceso, caídas y producto de decaimiento. La vida y el daño escalan con `× (1 + 0,25 × índice_capa)` (`EnemyData.scale_for_layer`).
+- **Escena base** (`Enemy`, `actors/enemies/enemy.gd`): un `CharacterBody2D` sin capa de física (solo choca con el mundo) con `HealthComponent`, `StatusEffects`, un `Hurtbox` en la capa `enemies` (lo alcanzan los disparos) y un `Hitbox` de contacto con máscara `player`, y un hijo `Behavior` (`EnemyBehavior`) que lo mueve. Los enemigos de suelo tienen el origen en los pies; los aéreos, en el centro. Buscan a Wilas por el grupo `player`.
+- **Al recibir un disparo**: destello blanco (HDR) de 100 ms, retroceso que se amortigua y los estados alterados del golpe. Nada vivo está quieto: el cuerpo respira y toma el tinte del estado alterado activo.
+- **Al morir**: emite `Events.enemy_killed` (cuenta para la partida y da _hitstop_), se dibuja una traza de cámara de burbujas y el tramo suelta sus caídas y su producto de decaimiento.
+- **Aparición**: los huecos `slot_enemy_ground` (sobre la superficie de una plataforma; el validador lo comprueba) y `slot_enemy_air` de los tramos normales y de bifurcación. La `LayerData` de la Capa K los rellena con un 55 % y un 50 % de probabilidad: en el suelo, neutrón libre (peso 2) o partícula alfa (peso 1); en el aire, electrón orbital. Ver [05-mundo](05-world.md#implementación-fase-5).
+- **Caídas**: 30 % de soltar 1–2 fotones (la alfa, 1–3), con la tirada direccionada por su hueco (dominio `drop`, ver [08-semillas](08-seeds.md#combate-y-enemigos-fase-6)). Los quarks y los cuantos de energía llegan con sus sistemas (Fases 7 y 10).
+
+### Sala de pruebas de combate
+
+`world/debug/combat_test_room.tscn` (F6): un suelo, una plataforma larga, una atravesable y Wilas. **1**, **2** y **3** sacan un electrón orbital, un neutrón libre o una partícula alfa; **4**, **5** y **6** aplican Inestable, Dilatado y Confinado a todos; **K** los elimina y **R** devuelve a Wilas al inicio. Con `-- --spawn=all` empieza con uno de cada. Los enemigos viven en un `Chunk` vacío, así que caídas y decaimiento funcionan como en la partida; Wilas no muere (se cura al bajar de la mitad).
+
 ## Jefes
 
 Cada jefe tiene 2–3 fases, una arena propia y un patrón que enseña la mecánica principal de su capa.

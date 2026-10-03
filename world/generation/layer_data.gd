@@ -30,6 +30,9 @@ const REWARD_KEY: StringName = &"reward_key"
 ## Weight of each object (Chunk.COIN…) in pickup and hazard slots.
 @export var pickup_weights: Dictionary[StringName, float] = {}
 @export var hazard_weights: Dictionary[StringName, float] = {}
+## Weight of each enemy (Chunk.ORBITAL_ELECTRON…) in ground and air enemy slots.
+@export var enemy_ground_weights: Dictionary[StringName, float] = {}
+@export var enemy_air_weights: Dictionary[StringName, float] = {}
 ## Base speed of the Decoherence in px/s (docs/03-run.md).
 @export var threat_speed: float = 45.0
 
@@ -41,6 +44,10 @@ func get_slot_objects(kind: StringName) -> Dictionary[StringName, float]:
 			return pickup_weights
 		Chunk.SLOT_HAZARD:
 			return hazard_weights
+		Chunk.SLOT_ENEMY_GROUND:
+			return enemy_ground_weights
+		Chunk.SLOT_ENEMY_AIR:
+			return enemy_air_weights
 	return {}
 
 

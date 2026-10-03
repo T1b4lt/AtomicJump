@@ -1,7 +1,8 @@
 class_name GameOver
 extends CanvasLayer
-## End-of-run screen. Shows the RunState passed by SceneRouter as "run", with
-## a button that copies its seed. With "completed" (the top of the layer was
+## End-of-run screen. Shows the RunState passed by SceneRouter as "run" (its
+## counters, enemies killed and cause of death), with a button that copies its
+## seed. With "completed" (the top of the layer was
 ## reached) the title says so instead of the Decoherence.
 
 const COMPLETED_TITLE: String = "GAME_OVER_TITLE_COMPLETED"
@@ -14,6 +15,8 @@ var _seed_code: String = ""
 @onready var _jumps_label: Label = %JumpsLabel
 @onready var _coins_label: Label = %CoinsLabel
 @onready var _keys_label: Label = %KeysLabel
+@onready var _kills_label: Label = %KillsLabel
+@onready var _cause_label: Label = %CauseLabel
 @onready var _copy_seed_button: Button = %CopySeedButton
 
 
@@ -34,6 +37,11 @@ func show_run(run: RunState) -> void:
 	_jumps_label.text = tr("GAME_OVER_JUMPS") % run.counters.jumps
 	_coins_label.text = tr("GAME_OVER_COINS") % run.counters.coins_collected
 	_keys_label.text = tr("GAME_OVER_KEYS") % run.counters.keys_collected
+	_kills_label.text = tr("GAME_OVER_KILLS") % run.counters.enemies_killed
+	var cause: StringName = run.counters.death_cause
+	_cause_label.visible = not cause.is_empty()
+	if not cause.is_empty():
+		_cause_label.text = tr("GAME_OVER_CAUSE") % tr(RunCounters.cause_key(cause))
 
 
 ## Seed that the copy button puts in the clipboard ("" without a run).

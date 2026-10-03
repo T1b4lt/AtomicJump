@@ -42,6 +42,8 @@ var _ending: bool = false
 @onready var _player: Player = %Player
 @onready var _threat: RisingThreat = %RisingThreat
 @onready var _hud: Hud = %Hud
+@onready var _projectiles: Node2D = %Projectiles
+@onready var _hit_stop: HitStop = %HitStop
 
 
 func _ready() -> void:
@@ -54,6 +56,10 @@ func _ready() -> void:
 	_update_chunks()
 
 	_player.bind_run(run)
+	_player.set_projectile_parent(_projectiles)
+	_player.hurt.connect(_on_player_hurt)
+	Events.enemy_damaged.connect(_on_enemy_damaged)
+	Events.enemy_killed.connect(_on_enemy_killed)
 	_hud.bind_run(run)
 	run.died.connect(_end_run.bind(false))
 	var spawn: Marker2D = _chunks[0].get_marker(Chunk.SPAWN_MARKER)
@@ -164,7 +170,7 @@ func _add_chunk(index: int) -> void:
 	var placement: ChunkPlacement = _column[index]
 	var chunk: Chunk = _library.get_info(placement.chunk_id).scene.instantiate()
 	chunk.position = Vector2(0.0, _tops[index])
-	build_chunk(chunk, placement, layer, run.world_rng)
+	build_chunk(chunk, placement, layer, run.world_rng, run.layer_index)
 	if placement.type == ChunkData.Type.FORK:
 		chunk.branch_chosen.connect(_on_branch_chosen.bind(placement))
 	_chunks_root.add_child(chunk)
@@ -178,7 +184,11 @@ func _add_chunk(index: int) -> void:
 ## optional parts, slots, and its fork exits or its reward. Also used by the
 ## chunk test room.
 static func build_chunk(
-	chunk: Chunk, placement: ChunkPlacement, layer_data: LayerData, rng: WorldRng
+	chunk: Chunk,
+	placement: ChunkPlacement,
+	layer_data: LayerData,
+	rng: WorldRng,
+	layer_index: int = 0
 ) -> void:
 	var key: Array = placement.key()
 	if placement.mirrored:
@@ -188,7 +198,9 @@ static func build_chunk(
 			rng, key, ChunkInfo.read_optional_parts(chunk), layer_data.optional_part_chance
 		)
 	)
-	chunk.fill_slots(SlotFiller.plan(rng, layer_data, key, ChunkInfo.read_slots(chunk)))
+	chunk.fill_slots(
+		SlotFiller.plan(rng, layer_data, key, ChunkInfo.read_slots(chunk)), key, rng, layer_index
+	)
 	match placement.type:
 		ChunkData.Type.FORK:
 			chunk.setup_fork(LayerGenerator.pick_fork_rewards(rng, layer_data, placement.fork))
@@ -222,6 +234,18 @@ func _end_run(completed: bool) -> void:
 	process_mode = Node.PROCESS_MODE_DISABLED
 	var ended: RunState = RunManager.end_run()
 	SceneRouter.go_to(SceneRouter.GAME_OVER, {"run": ended, "completed": completed})
+
+
+func _on_player_hurt() -> void:
+	_hit_stop.stop(_hit_stop.player_hurt_time)
+
+
+func _on_enemy_damaged(_enemy_id: StringName) -> void:
+	_hit_stop.stop(_hit_stop.enemy_hit_time)
+
+
+func _on_enemy_killed(_enemy_id: StringName, _position: Vector2) -> void:
+	_hit_stop.stop(_hit_stop.enemy_kill_time)
 
 
 func _on_pause_menu_menu_button_pressed() -> void:

@@ -46,3 +46,20 @@ STAT_DEFENSE,Apantallamiento,Shielding
 DEBUG_MOVEMENT_ROOM_HELP,"R: volver al inicio · T: Decoherencia · F: trayectoria","R: back to start · T: Decoherence · F: trajectory"
 LAYER_K_NAME,Capa K,Layer K
 DEBUG_CHUNK_ROOM_HELP,"R: volver al inicio · M: espejo · N: otra semilla · Re Pág/Av Pág: tramo anterior/siguiente","R: back to start · M: mirror · N: another seed · PgUp/PgDn: previous/next chunk"
+GAME_OVER_KILLS,Enemigos eliminados: %s,Enemies eliminated: %s
+GAME_OVER_CAUSE,Causa: %s,Cause: %s
+CAUSE_ORBITAL_ELECTRON,Electrón orbital,Orbital electron
+CAUSE_DECAY_ELECTRON,Electrón de desintegración,Decay electron
+CAUSE_FREE_NEUTRON,Neutrón libre,Free neutron
+CAUSE_ALPHA_PARTICLE,Partícula alfa,Alpha particle
+CAUSE_SPIKE,Picos de potencial,Potential spikes
+CAUSE_RISING_THREAT,Decoherencia,Decoherence
+CAUSE_UNKNOWN,Desconocida,Unknown
+ENEMY_ORBITAL_ELECTRON,Electrón orbital,Orbital electron
+ENEMY_DECAY_ELECTRON,Electrón de desintegración,Decay electron
+ENEMY_FREE_NEUTRON,Neutrón libre,Free neutron
+ENEMY_ALPHA_PARTICLE,Partícula alfa,Alpha particle
+STATUS_DECAY,Inestable,Unstable
+STATUS_SLOW,Dilatado,Dilated
+STATUS_ROOT,Confinado,Confined
+DEBUG_COMBAT_ROOM_HELP,"1/2/3: electrón/neutrón/alfa · 4/5/6: inestable/dilatado/confinado · K: eliminar todos · R: volver al inicio","1/2/3: electron/neutron/alpha · 4/5/6: unstable/dilated/confined · K: kill all · R: back to start"

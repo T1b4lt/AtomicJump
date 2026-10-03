@@ -7,9 +7,14 @@
 [ext_resource type="Texture2D" path="res://assets/generated/player/player_eyes_neutral.svg" id="5_eyes"]
 [ext_resource type="Texture2D" path="res://assets/generated/player/player_orbital_front.svg" id="6_front"]
 [ext_resource type="Texture2D" path="res://assets/generated/player/player_electron.svg" id="7_elec"]
+[ext_resource type="Script" path="res://actors/components/hurtbox.gd" id="8_hurt"]
+[ext_resource type="Script" path="res://combat/shooter.gd" id="9_shoot"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j5lpt"]
 size = Vector2(30, 38)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hurt"]
+size = Vector2(24, 32)
 
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 2
@@ -20,6 +25,21 @@ script = ExtResource("1_fhl8c")
 unique_name_in_owner = true
 position = Vector2(0, 1)
 shape = SubResource("RectangleShape2D_j5lpt")
+
+[node name="Hurtbox" type="Area2D" parent="."]
+unique_name_in_owner = true
+collision_layer = 2
+collision_mask = 0
+monitoring = false
+script = ExtResource("8_hurt")
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, 2)
+shape = SubResource("RectangleShape2D_hurt")
+
+[node name="Shooter" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("9_shoot")
 
 [node name="Visual" type="Node2D" parent="."]
 unique_name_in_owner = true

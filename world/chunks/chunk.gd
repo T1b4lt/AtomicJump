@@ -50,15 +50,27 @@ const SLOT_KINDS: Array[StringName] = [
 const COIN: StringName = &"coin"
 const KEY: StringName = &"key"
 const SPIKE: StringName = &"spike"
+## Enemies of Layer K (their EnemyData ids).
+const ORBITAL_ELECTRON: StringName = &"orbital_electron"
+const FREE_NEUTRON: StringName = &"free_neutron"
+const ALPHA_PARTICLE: StringName = &"alpha_particle"
 const OBJECT_SCENES: Dictionary[StringName, PackedScene] = {
 	COIN: preload("res://items/pickups/coin/coin.tscn"),
 	KEY: preload("res://items/pickups/key/key.tscn"),
 	SPIKE: preload("res://world/hazards/spike/spike.tscn"),
+	ORBITAL_ELECTRON: preload("res://actors/enemies/orbital_electron/orbital_electron.tscn"),
+	FREE_NEUTRON: preload("res://actors/enemies/free_neutron/free_neutron.tscn"),
+	ALPHA_PARTICLE: preload("res://actors/enemies/alpha_particle/alpha_particle.tscn"),
 }
 const FORK_GATE_SCENE: PackedScene = preload("res://world/chunks/fork_gate.tscn")
 ## Coins of a reward_coins reward, in a ring around the reward marker.
 const REWARD_COINS: int = 8
 const REWARD_RING_RADIUS: float = 44.0
+## Px between the photons an enemy drops, and how high above its origin.
+const DROP_SPACING: float = 20.0
+const DROP_HEIGHT: float = 16.0
+## Suffix of the address of what an enemy decays into.
+const DECAY_KEY: StringName = &"decay"
 
 @export var data: ChunkData:
 	set(value):
@@ -71,6 +83,9 @@ const REWARD_RING_RADIUS: float = 44.0
 var mirrored: bool = false
 var _gates: Array[ForkGate] = []
 var _chosen_side: int = -1
+## Rolls of the run, for the drops of the enemies (set by fill_slots()).
+var _rng: WorldRng = null
+var _layer_index: int = 0
 
 
 ## Opening (third of the inner width) that contains the x of a marker.
@@ -110,6 +125,10 @@ func _notification(what: int) -> void:
 
 
 func _get_configuration_warnings() -> PackedStringArray:
+	# Only chunk scenes are validated, not a Chunk used inside another scene
+	# (the combat test room's arena)
+	if owner != null:
+		return PackedStringArray()
 	return ChunkValidator.validate(self)
 
 
@@ -207,12 +226,50 @@ func set_optional_parts(enabled: Array[StringName]) -> void:
 		layer.enabled = layer.name in enabled
 
 
-## Fills the slots with {slot name: object id} from SlotFiller.plan().
-func fill_slots(plan: Dictionary[StringName, StringName]) -> void:
+## Fills the slots with {slot name: object id} from SlotFiller.plan(). The
+## enemies get the address of their slot (`key` + slot name), which seeds their
+## decisions and their drops with `rng`, and scale with `layer_index`.
+func fill_slots(
+	plan: Dictionary[StringName, StringName],
+	key: Array = [],
+	rng: WorldRng = null,
+	layer_index: int = 0
+) -> void:
+	set_rolls(rng, layer_index)
 	for slot_name: StringName in plan:
 		var slot: Node2D = get_node_or_null(NodePath("Slots/" + String(slot_name))) as Node2D
-		if slot != null and OBJECT_SCENES.has(plan[slot_name]):
-			_spawn(OBJECT_SCENES[plan[slot_name]], slot.position)
+		if slot == null or not OBJECT_SCENES.has(plan[slot_name]):
+			continue
+		var object: Node = OBJECT_SCENES[plan[slot_name]].instantiate()
+		var enemy: Enemy = object as Enemy
+		if enemy != null:
+			add_enemy(enemy, slot.position, key + [slot_name])
+		else:
+			_add_object(object as Node2D, slot.position)
+
+
+## Rolls of the run for the drops of the enemies, and the layer index that
+## scales them (fill_slots() sets them).
+func set_rolls(rng: WorldRng, layer_index: int = 0) -> void:
+	_rng = rng
+	_layer_index = layer_index
+
+
+## Adds an enemy at `at` (chunk px) with the address of its slot. When it dies,
+## the chunk drops its loot and spawns what it decays into.
+func add_enemy(enemy: Enemy, at: Vector2, address: Array) -> void:
+	enemy.setup(address, _rng, _layer_index)
+	enemy.died.connect(_on_enemy_died)
+	_add_object(enemy, at)
+
+
+## Enemies of the chunk that are still alive.
+func get_enemies() -> Array[Enemy]:
+	var enemies: Array[Enemy] = []
+	for child: Node in get_children():
+		if child is Enemy and not (child as Enemy).is_dying():
+			enemies.append(child as Enemy)
+	return enemies
 
 
 ## Puts the reward of the branch on the reward marker.
@@ -261,10 +318,27 @@ func _markers_with_prefix(prefix: String) -> Array[Marker2D]:
 
 
 func _spawn(scene: PackedScene, at: Vector2) -> Node2D:
-	var object: Node2D = scene.instantiate() as Node2D
+	return _add_object(scene.instantiate() as Node2D, at)
+
+
+func _add_object(object: Node2D, at: Vector2) -> Node2D:
 	object.position = at
 	add_child(object)
 	return object
+
+
+## Drops the loot of a dead enemy and spawns what it decays into. Deferred:
+## it dies during a physics callback, when areas cannot be added.
+func _on_enemy_died(enemy: Enemy) -> void:
+	var drops: Array[StringName] = enemy.data.roll_drops(_rng, enemy.address)
+	for i: int in drops.size():
+		var offset: Vector2 = Vector2((i - (drops.size() - 1) / 2.0) * DROP_SPACING, -DROP_HEIGHT)
+		_spawn.call_deferred(OBJECT_SCENES[drops[i]], enemy.position + offset)
+	if enemy.data.decay_scene != null:
+		var product: Enemy = enemy.data.decay_scene.instantiate() as Enemy
+		product.lifetime = enemy.data.decay_lifetime
+		var center: Vector2 = enemy.position + enemy.body.position
+		add_enemy.call_deferred(product, center, enemy.address + [DECAY_KEY])
 
 
 ## Mirrors the cells of a layer: column c goes to COLUMNS - 1 - c with its tile flipped.

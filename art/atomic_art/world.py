@@ -11,7 +11,7 @@ import numpy as np
 from PIL import Image, ImageFilter
 
 from . import palette as P
-from .svg import circle, g, path, polyline, rect
+from .svg import circle, g, path, polyline, rect, without_glow
 
 # --- Fondos orbitales -------------------------------------------------------
 
@@ -294,3 +294,13 @@ def potential_spikes_sprite(width_tiles: int = 2) -> str:
     teeth = polyline(pts, fill=P.DANGER, opacity=0.15) + polyline(pts, stroke=P.DANGER, sw=2)
     base = path(f"M0,16 L{w},16", stroke=P.DANGER, sw=1, opacity=0.5)
     return g(base + teeth, x=-w / 2, y=-8)
+
+
+# Longitud de la estela del proyectil del juego: su cabeza queda a PROJECTILE_HEAD_X del centro del lienzo
+PROJECTILE_LENGTH = 40
+PROJECTILE_HEAD_X = 16
+
+
+def projectile_sprite(color: str = P.PLAYER) -> str:
+    """Proyectil del juego, sin filtros: la cabeza en (PROJECTILE_HEAD_X, 0), apuntando a +x."""
+    return g(without_glow(projectile(color, PROJECTILE_LENGTH)), x=PROJECTILE_HEAD_X)
