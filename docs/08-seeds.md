@@ -151,22 +151,28 @@ Implantado en la Fase 3, en `core/rng/`:
 | `local_rng(dominio, clave)` | `RandomNumberGenerator` sembrado con `roll_int`. |
 | `shuffled(lista, dominio, clave)` | Copia barajada (Fisher-Yates) con el `local_rng` de la dirección. `Array.shuffle()` usa el generador global y no se debe usar para generar. |
 
-`WorldRng.GENERATION_VERSION` (hoy **1**) y `version_label()` (`g1`). `RunState.get_seed_label()` da `K7QX-2MPA · g1`.
+`WorldRng.GENERATION_VERSION` (hoy **2**: la Fase 5 cambió la generación entera) y `version_label()` (`g2`). `RunState.get_seed_label()` da `K7QX-2MPA · g2`.
 
-### Generación del prototipo
+### Generación de capas (Fase 5)
 
-Hasta que la Fase 5 traiga `LayerGenerator`, `world/generation/prototype_generator.gd` (`PrototypeGenerator`) genera la columna de tramos del nivel con funciones puras del `WorldRng`. La clave de un tramo es `["K", "main", índice]` (el índice 0 es el tramo inicial; la rama `main` es provisional, aún no hay bifurcaciones):
+`LayerGenerator` y `SlotFiller` ([05-mundo](05-world.md#implementación-fase-5)) sustituyen al generador del prototipo. La clave de un tramo es `[capa, rama, índice]`: la rama es `main` para el camino principal o `<bifurcación>/<lado>` (`1/L`, `2/R`) para las ramas, con las bifurcaciones numeradas desde 1 y el índice contando desde 0 dentro de cada rama. Direcciones:
 
-- `("layout", "K", "main", i)`: qué tramo va en la posición `i` (`pick_weighted` entre `platform_1` y `platform_2`).
-- `("slot_order", "K", "main", i)`: orden barajado de los huecos del tramo.
-- `("slot_count", "K", "main", i, tipo)`: cuántos objetos de cada tipo hay (pincho 0–1, fotón 1–5, positrón 0–1).
+| Dirección | Qué decide |
+| --- | --- |
+| `("layout", "K", rama, i, "mirror")` | Si la posición va reflejada (`chance` 0,5; se tira antes de elegir el tramo) |
+| `("layout", "K", rama, i)` | Qué tramo va en la posición (`pick_weighted` entre los candidatos válidos) |
+| `("layout", "K", rama, "length")` | Cuántos tramos normales tiene una rama |
+| `("layout", "K", rama, i, "optional", parte)` | Si aparece una parte opcional |
+| `("fork_reward", "K", bifurcación, lado)` | La recompensa de cada rama; la derecha se elige sin la de la izquierda, así que nunca coinciden |
+| `("slot", "K", rama, i, hueco)` | Si el hueco se rellena (`chance` con la probabilidad del tipo de hueco por un multiplicador: presencia monótona) |
+| `("slot_kind", "K", rama, i, hueco)` | Qué lo rellena (`pick_weighted` entre los objetos de ese tipo de hueco) |
 
-Cada tipo ocupa los siguientes huecos del orden barajado, sin reintentos (el prototipo elegía huecos al azar hasta encontrar uno libre, un bucle que podía no terminar). `slot_order` y `slot_count` son dominios **provisionales** del prototipo: la Fase 5 los sustituye por `slot` y `slot_kind` por hueco.
+La secuencia se calcula en un orden fijo (camino principal y después las ramas de cada bifurcación, izquierda y luego derecha), porque "no repetir tramos" depende de lo que ya se ha usado; las tiradas de huecos y partes opcionales son independientes del orden. Los dominios provisionales del prototipo (`slot_order`, `slot_count`) ya no existen.
 
 ### Tests
 
-- `tests/generation_test.gd`: semillas doradas, misma partida con la misma semilla, independencia del orden (generar la columna al revés con tiradas ajenas entre medias da lo mismo), independencia del generador global y monotonía (subir la probabilidad de `chance` solo añade huecos activos; añadir un candidato a `pick_weighted` solo cambia los huecos que gana el nuevo).
-- **Semillas doradas:** `tests/golden/generation_g<versión>.json` guarda, para 6 semillas fijas (`GoldenSeeds.SEEDS`), su entero, los 12 primeros tramos y el plan de objetos de cada uno (un carácter por hueco: `c` fotón, `k` positrón, `s` pincho, `.` vacío). Si un cambio de generación es intencionado, se sube `GENERATION_VERSION` y se regenera ejecutando el test con la variable de entorno `UPDATE_GOLDEN_SEEDS=1` (`UPDATE_GOLDEN_SEEDS=1 addons/gdUnit4/runtest.sh --headless --ignoreHeadlessMode -a res://tests/generation_test.gd`). El cambio del fichero se revisa en la PR.
+- `tests/generation_test.gd`: semillas doradas, misma capa con la misma semilla, independencia de otras tiradas y del orden de los huecos, independencia del generador global, monotonía (subir la probabilidad de los huecos solo añade objetos, sin cambiar los que ya había; añadir un candidato a `pick_weighted` solo cambia los huecos que gana el nuevo) y, para 150 semillas, que el camino principal sigue la plantilla, que cada bifurcación tiene dos ramas de la longitud correcta acabadas en su tramo de recompensa y con recompensas distintas, que **todas** las columnas posibles encajan entrada con salida y no repiten tramo seguido, que la dificultad sigue la curva y que solo se reflejan los tramos que lo permiten.
+- **Semillas doradas:** `tests/golden/generation_g<versión>.json` guarda, para 6 semillas fijas (`GoldenSeeds.SEEDS`), su entero, el camino principal y las ramas de la Capa K (una línea por tramo: id, `~m` si va reflejado, un carácter por hueco —`c` fotón, `k` positrón, `s` pico, `.` vacío— y las partes opcionales que aparecen) y las recompensas de cada rama. Si un cambio de generación es intencionado, se sube `GENERATION_VERSION` y se regenera ejecutando el test con la variable de entorno `UPDATE_GOLDEN_SEEDS=1` (`UPDATE_GOLDEN_SEEDS=1 addons/gdUnit4/runtest.sh --headless --ignoreHeadlessMode -a res://tests/generation_test.gd`). El cambio del fichero se revisa en la PR.
 
 ## Ideas a futuro
 

@@ -15,7 +15,7 @@ Todo el arte del juego es **vectorial, geométrico y luminoso sobre un fondo cas
 | Estilo | Vectorial geométrico con brillo ("neón de cámara de burbujas"). |
 | Resolución | Referencia **1280×720**, `stretch/mode = canvas_items`, `aspect = keep_width`. |
 | Producción | Todo el arte se genera con código Python en `art/` (paleta central + generadores). No hay arte pintado a mano. |
-| Arte provisional | Desaparece: cada asset nace con el estilo final. Los assets de Kenney se eliminan a medida que se sustituyen. |
+| Arte provisional | Desaparece: cada asset nace con el estilo final. Los assets de Kenney se eliminan a medida que se sustituyen (la Fase 5 quitó los de los tramos; quedan los de fotones, positrones y cofres). |
 | Brillo (*glow*) | Lo pone el motor, no el SVG: el importador SVG de Godot no soporta filtros. Verificado en la Fase 4: HDR 2D + glow del `WorldEnvironment` funcionan en *Compatibility*. |
 | Animación | En el motor (tweens, AnimationPlayer, shaders y partículas) sobre formas vectoriales. No hay hojas de sprites. |
 | Fondos | Shaders que calculan el orbital de cada capa en tiempo real. Las imágenes generadas con NumPy son la referencia. |
@@ -151,7 +151,7 @@ Cada capa muestra la densidad de probabilidad |ψ|² de su orbital característi
 | M | 3d | `x·y · e^(−r/3)` | Trébol de cuatro lóbulos |
 | N | 4f | `x(x² − 3y²) · e^(−r/4)` | Seis pétalos |
 
-La densidad se comprime con `pow(d, 0.45)`, se tiñe con el color de la capa y se le superponen "mediciones" (puntos muestreados según la densidad) con el color de acento, anillos concéntricos tenues y una viñeta. En el juego: shader con respiración lenta de la nube (±12 %) y parpadeo de las mediciones.
+La densidad se comprime con `pow(d, 0.45)`, se tiñe con el color de la capa y se le superponen "mediciones" (puntos muestreados según la densidad) con el color de acento, anillos concéntricos tenues y una viñeta. En el juego: shader con respiración lenta de la nube (±12 %) y parpadeo de las mediciones. **Capa K implementada** (Fase 5): `world/backgrounds/orbital_background.gdshader` en una `CanvasLayer` (capa −100) fija en pantalla (`OrbitalBackground`, colores de `Palette`); las mediciones son una rejilla de celdas de 6 px con un punto en las que pasan una prueba de hash contra la densidad, respiran con la nube y brillan un poco (HDR).
 
 ### Tiles y peligros
 
@@ -162,13 +162,15 @@ La densidad se comprime con `pow(d, 0.45)`, se tiñe con el color de la capa y s
 | Pared | Retícula | Relleno `VOID_2`, rejilla de 16 px `GRID` con nodos y borde `INK_DIM` |
 | Pico de potencial | Peligro | Gráfica en diente de sierra `POSITIVE` sobre una línea base |
 
+En el juego (Fase 5), `world.tileset_atlas(capa)` dibuja el atlas de tiles de 32 px de cada capa (8 × 3, importado al doble): las 16 combinaciones de lados expuestos de la retícula (el borde solo se dibuja hacia el hueco, rejilla de 16 px desfasada para que case entre tiles), el nivel de energía suelto, izquierdo, central y derecho (barra de 14 px con extremos redondeados; colisiona la mitad superior del tile) y el nivel virtual (raya discontinua de periodo 16, sin costuras). El TileSet de Godot (`world/tilesets/layer_k_tileset.tres`) asigna colisiones, la plataforma atravesable y los terrenos sobre esa distribución, así que **la distribución del atlas no se cambia sin actualizar el TileSet**. Las capas de tiles se dibujan a escala 0,5 y la de plataformas con `self_modulate` 1,4, para que brille su borde. El pico de potencial es un sprite (`hazards/potential_spikes.svg`, 2 tiles) dentro de la escena `Spike`.
+
 ### Decoherencia
 
 Lo contrario del resto del juego: **ausencia de forma**. Un frente de ruido pálido (`DECOHERENCE`) con un borde ondulado brillante, bloques de 4 px que se desprenden por delante y líneas de escaneo. En el juego: shader de ruido animado con el frente como suma de senoidales desfasadas (`world/rising_threat/decoherence.gdshader`, Fase 4: traducción directa de `decoherence_strip()`; el ruido y los bloques cambian 12 veces por segundo y el borde brilla en HDR).
 
 ### Bifurcaciones
 
-Cada salida del techo tiene una línea discontinua del acento de capa y el icono de su recompensa flotando. Al cruzar una, la otra **colapsa**: la pared se cierra desde los lados, el icono se encoge y se disuelve en fragmentos.
+Cada salida del techo tiene una línea discontinua del acento de capa y el icono de su recompensa flotando. Al cruzar una, la otra **colapsa**: la pared se cierra desde los lados, el icono se encoge y se disuelve en fragmentos. Implementado en la Fase 5 (`ForkGate`). Los iconos de recompensa (`rewards/reward_<tipo>.svg`) son el recogible de la recompensa dentro de un marco cuadrado de 40 px.
 
 ## Objetos
 
@@ -322,9 +324,9 @@ uv add <paquete>                         # añadir dependencias
 
 `art/build_game_assets.py` (desde la Fase 4) exporta el arte del juego:
 
-- A `assets/generated/` (sí importado por Godot) los SVG **sin filtros ni texto**, con nombres funcionales en inglés agrupados por carpeta (`player/player_core.svg`…). Hoy: las piezas de Wilas (`player_core`, `player_orbital`, `player_orbital_front`, `player_electron` y `player_eyes_<expresión>`), que comparten el centro del núcleo para colocarlas sin cálculos.
+- A `assets/generated/` (sí importado por Godot) los SVG **sin filtros ni texto**, con nombres funcionales en inglés agrupados por carpeta (`player/player_core.svg`…). Hoy: las piezas de Wilas (`player_core`, `player_orbital`, `player_orbital_front`, `player_electron` y `player_eyes_<expresión>`), que comparten el centro del núcleo para colocarlas sin cálculos; el atlas de tiles de la Capa K (`tilesets/layer_k_tiles.svg`), el pico de potencial (`hazards/potential_spikes.svg`) y los iconos de recompensa de bifurcación (`rewards/`). Para reutilizar en el juego una función de previsualización que lleva brillo, `svg.without_glow()` le quita los filtros.
 - Cada pieza animable se exporta **por partes** para animarlas por separado en Godot.
-- Los SVG se importan con `svg/scale = 2` (en su `.import`) y se dibujan con escala 0,5: quedan nítidos aunque la ventana sea mayor que 1280×720.
+- Los SVG se importan con `svg/scale = 2` (en su `.import`) y se dibujan con escala 0,5: quedan nítidos aunque la ventana sea mayor que 1280×720. Para un SVG nuevo, el script escribe un `.import` mínimo con esa escala que Godot completa al importar.
 - Un manifiesto (`assets/generated/manifest.json`) lista cada asset con su tamaño y su origen; `tests/generated_assets_test.gd` comprueba que coincide con los ficheros, que no hay filtros ni texto y que se importan al doble de tamaño. Al regenerar se borran los `.import` de los assets que ya no existen.
 - `core/palette.gd`: la paleta como clase `Palette` de GDScript.
 - La salida es regenerable, pero **se versiona en git**: así quien abra el proyecto en Godot no necesita Python. Los `.import` también se versionan (guardan la escala y el uid de cada asset).

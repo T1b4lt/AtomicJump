@@ -67,6 +67,8 @@ La Fase 3 (sistema de semillas) hace la partida reproducible de verdad ([08 · S
 
 La Fase 4 (movimiento, cámara y Decoherencia) cambia la sensación de juego ([04 · Jugador](docs/04-player.md#movimiento) y [03 · Partida](docs/03-run.md#la-decoherencia-amenaza-ascendente)): aceleración, gravedad de caída, salto variable, _coyote time_, _jump buffer_, bajar de plataformas atravesables (Abajo + salto) y el **Túnel** (Shift), una esquiva con invulnerabilidad. La cámara sigue a Wilas y la prisa la pone la **Decoherencia**, que sube desde abajo, quita un 25 % de coherencia al tocarla y te devuelve a la última plataforma segura. Wilas ya tiene su aspecto final, generado por código y animado en el motor, con brillo. Para ajustar el movimiento hay una sala de pruebas (`world/debug/movement_test_room.tscn`).
 
+La Fase 5 (tramos y generación de capas) sustituye la columna aleatoria del prototipo por una **Capa K generada** ([05 · Mundo](docs/05-world.md)): tramos de una pantalla diseñados con TileMapLayers sobre un tileset generado (niveles de energía, niveles virtuales atravesables, retícula y picos de potencial) y encadenados según sus entradas y salidas, con espejo y plataformas opcionales por semilla. Cada partida recorre la entrada de capa, dos **bifurcaciones** con el icono de su recompensa (al cruzar una salida la otra colapsa), un descanso y un jefe provisional; al salir por arriba se completa la capa. El fondo es la nube del orbital 1s calculada en un shader. Hay una plantilla de tramo con validador en el editor y una sala para jugar un tramo suelto (`world/debug/chunk_test_room.tscn`). La generación cambió, así que las semillas pasan a `g2`.
+
 ## Ejecutar el proyecto
 
 1. Instala [Godot 4.7](https://godotengine.org/download).
