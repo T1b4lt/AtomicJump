@@ -1,0 +1,75 @@
+{
+  "generator": "art/build_game_assets.py",
+  "assets": {
+    "player/player_core.svg": {
+      "size": [
+        52,
+        52
+      ],
+      "source": "characters.wilas_core"
+    },
+    "player/player_orbital.svg": {
+      "size": [
+        72,
+        72
+      ],
+      "source": "characters.wilas_orbital"
+    },
+    "player/player_orbital_front.svg": {
+      "size": [
+        72,
+        72
+      ],
+      "source": "characters.wilas_orbital_front"
+    },
+    "player/player_electron.svg": {
+      "size": [
+        8,
+        8
+      ],
+      "source": "characters.wilas_electron"
+    },
+    "player/player_eyes_neutral.svg": {
+      "size": [
+        52,
+        52
+      ],
+      "source": "characters.wilas_eyes('neutral')"
+    },
+    "player/player_eyes_blink.svg": {
+      "size": [
+        52,
+        52
+      ],
+      "source": "characters.wilas_eyes('blink')"
+    },
+    "player/player_eyes_happy.svg": {
+      "size": [
+        52,
+        52
+      ],
+      "source": "characters.wilas_eyes('happy')"
+    },
+    "player/player_eyes_jump.svg": {
+      "size": [
+        52,
+        52
+      ],
+      "source": "characters.wilas_eyes('jump')"
+    },
+    "player/player_eyes_focus.svg": {
+      "size": [
+        52,
+        52
+      ],
+      "source": "characters.wilas_eyes('focus')"
+    },
+    "player/player_eyes_hurt.svg": {
+      "size": [
+        52,
+        52
+      ],
+      "source": "characters.wilas_eyes('hurt')"
+    }
+  }
+}

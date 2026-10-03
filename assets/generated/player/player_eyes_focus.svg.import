@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cmlx4kbj77cjt"
-path="res://.godot/imported/character_handRed.png-7608ca9973db03ca91efe0aa550984cd.ctex"
+uid="uid://1ogastgo6hbp"
+path="res://.godot/imported/player_eyes_focus.svg-358a594ef58ca18e5dcbd34496ffbfac.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/scribble-assets/character_handRed.png"
-dest_files=["res://.godot/imported/character_handRed.png-7608ca9973db03ca91efe0aa550984cd.ctex"]
+source_file="res://assets/generated/player/player_eyes_focus.svg"
+dest_files=["res://.godot/imported/player_eyes_focus.svg-358a594ef58ca18e5dcbd34496ffbfac.ctex"]
 
 [params]
 
@@ -38,3 +38,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=2.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false
