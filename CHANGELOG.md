@@ -1,5 +1,36 @@
 # Changelog
 
+## [0.5.0](https://github.com/T1b4lt/AtomicJump/compare/v0.4.0...v0.5.0) (2026-10-03)
+
+
+### Features
+
+* add combat, shooting and the Layer K enemies ([58b42c6](https://github.com/T1b4lt/AtomicJump/commit/58b42c63903c76a4567327df48a73fc6b40ad566))
+* add player state machine, following camera and the Decoherence ([2f880cf](https://github.com/T1b4lt/AtomicJump/commit/2f880cf5483e03af5edf289593026ec0458cb65a))
+* add reproducible seed system with addressed world rolls ([7187998](https://github.com/T1b4lt/AtomicJump/commit/71879982e07697eb3c68345b904f92ad35d43dec))
+* add stat system with modifiers and Wilas character data ([b5ae960](https://github.com/T1b4lt/AtomicJump/commit/b5ae960f59cbfad050c323675a90de01e9335171))
+* add the run economy, items, operators, shop and build screen ([f4dbe77](https://github.com/T1b4lt/AtomicJump/commit/f4dbe7759b7ab01826413a6ef921f712e3430643))
+* **art:** export pickups, containers, the Pión and the item and boon icons ([f35b516](https://github.com/T1b4lt/AtomicJump/commit/f35b516f34451c7b17c4f04265f02858d20e4473))
+* **art:** export the game art and the palette to Godot ([d844528](https://github.com/T1b4lt/AtomicJump/commit/d844528199183869b4bad439cf1df2436b17b1ef))
+* **art:** export the Layer K enemies and the player projectile ([0e14a23](https://github.com/T1b4lt/AtomicJump/commit/0e14a23c234cdcac5f8e4283ef1b542aac15183f))
+* **art:** export the Layer K tileset, potential spikes and fork reward icons ([58f2a4a](https://github.com/T1b4lt/AtomicJump/commit/58f2a4af3f6f2280041c48aa011cbf291d3e9916))
+* generate Layer K from hand-made chunks with forks, mirror and optional parts ([131cd7d](https://github.com/T1b4lt/AtomicJump/commit/131cd7d67962de42a4848dd4cca1428119e937bc))
+* phase 4 — movement, camera and the Decoherence ([ffea8a9](https://github.com/T1b4lt/AtomicJump/commit/ffea8a9620620d1614ffb9a370e361bbd14243d6))
+* phase 5 · chunk pipeline and layer generation ([4869e01](https://github.com/T1b4lt/AtomicJump/commit/4869e014b5f05e8e4312dd80a58ed9256986828f))
+* phase 6 · combat and enemies ([af2b6f9](https://github.com/T1b4lt/AtomicJump/commit/af2b6f9ef5c2b9815cef14541eb2b06f2ac2ac5d))
+* phase 7 · economy and items ([3dbc05f](https://github.com/T1b4lt/AtomicJump/commit/3dbc05f35beb3b9dc13a62fdb1a069a9fcbdd5a4))
+* sistema de semillas (Fase 3) ([f4a3e15](https://github.com/T1b4lt/AtomicJump/commit/f4a3e15cbb39a7e6dd43567816125aede5968ccf))
+
+
+### Bug Fixes
+
+* allow resuming from the pause menu with Esc ([1a4dac0](https://github.com/T1b4lt/AtomicJump/commit/1a4dac0ccea1fda2611d2ea43d1ad49e43bbc9cd))
+* count air jumps explicitly instead of relying on is_on_floor timing ([e1790e4](https://github.com/T1b4lt/AtomicJump/commit/e1790e4c23af31d483e188709e9106f87d5f1471))
+* make spikes deal continuous damage with invulnerability frames ([f16a438](https://github.com/T1b4lt/AtomicJump/commit/f16a4386d7d8b2e57cd234cef484be96b996631a))
+* phase 1 prototype bug fixes ([4a58f08](https://github.com/T1b4lt/AtomicJump/commit/4a58f0814a7b2b4f1bc28a40ed800688d78d4735))
+* reset run state on every new run and generate re-enterable seeds ([7399963](https://github.com/T1b4lt/AtomicJump/commit/7399963274451dc62781ae9ff16cf27fc9a426bf))
+* start runs with max hp equal to current hp (100) ([eb937b5](https://github.com/T1b4lt/AtomicJump/commit/eb937b5125b0464dca92b92ac8e78146ce9d983d))
+
 ## [0.4.0](https://github.com/T1b4lt/AtomicJump/compare/v0.3.4...v0.4.0) (2024-10-25)
 
 
