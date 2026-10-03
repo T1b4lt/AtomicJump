@@ -10,6 +10,7 @@
 
 [node name="initial" type="Node2D"]
 script = ExtResource("1_rpahe")
+safe = true
 
 [node name="background_1" parent="." instance=ExtResource("1_7aq7b")]
 position = Vector2(0, 21)
@@ -35,8 +36,6 @@ position = Vector2(733, 212)
 [node name="block_5" parent="." instance=ExtResource("4_u7sq0")]
 position = Vector2(368, 90)
 
-[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
-position = Vector2(1150, 10)
 
 [node name="ObjectPlaceholders" type="Node2D" parent="."]
 unique_name_in_owner = true
@@ -73,6 +72,3 @@ position = Vector2(338, 40)
 
 [node name="random_10" type="Node2D" parent="ObjectPlaceholders"]
 position = Vector2(400, 38)
-
-[connection signal="screen_entered" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_entered"]
-[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

@@ -34,8 +34,6 @@ position = Vector2(737, 212)
 [node name="block_7" parent="." instance=ExtResource("4_lscng")]
 position = Vector2(367, 30)
 
-[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
-position = Vector2(1150, 10)
 
 [node name="ObjectPlaceholders" type="Node2D" parent="."]
 unique_name_in_owner = true
@@ -81,6 +79,3 @@ position = Vector2(336, -26)
 
 [node name="random_13" type="Node2D" parent="ObjectPlaceholders"]
 position = Vector2(402, -28)
-
-[connection signal="screen_entered" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_entered"]
-[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

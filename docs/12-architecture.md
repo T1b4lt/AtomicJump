@@ -5,7 +5,8 @@ Este documento describe **hacia dónde** debe ir el código. El estado actual y 
 ## Motor y configuración
 
 - **Godot 4.7** (GDScript), renderer _Compatibility_.
-- Viewport de referencia **1280×720** (migrado en la Fase 2); ver [13-dirección de arte](13-art-style.md). Los tramos del prototipo siguen midiendo 1160×670 (`Chunk.WIDTH` y `Chunk.HEIGHT`): la cámara centra el área de juego en horizontal y alinea su borde inferior con el del primer tramo, así que el jugador ve un poco más hacia arriba que antes, pero muere en el mismo punto. La Fase 5 rehace los tramos con el tamaño definitivo.
+- Viewport de referencia **1280×720** (migrado en la Fase 2); ver [13-dirección de arte](13-art-style.md). Los tramos del prototipo siguen midiendo 1160×670 (`Chunk.WIDTH` y `Chunk.HEIGHT`): como el área de juego es más estrecha que la vista, la cámara la centra en horizontal, y nunca enseña nada por debajo del primer tramo. La Fase 5 rehace los tramos con el tamaño definitivo.
+- **HDR 2D** activado (`rendering/viewport/hdr_2d`) y un `WorldEnvironment` con _glow_ en las escenas de juego (`world/environment/glow_environment.tres`): brilla lo que se dibuja con color por encima de 1 (ver [13-dirección de arte](13-art-style.md#implementación-en-godot)).
 - `display/window/stretch/mode = canvas_items` y `aspect = keep_width` (el alto se amplía en pantallas más altas).
 - Se trackean en git `*.import` y `*.uid`; se ignora `.godot/`.
 
@@ -31,7 +32,7 @@ Este documento describe **hacia dónde** debe ir el código. El estado actual y 
 
 ## Estructura de carpetas objetivo
 
-La Fase 2 implantó esta estructura; las carpetas sin contenido todavía se crearán en su fase. Estado actual: `core/autoload/` (`events`, `run_manager`, `scene_router` con su `.tscn`, `settings`), `core/run/` (`run_state.gd`, `run_counters.gd`), `core/stats/`, `core/rng/` (`seed_code`, `seed_hash`, `world_rng`), `core/physics_layers.gd`, `actors/player/` (`player`, `scrolling_camera` y `character_data.gd`), `items/pickups/` y `items/containers/`, `world/level/` (escena de partida), `world/generation/prototype_generator.gd` (generación provisional hasta la Fase 5), `world/chunks/k/` (tramos del prototipo) y `world/chunks/parts/` (bloques, muros y fondos con los que están hechos), `world/hazards/spike/`, `ui/` (`hud`, `main_menu`, `pause_menu`, `settings_menu`, `game_over`), `data/characters/wilas.tres` y `localization/translations.csv`. Las semillas doradas están en `tests/golden/`.
+La Fase 2 implantó esta estructura; las carpetas sin contenido todavía se crearán en su fase. Estado actual: `core/autoload/` (`events`, `run_manager`, `scene_router` con su `.tscn`, `settings`), `core/run/` (`run_state.gd`, `run_counters.gd`), `core/stats/`, `core/rng/` (`seed_code`, `seed_hash`, `world_rng`), `core/physics_layers.gd`, `core/palette.gd` (generado), `actors/player/` (`player`, `player_visual`, `player_input`, `movement_config`, `player_camera` y `character_data.gd`), `items/pickups/` y `items/containers/`, `world/level/` (escena de partida), `world/generation/prototype_generator.gd` (generación provisional hasta la Fase 5), `world/chunks/k/` (tramos del prototipo) y `world/chunks/parts/` (bloques, muros y fondos con los que están hechos), `world/hazards/spike/`, `world/rising_threat/` (la Decoherencia y su shader), `world/environment/` (el `Environment` con _glow_), `world/debug/` (sala de pruebas de movimiento y `DebugBlock`), `ui/` (`hud`, `main_menu`, `pause_menu`, `settings_menu`, `game_over`), `data/characters/wilas.tres`, `data/movement/wilas_movement.tres`, `assets/generated/` (arte exportado por `art/build_game_assets.py`) y `localization/translations.csv`. Las semillas doradas están en `tests/golden/`.
 
 ```
 res://
@@ -41,9 +42,10 @@ res://
 │   ├── run/                 # run_state.gd, run_counters.gd
 │   ├── stats/               # stat_block.gd, stat_modifier.gd, stats.gd
 │   ├── save/                # save_system.gd, migrations
-│   └── physics_layers.gd    # constantes de las capas de física
+│   ├── physics_layers.gd    # constantes de las capas de física
+│   └── palette.gd           # paleta de colores (generada desde art/)
 ├── actors/
-│   ├── player/              # player.tscn/.gd, character_data.gd, estados, cámara
+│   ├── player/              # player.tscn/.gd, player_visual, player_input, movement_config, player_camera, character_data
 │   ├── enemies/             # enemy_base, un subdirectorio por enemigo
 │   ├── bosses/
 │   └── components/          # health_component, hitbox, hurtbox, knockback, status_effects
@@ -52,7 +54,9 @@ res://
 │   ├── level/               # escena de partida (level.tscn)
 │   ├── chunks/              # chunk.gd (base), chunk_template.tscn, k/, l/, m/, n/, special/, parts/
 │   ├── generation/          # layer_generator.gd, chunk_library.gd
-│   ├── rising_threat/
+│   ├── rising_threat/       # rising_threat (la Decoherencia), decoherence.gdshader
+│   ├── environment/         # Environment con glow
+│   ├── debug/               # salas de pruebas (movimiento; tramo suelto en la Fase 5)
 │   ├── hazards/             # spike, force_field…
 │   └── tilesets/
 ├── items/
@@ -64,7 +68,7 @@ res://
 ├── ui/                      # hud, menus, run_summary, boon_picker, build_screen, theme
 ├── data/                    # recursos .tres: characters, items, boons, enemies, layers, chunks, meta_upgrades, heat_modifiers
 ├── localization/            # translations.csv
-├── assets/                  # arte, audio, fuentes (provisional → final)
+├── assets/                  # arte, audio, fuentes; generated/ lo exporta art/build_game_assets.py
 └── tests/                   # gdUnit4
 ```
 
@@ -119,8 +123,8 @@ signal coins_changed(value: int)
 Implementado en la Fase 2 (`core/run/run_state.gd`), con lo que necesita el prototipo; el resto de campos llega con su sistema:
 
 - `RunManager.start_run(seed_text, character)` crea el `RunState` (por defecto con Wilas; sin semilla válida, con una aleatoria) y emite `Events.run_started`; `end_run()` lo suelta, emite `Events.run_ended` y lo devuelve para que la pantalla final lo reciba por `SceneRouter`. Ir al menú desde la pausa también termina la partida.
-- Campos actuales: `seed_code` (semilla como la ve el jugador, normalizada), `world_rng` (desde la Fase 3), `character`, `stats`, `hp`, `coins`, `keys` (saldo), `altitude` y `counters` (`jumps`, `coins_collected`, `keys_collected`).
-- Señales: `hp_changed(value, max_value)`, `coins_changed`, `keys_changed`, `altitude_changed` y `died`. `take_damage(amount)` aplica el apantallamiento (`daño × (1 − defense)`) y emite `died` una sola vez; si baja la coherencia máxima, la coherencia se recorta.
+- Campos actuales: `seed_code` (semilla como la ve el jugador, normalizada), `world_rng` (desde la Fase 3), `character`, `stats`, `hp`, `coins`, `keys` (saldo), `altitude` (máxima alcanzada), `threat_distance` (desde la Fase 4) y `counters` (`jumps`, `coins_collected`, `keys_collected`).
+- Señales: `hp_changed(value, max_value)`, `coins_changed`, `keys_changed`, `altitude_changed`, `threat_distance_changed` y `died`. `take_damage(amount, reducible = true)` aplica el apantallamiento (`daño × (1 − defense)`) salvo con `reducible = false` (la Decoherencia) y emite `died` una sola vez; si baja la coherencia máxima, la coherencia se recorta.
 - Los recogibles no conocen la partida: emiten `Events.coin_collected` / `Events.key_collected` y `RunManager` lo suma al `RunState` en curso.
 - `Player`, `Hud` y `Level` reciben el `RunState` con `bind_run(run)` (llamar hacia abajo) en lugar de leer un autoload; así se prueban sin partida global. La escena del nivel lanzada sola (F6) empieza una partida aleatoria.
 
@@ -174,6 +178,21 @@ Configuradas en `project.godot` desde la Fase 2 y disponibles en código como `P
 - Máquina de estados sencilla (`idle`, `run`, `jump`, `fall`, `dash`, `hurt`, `dead`) con estados como nodos o como enum más funciones; se evita la lógica en un único `_physics_process` gigante.
 - Parámetros de movimiento (coyote, buffer, gravedad…) en un recurso `MovementConfig` exportado.
 
+Implementado en la Fase 4 (`actors/player/`):
+
+- `Player` (`CharacterBody2D`, colisión de 30×38 px con los pies 20 px bajo el origen; el núcleo de Wilas mide 40 px): enum `State` y una función por tarea (`_process_control`, `_try_jump`, `_start_dash`, `_knock_back`…). `_physics_process` solo lee el input y llama a `physics_step(delta, input)`, que también usan los tests y las herramientas de depuración para simular fotogramas sin teclado. Señales: `state_changed(from, to)`, `jumped(in_air)`, `landed`, `dashed`, `hurt` y `respawned`.
+- `PlayerInput`: foto de los controles de un fotograma (`move_axis`, `down_held`, `jump_pressed`, `jump_held`, `dash_pressed`); `from_actions()` la lee de las acciones de input.
+- `MovementConfig` (Resource, `data/movement/wilas_movement.tres`): tiempos de aceleración y frenado (suelo y aire), gravedad de subida y multiplicador de caída, velocidad terminal, recorte del salto, ratio del salto aéreo, _coyote_, _buffer_, tiempo de atravesar plataformas, Túnel (velocidad, duración, recarga y Túneles aéreos) y retroceso. Valores en [04-jugador](04-player.md#movimiento).
+- Bajar de una plataforma atravesable quita del `collision_mask` la capa `one_way_platforms` durante `drop_through_time` y hasta que el jugador ya no la toca (consulta de forma con `intersect_shape`).
+- Daño: `take_damage(amount, source_position)` (respeta la invulnerabilidad, retroceso alejándose de la fuente) y `take_unavoidable_damage(amount)` (la Decoherencia: sin apantallamiento ni invulnerabilidad, con `RunState.take_damage(amount, false)`). `respawn_at(spot)` recoloca al jugador parado e invulnerable. `safe_spots` guarda los últimos puntos de suelo pisados.
+- `PlayerVisual` (nodo `Visual`): dibuja a Wilas con sus piezas generadas y lo anima en el motor (órbita del electrón, respiración, parpadeos, expresiones por estado, _squash & stretch_, pulso del salto cuántico, estela del Túnel, destello al recibir daño). El `Player` la llama hacia abajo; nunca afecta a la jugabilidad. Su aleatoriedad (parpadeos) es cosmética y usa su propio `RandomNumberGenerator`.
+- `PlayerCamera` (`Camera2D`): sigue a un `target` con suavizado exponencial, sesgo hacia arriba, _look-ahead_ vertical según la velocidad y límites laterales e inferior (`area_left`, `area_right`, `area_bottom`).
+
+## La Decoherencia y el nivel
+
+- `RisingThreat` (`world/rising_threat/`): su `y` es el frente. Velocidad base, goma elástica, frenado cerca del jugador y `paused`; un `Area2D` en la capa `rising_threat` detecta al jugador y `hit()` aplica el daño y busca dónde reaparecer (`find_respawn_spot`: último punto seguro válido o, si no, rayos hacia abajo por columnas). Se dibuja con `decoherence.gdshader`. Valores en [03-partida](03-run.md#la-decoherencia-amenaza-ascendente).
+- `Level` reparte el trabajo: coloca la Decoherencia bajo el primer tramo, la pausa mientras el jugador está en un tramo `safe` (`Chunk.safe`; hoy, el inicial), crea los tramos por índice hasta uno por encima de la vista y libera los que quedan por debajo de la Decoherencia y de la vista. Ya no usa las señales de pantalla de los tramos. Cada fotograma de física actualiza en el `RunState` la altura máxima (`altitude`) y la distancia a la Decoherencia (`threat_distance`, señal `threat_distance_changed`), ambas en pm.
+
 ## Guardado
 
 - `SaveSystem` serializa `MetaProgress` a JSON con `schema_version`; aplica migraciones al cargar.
@@ -185,5 +204,5 @@ Configuradas en `project.godot` desde la Fase 2 y disponibles en código como `P
 - **CI** (GitHub Actions, `.github/workflows/ci.yml`): `gdformat --check`, `gdlint` y los tests con Godot 4.7.2 _headless_ en cada PR y en cada push a `main`; el informe de gdUnit4 se sube como artefacto. Las builds de exportación (Windows y Linux) en cada release de release-please llegan en la Fase 15.
 - **Releases** con release-please (`.github/workflows/release-please.yml`, action v5) en cada push a `main`: abre o actualiza la PR de release con la versión y el `CHANGELOG.md`. Configuración en `release-please-config.json` (tipo `simple`, `bump-minor-pre-major` para que un cambio incompatible no salte a la 1.0 antes de tiempo) y versión actual en `.release-please-manifest.json`. Usa el `GITHUB_TOKEN` del workflow, así que no hay token personal que caduque; a cambio, la CI no se dispara sola en las PR de release (solo tocan versión y CHANGELOG).
 - **Exportación**: `export_presets.cfg` con los presets `Windows Desktop` y `Linux` (x86_64, PCK embebido), que excluyen `tests/` y `addons/gdUnit4/`. Salida en `export/` (ignorado por git).
-- **Escenas de depuración**: jugar un tramo suelto, arena de jefe y galería de objetos.
+- **Escenas de depuración**: sala de pruebas de movimiento (`world/debug/movement_test_room.tscn`, Fase 4); jugar un tramo suelto, arena de jefe y galería de objetos llegarán con sus fases.
 - **Consola o menú de depuración** (solo en builds de desarrollo): dar objetos, saltar de capa, invulnerabilidad y mostrar huecos y direcciones de las tiradas.

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dnq02y52jxt3d"
-path="res://.godot/imported/character_squareRed.png-4874a84448abd6bdeafe305b51bc8703.ctex"
+uid="uid://c0iyqgb8742r6"
+path="res://.godot/imported/player_orbital_front.svg-593a4a617741bd5e306e2a1dfe731280.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/scribble-assets/character_squareRed.png"
-dest_files=["res://.godot/imported/character_squareRed.png-4874a84448abd6bdeafe305b51bc8703.ctex"]
+source_file="res://assets/generated/player/player_orbital_front.svg"
+dest_files=["res://.godot/imported/player_orbital_front.svg-593a4a617741bd5e306e2a1dfe731280.ctex"]
 
 [params]
 
@@ -38,3 +38,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=2.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false

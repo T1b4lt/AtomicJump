@@ -44,6 +44,41 @@ def _core(color: str, deep: str, r: float, gid: str) -> str:
     return f"<defs>{grad}</defs>" + circle(0, 0, r, fill=f"url(#{gid})")
 
 
+# Medidas del orbital de Wilas (radios de la elipse e inclinación en grados)
+ORBIT_RX = R * 1.55
+ORBIT_RY = R * 0.55
+ORBIT_ANGLE = -25
+ELECTRON_R = 2.6
+EXPRESSIONS = ("neutral", "blink", "happy", "jump", "focus", "hurt")
+
+
+# --- Piezas de Wilas para el juego (se animan por separado en Godot) ---------
+
+
+def wilas_core(uid: str = "core") -> str:
+    """Núcleo con su halo, sin ojos: el motor lo aplasta, lo estira y le da brillo."""
+    return circle(0, 0, R + 5, fill=P.PLAYER, opacity=0.12) + _core(P.PLAYER, P.PLAYER_DEEP, R, f"core_{uid}")
+
+
+def wilas_eyes(expression: str = "neutral") -> str:
+    """Ojos de una expresión, en las coordenadas del núcleo."""
+    return _eyes(expression)
+
+
+def wilas_orbital(rotate: float = ORBIT_ANGLE) -> str:
+    """Orbital completo: se dibuja detrás del núcleo."""
+    return ellipse(0, 0, ORBIT_RX, ORBIT_RY, stroke=P.PLAYER, sw=1.6, rotate=rotate, opacity=0.85)
+
+
+def wilas_orbital_front(rotate: float = ORBIT_ANGLE) -> str:
+    """Mitad delantera del orbital: se dibuja delante del núcleo."""
+    return front_arc(ORBIT_RX, ORBIT_RY, rotate, P.PLAYER, 1.6)
+
+
+def wilas_electron() -> str:
+    return circle(0, 0, ELECTRON_R, fill=P.INK)
+
+
 def wilas(
     expression: str = "neutral",
     *,
@@ -61,20 +96,19 @@ def wilas(
     """
     import math
 
-    ring = ellipse(0, 0, R * 1.55, R * 0.55, stroke=P.PLAYER, sw=1.6, rotate=orbit_angle, opacity=0.85)
+    ring = wilas_orbital(orbit_angle)
     a = math.radians(orbit_angle)
     phi = math.radians(electron_phase)
-    ex, ey = R * 1.55 * math.cos(phi), R * 0.55 * math.sin(phi)
+    ex, ey = ORBIT_RX * math.cos(phi), ORBIT_RY * math.sin(phi)
     ex, ey = ex * math.cos(a) - ey * math.sin(a), ex * math.sin(a) + ey * math.cos(a)
-    electron = g(circle(ex, ey, 2.6, fill=P.INK), glow=3)
+    electron = g(wilas_electron(), x=ex, y=ey, glow=3)
     behind = math.sin(phi) < 0
-    halo = circle(0, 0, R + 5, fill=P.PLAYER, opacity=0.12)
-    body = halo + _core(P.PLAYER, P.PLAYER_DEEP, R, f"core_{uid}")
+    body = wilas_core(uid)
     if flash:
         body += circle(0, 0, R, fill="#FFFFFF", opacity=flash)
-    body += _eyes(expression)
+    body += wilas_eyes(expression)
     body = f'<g transform="scale({sx},{sy})">{body}</g>'
-    front = g(front_arc(R * 1.55, R * 0.55, orbit_angle, P.PLAYER, 1.6), glow=2)
+    front = g(wilas_orbital_front(orbit_angle), glow=2)
     return g(ring, glow=2) + (electron if behind else "") + body + front + ("" if behind else electron)
 
 

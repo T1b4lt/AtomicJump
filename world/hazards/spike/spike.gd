@@ -17,13 +17,13 @@ func _ready() -> void:
 
 func _physics_process(_delta: float) -> void:
 	if is_instance_valid(_player):
-		_player.take_damage(damage)
+		_player.take_damage(damage, global_position)
 
 
 func _on_body_entered(body: Node2D) -> void:
 	if body is Player:
 		_player = body as Player
-		_player.take_damage(damage)
+		_player.take_damage(damage, global_position)
 		set_physics_process(true)
 
 

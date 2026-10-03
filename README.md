@@ -65,6 +65,8 @@ La Fase 2 (refactor de fundamentos) mantiene esa jugabilidad sobre la arquitectu
 
 La Fase 3 (sistema de semillas) hace la partida reproducible de verdad ([08 · Semillas](docs/08-seeds.md)): semillas `K7QX-2MPA` o de texto libre ("hola mundo"), hash estable propio y tiradas direccionadas para elegir los tramos y colocar los objetos, así que la misma semilla genera el mismo mundo en cualquier ejecución. El menú tiene botones **Aleatoria** y **Pegar**, y el HUD y la pantalla final muestran `semilla · g1` (con **Copiar semilla** en la pantalla final).
 
+La Fase 4 (movimiento, cámara y Decoherencia) cambia la sensación de juego ([04 · Jugador](docs/04-player.md#movimiento) y [03 · Partida](docs/03-run.md#la-decoherencia-amenaza-ascendente)): aceleración, gravedad de caída, salto variable, _coyote time_, _jump buffer_, bajar de plataformas atravesables (Abajo + salto) y el **Túnel** (Shift), una esquiva con invulnerabilidad. La cámara sigue a Wilas y la prisa la pone la **Decoherencia**, que sube desde abajo, quita un 25 % de coherencia al tocarla y te devuelve a la última plataforma segura. Wilas ya tiene su aspecto final, generado por código y animado en el motor, con brillo. Para ajustar el movimiento hay una sala de pruebas (`world/debug/movement_test_room.tscn`).
+
 ## Ejecutar el proyecto
 
 1. Instala [Godot 4.7](https://godotengine.org/download).
@@ -84,6 +86,7 @@ La Fase 3 (sistema de semillas) hace la partida reproducible de verdad ([08 · S
 | --------------- | ------- | --------------- |
 | Moverse         | A / D   | Stick izquierdo |
 | Saltar          | Espacio | A               |
+| Bajar plataforma | S + Espacio | Abajo + A   |
 | Disparar        | Flechas | Stick derecho   |
 | Túnel (esquiva) | Shift   | RB              |
 | Operador        | E       | LB              |
