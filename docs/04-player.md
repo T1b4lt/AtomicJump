@@ -64,12 +64,20 @@ El jugador es una máquina de estados pequeña: `idle`, `run`, `jump` (sube), `f
 - Se destruyen al superar el **Alcance** o al chocar con una plataforma (salvo con modificadores).
 - **Retroceso del disparo:** disparar hacia abajo en el aire frena un poco la caída. No es un salto extra, pero da control.
 
+Implementado en la Fase 6:
+
+- `PlayerInput.shoot_direction` lee los ejes de `shoot_*`; el `Shooter` del jugador (`combat/shooter.gd`) lo ajusta a 4 direcciones (en diagonal gana la vertical) y dispara mientras se mantenga, con `1 / attack_rate` segundos entre disparos (2,5 disparos/s de base). Cada disparo crea un `ProjectileSpec` con la Carga (`attack_power`, daño) y el Alcance (`attack_range`, distancia) del momento; los modificadores de proyectil lo transformarán desde la Fase 7.
+- El proyectil vuela a 900 px/s más el **25 %** de la velocidad de Wilas y nace a 18 px de su centro. Atraviesa las plataformas atravesables y se detiene en las paredes y niveles de energía (un rayo por fotograma, así que no los atraviesa aunque vaya rápido), en el primer enemigo (más `pierce` si lo tiene) o al agotar su alcance.
+- Se dispara en reposo, corriendo y en el aire, pero no durante el Túnel ni en el retroceso de un golpe. Disparar hacia un lado gira a Wilas.
+- **Retroceso del disparo:** cada disparo hacia abajo en el aire, si Wilas cae, le resta 140 px/s de velocidad de caída (`MovementConfig.shoot_down_recoil`) sin llegar nunca a impulsarla hacia arriba.
+
 ### Recibir daño
 
 - Daño de contacto con enemigos, proyectiles enemigos, peligros y la Decoherencia.
 - Tras recibir daño: 1 s de invulnerabilidad con parpadeo y un pequeño retroceso (0,2 s sin control, alejándose del golpe y un poco hacia arriba).
 - La Decoherencia es la excepción: quita siempre el 25 % de la coherencia máxima, sin apantallamiento ni invulnerabilidad (ver [03-partida](03-run.md#la-decoherencia-amenaza-ascendente)).
 - `daño_final = daño × (1 − apantallamiento)`, con el apantallamiento limitado al 60 %.
+- Implementación (Fase 6): Wilas recibe los golpes en su `Hurtbox` (24×32 px, algo menor que su colisión, para que los roces no cuenten), que llama a `Player.take_hit(DamageInfo)`. Los enemigos, sus proyectiles y los peligros llevan un `Hitbox`. Cada golpe guarda su origen, que es la **causa de la muerte** si la coherencia llega a 0. Al recibir daño hay un _hitstop_ de 60 ms (ver [12-arquitectura](12-architecture.md#combate)).
 
 ### Ranuras de interacción
 

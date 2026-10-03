@@ -122,6 +122,8 @@ Todos comparten el menta del jugador y los ojos redondos; se distinguen por la s
 
 Construcción: esfera (o forma) con el color de su carga + ojos rasgados + traza que indica su movimiento. La lista completa y el comportamiento están en [09-enemigos](09-enemies.md); la clave visual:
 
+En el juego (Fase 6, Capa K): cada enemigo es un SVG sin filtros (`enemies.*_sprite()` en `atomic_art/enemies.py`) que brilla con `modulate` HDR (×1,35). Su traza se dibuja en el motor cuando depende del movimiento: el electrón orbital pinta su órbita punteada y un arco que se desvanece detrás de él; la partícula alfa enseña sus líneas de velocidad al embestir. El cuerpo respira (±4 %), destella en blanco 100 ms al recibir un disparo, parpadea durante el aviso de 0,45 s de la embestida y toma el color de la familia del estado alterado activo (Inestable = débil, Dilatado = gravitatoria, Confinado = fuerte). El electrón de desintegración del neutrón es un electrón orbital más pequeño.
+
 | Enemigo | Clave visual |
 |---|---|
 | Electrón orbital | Esfera cian sobre una órbita punteada con estela |
@@ -207,7 +209,7 @@ Gramática fija para los más de 100 iconos: **marco + glifo + joya**.
 
 - **Firma:** trazas de cámara de burbujas. Espirales que se cierran (`r = r₀ · e^(−k·t)`), vértices de desintegración en V e hileras de burbujas diminutas. Se usan en impactos, muertes, transiciones de capa y como decoración de fondo muy tenue.
 - **Proyectil del jugador:** paquete de ondas menta (cabeza brillante + estela ondulada). Cada familia de interacción cambiará el color y la forma de la estela: **el build se ve en los disparos**.
-- **Impacto:** destello blanco en el objetivo, empujón, anillo que se expande y dos espirales de cargas opuestas.
+- **Impacto:** destello blanco en el objetivo, empujón, anillo que se expande y dos espirales de cargas opuestas. En el juego (Fase 6) es `ImpactEffect`, dibujado con `_draw()` en 0,35 s: un disco blanco que se encoge, el anillo, dos espirales `r = r₀ · e^(−k·t)` que crecen y una hilera de burbujas; el del proyectil del jugador es menta y blanco, y la muerte de un enemigo usa uno mayor (0,5 s) en cian y magenta. Con _hitstop_ de 30–60 ms.
 - **Aniquilación:** destello blanco y dos fotones gamma en direcciones opuestas (e⁺ + e⁻ → γ γ).
 
 ## Animación
@@ -324,7 +326,7 @@ uv add <paquete>                         # añadir dependencias
 
 `art/build_game_assets.py` (desde la Fase 4) exporta el arte del juego:
 
-- A `assets/generated/` (sí importado por Godot) los SVG **sin filtros ni texto**, con nombres funcionales en inglés agrupados por carpeta (`player/player_core.svg`…). Hoy: las piezas de Wilas (`player_core`, `player_orbital`, `player_orbital_front`, `player_electron` y `player_eyes_<expresión>`), que comparten el centro del núcleo para colocarlas sin cálculos; el atlas de tiles de la Capa K (`tilesets/layer_k_tiles.svg`), el pico de potencial (`hazards/potential_spikes.svg`) y los iconos de recompensa de bifurcación (`rewards/`). Para reutilizar en el juego una función de previsualización que lleva brillo, `svg.without_glow()` le quita los filtros.
+- A `assets/generated/` (sí importado por Godot) los SVG **sin filtros ni texto**, con nombres funcionales en inglés agrupados por carpeta (`player/player_core.svg`…). Hoy: las piezas de Wilas (`player_core`, `player_orbital`, `player_orbital_front`, `player_electron` y `player_eyes_<expresión>`), que comparten el centro del núcleo para colocarlas sin cálculos; el atlas de tiles de la Capa K (`tilesets/layer_k_tiles.svg`), el pico de potencial (`hazards/potential_spikes.svg`), los iconos de recompensa de bifurcación (`rewards/`), los enemigos de la Capa K (`enemies/`: `orbital_electron`, `decay_electron`, `free_neutron`, `alpha_particle` y las líneas de velocidad `alpha_speed_lines`, que se muestran al embestir) y el proyectil del jugador (`combat/player_projectile.svg`, con la cabeza a 16 px del centro del lienzo). Para reutilizar en el juego una función de previsualización que lleva brillo, `svg.without_glow()` le quita los filtros.
 - Cada pieza animable se exporta **por partes** para animarlas por separado en Godot.
 - Los SVG se importan con `svg/scale = 2` (en su `.import`) y se dibujan con escala 0,5: quedan nítidos aunque la ventana sea mayor que 1280×720. Para un SVG nuevo, el script escribe un `.import` mínimo con esa escala que Godot completa al importar.
 - Un manifiesto (`assets/generated/manifest.json`) lista cada asset con su tamaño y su origen; `tests/generated_assets_test.gd` comprueba que coincide con los ficheros, que no hay filtros ni texto y que se importan al doble de tamaño. Al regenerar se borran los `.import` de los assets que ya no existen.
@@ -340,6 +342,6 @@ Las texturas de ruido o atlas aún no hacen falta: la Decoherencia y los fondos 
 | Techo minimalista: no habrá ilustraciones ni retratos detallados | Asumido como identidad; la personalidad sale de la forma, la animación y el *game feel* |
 | El brillo depende del motor y del renderer *Compatibility* | Verificado en la Fase 4: el glow del `WorldEnvironment` con HDR 2D funciona en *Compatibility* |
 | El importador SVG de Godot (ThorVG) no soporta filtros y tiene soporte limitado de algunas funciones SVG | SVG de juego simples: formas, trazos y degradados radiales, sin filtros ni texto |
-| Rendimiento con muchos elementos brillantes y partículas | Perfilar en la Fase 6 (combate) con el peor caso de enemigos y proyectiles |
+| Rendimiento con muchos elementos brillantes y partículas | Medido en la Fase 6 en la sala de combate: 40 enemigos y disparo continuo cuestan ~1,6 ms de CPU por fotograma. Perfilar el render en hardware modesto en la Fase 15 |
 | Ruido (Decoherencia, fondos) pesado como imagen | En el juego son shaders, no texturas |
 | Música fuera del alcance del generador | Librería o encargo externo ([ideas a futuro](99-future-ideas.md)) |

@@ -135,15 +135,15 @@ La **v1.0** llegará después de la 0.99.0. Antes faltan cosas que quedan **fuer
 
 **Objetivo:** disparar y enfrentarse a los enemigos de la Capa K.
 
-- [ ] `HealthComponent`, `Hitbox`, `Hurtbox`, `DamageInfo`.
-- [ ] Invulnerabilidad y retroceso al recibir daño; _hitstop_ básico.
-- [ ] `Shooter` en 4 direcciones con Frecuencia, Alcance y Carga; `ProjectileSpec`; proyectiles con herencia de velocidad; retroceso al disparar hacia abajo.
-- [ ] `EnemyData` y enemigo base con comportamientos reutilizables (patrulla, órbita, carga).
-- [ ] Enemigos de la Capa K: electrón orbital, neutrón libre (con decaimiento) y partícula alfa.
-- [ ] Huecos de enemigo rellenados por semilla; caídas direccionadas.
-- [ ] Sistema de estados alterados (base para Inestable, Dilatado, etc.).
-- [ ] Contadores de partida: enemigos eliminados y causa de muerte.
-- [ ] **Arte:** enemigos de la Capa K, proyectiles, impactos y trazas de cámara de burbujas.
+- [x] `HealthComponent`, `Hitbox`, `Hurtbox`, `DamageInfo`.
+- [x] Invulnerabilidad y retroceso al recibir daño; _hitstop_ básico.
+- [x] `Shooter` en 4 direcciones con Frecuencia, Alcance y Carga; `ProjectileSpec`; proyectiles con herencia de velocidad; retroceso al disparar hacia abajo.
+- [x] `EnemyData` y enemigo base con comportamientos reutilizables (patrulla, órbita, carga).
+- [x] Enemigos de la Capa K: electrón orbital, neutrón libre (con decaimiento) y partícula alfa.
+- [x] Huecos de enemigo rellenados por semilla; caídas direccionadas.
+- [x] Sistema de estados alterados (base para Inestable, Dilatado, etc.).
+- [x] Contadores de partida: enemigos eliminados y causa de muerte.
+- [x] **Arte:** enemigos de la Capa K, proyectiles, impactos y trazas de cámara de burbujas.
 
 **Terminado cuando:** se puede superar la Capa K combatiendo contra los 3 enemigos, con daño en ambos sentidos.
 

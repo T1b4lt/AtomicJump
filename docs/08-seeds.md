@@ -79,6 +79,7 @@ Consecuencias:
 | `slot`        | Si un hueco se activa                                | Sí, de forma monótona                                                       |
 | `slot_kind`   | Qué aparece en un hueco activo                       | Sí (calidad)                                                                |
 | `enemy`       | Tipo de enemigo en cada hueco                        | Entropía                                                                    |
+| `drop`        | Lo que suelta un enemigo al morir                    | Sí, de forma monótona (probabilidad)                                        |
 | `loot`        | Contenido de contenedores y recompensas              | Sí (rareza y pool desbloqueado)                                             |
 | `shop`        | Inventario de la tienda                              | Sí (pool desbloqueado)                                                      |
 | `combat`      | Críticos, efectos aleatorios en combate              | — (secuencia local, no garantizada)                                         |
@@ -151,7 +152,7 @@ Implantado en la Fase 3, en `core/rng/`:
 | `local_rng(dominio, clave)` | `RandomNumberGenerator` sembrado con `roll_int`. |
 | `shuffled(lista, dominio, clave)` | Copia barajada (Fisher-Yates) con el `local_rng` de la dirección. `Array.shuffle()` usa el generador global y no se debe usar para generar. |
 
-`WorldRng.GENERATION_VERSION` (hoy **2**: la Fase 5 cambió la generación entera) y `version_label()` (`g2`). `RunState.get_seed_label()` da `K7QX-2MPA · g2`.
+`WorldRng.GENERATION_VERSION` (hoy **3**: la Fase 5 cambió la generación entera y la Fase 6 añadió los huecos de enemigo) y `version_label()` (`g3`). `RunState.get_seed_label()` da `K7QX-2MPA · g3`.
 
 ### Generación de capas (Fase 5)
 
@@ -169,10 +170,23 @@ Implantado en la Fase 3, en `core/rng/`:
 
 La secuencia se calcula en un orden fijo (camino principal y después las ramas de cada bifurcación, izquierda y luego derecha), porque "no repetir tramos" depende de lo que ya se ha usado; las tiradas de huecos y partes opcionales son independientes del orden. Los dominios provisionales del prototipo (`slot_order`, `slot_count`) ya no existen.
 
+### Combate y enemigos (Fase 6)
+
+Los huecos de enemigo siguen las mismas reglas que el resto, pero **qué enemigo** aparece se tira en el dominio `enemy` (el que cambiará la Entropía) en lugar de `slot_kind` (`SlotFiller.kind_domain`). Cada enemigo recibe la dirección de su hueco (`[capa, rama, índice, hueco]`):
+
+| Dirección | Qué decide |
+| --- | --- |
+| `("enemy", "K", rama, i, hueco)` | Qué enemigo ocupa un hueco activo (`pick_weighted` entre los de la capa) |
+| `("ai", "K", rama, i, hueco)` | Su `RandomNumberGenerator` propio (`local_rng`): fase y sentido de la órbita, si es elíptica, dirección inicial de la patrulla |
+| `("drop", "K", rama, i, hueco)` | Si suelta algo al morir (`chance`, monótona) |
+| `("drop", "K", rama, i, hueco, "count")` | Cuántos fotones suelta |
+
+El producto de decaimiento de un enemigo (el electrón del neutrón libre) usa la dirección de su padre más `"decay"`. Así, un mismo enemigo suelta siempre lo mismo y se mueve igual al aparecer, mate el jugador lo que mate antes. El combate en sí (cuándo embiste la alfa, por dónde va cada disparo) depende de lo que haga el jugador y no está garantizado.
+
 ### Tests
 
 - `tests/generation_test.gd`: semillas doradas, misma capa con la misma semilla, independencia de otras tiradas y del orden de los huecos, independencia del generador global, monotonía (subir la probabilidad de los huecos solo añade objetos, sin cambiar los que ya había; añadir un candidato a `pick_weighted` solo cambia los huecos que gana el nuevo) y, para 150 semillas, que el camino principal sigue la plantilla, que cada bifurcación tiene dos ramas de la longitud correcta acabadas en su tramo de recompensa y con recompensas distintas, que **todas** las columnas posibles encajan entrada con salida y no repiten tramo seguido, que la dificultad sigue la curva y que solo se reflejan los tramos que lo permiten.
-- **Semillas doradas:** `tests/golden/generation_g<versión>.json` guarda, para 6 semillas fijas (`GoldenSeeds.SEEDS`), su entero, el camino principal y las ramas de la Capa K (una línea por tramo: id, `~m` si va reflejado, un carácter por hueco —`c` fotón, `k` positrón, `s` pico, `.` vacío— y las partes opcionales que aparecen) y las recompensas de cada rama. Si un cambio de generación es intencionado, se sube `GENERATION_VERSION` y se regenera ejecutando el test con la variable de entorno `UPDATE_GOLDEN_SEEDS=1` (`UPDATE_GOLDEN_SEEDS=1 addons/gdUnit4/runtest.sh --headless --ignoreHeadlessMode -a res://tests/generation_test.gd`). El cambio del fichero se revisa en la PR.
+- **Semillas doradas:** `tests/golden/generation_g<versión>.json` guarda, para 6 semillas fijas (`GoldenSeeds.SEEDS`), su entero, el camino principal y las ramas de la Capa K (una línea por tramo: id, `~m` si va reflejado, un carácter por hueco en orden de nombre —`c` fotón, `k` positrón, `s` pico, `o` electrón orbital, `f` neutrón libre, `a` partícula alfa, `.` vacío— y las partes opcionales que aparecen) y las recompensas de cada rama. Si un cambio de generación es intencionado, se sube `GENERATION_VERSION` y se regenera ejecutando el test con la variable de entorno `UPDATE_GOLDEN_SEEDS=1` (`UPDATE_GOLDEN_SEEDS=1 addons/gdUnit4/runtest.sh --headless --ignoreHeadlessMode -a res://tests/generation_test.gd`). El cambio del fichero se revisa en la PR.
 
 ## Ideas a futuro
 
