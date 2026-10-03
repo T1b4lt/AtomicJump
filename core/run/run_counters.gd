@@ -8,6 +8,9 @@ const CAUSE_KEY_PREFIX: String = "CAUSE_"
 var jumps: int = 0
 var coins_collected: int = 0
 var keys_collected: int = 0
+var coins_spent: int = 0
+## Observables and operators gained.
+var items_collected: int = 0
 var enemies_killed: int = 0
 ## Kills of each enemy type, by EnemyData id.
 var kills_by_enemy: Dictionary[StringName, int] = {}

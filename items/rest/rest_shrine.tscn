@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://items/rest/rest_shrine.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://items/rest/rest_choice.tscn" id="2_choice"]
+[ext_resource type="Texture2D" path="res://assets/generated/icons/rest_heal.svg" id="3_heal"]
+[ext_resource type="Texture2D" path="res://assets/generated/icons/rest_max_hp.svg" id="4_max_hp"]
+
+[node name="RestShrine" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="HealChoice" parent="." instance=ExtResource("2_choice")]
+unique_name_in_owner = true
+position = Vector2(-64, 0)
+icon = ExtResource("3_heal")
+prompt_key = "REST_HEAL"
+
+[node name="MaxHpChoice" parent="." instance=ExtResource("2_choice")]
+unique_name_in_owner = true
+position = Vector2(64, 0)
+icon = ExtResource("4_max_hp")
+prompt_key = "REST_MAX_HP"

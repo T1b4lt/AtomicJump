@@ -1,7 +1,7 @@
 class_name GameOver
 extends CanvasLayer
 ## End-of-run screen. Shows the RunState passed by SceneRouter as "run" (its
-## counters, enemies killed and cause of death), with a button that copies its
+## counters, enemies killed, items and cause of death), with a button that copies its
 ## seed. With "completed" (the top of the layer was
 ## reached) the title says so instead of the Decoherence.
 
@@ -16,6 +16,7 @@ var _seed_code: String = ""
 @onready var _coins_label: Label = %CoinsLabel
 @onready var _keys_label: Label = %KeysLabel
 @onready var _kills_label: Label = %KillsLabel
+@onready var _items_label: Label = %ItemsLabel
 @onready var _cause_label: Label = %CauseLabel
 @onready var _copy_seed_button: Button = %CopySeedButton
 
@@ -38,6 +39,7 @@ func show_run(run: RunState) -> void:
 	_coins_label.text = tr("GAME_OVER_COINS") % run.counters.coins_collected
 	_keys_label.text = tr("GAME_OVER_KEYS") % run.counters.keys_collected
 	_kills_label.text = tr("GAME_OVER_KILLS") % run.counters.enemies_killed
+	_items_label.text = tr("GAME_OVER_ITEMS") % run.counters.items_collected
 	var cause: StringName = run.counters.death_cause
 	_cause_label.visible = not cause.is_empty()
 	if not cause.is_empty():

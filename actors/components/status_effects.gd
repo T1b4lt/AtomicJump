@@ -15,6 +15,8 @@ const TINTS: Dictionary[StringName, Color] = {
 	StatusEffectData.ROOT: Palette.FAMILY_STRONG,
 	StatusEffectData.CHARGED: Palette.FAMILY_ELECTROMAGNETIC,
 	StatusEffectData.LINKED: Palette.FAMILY_QUANTUM,
+	StatusEffectData.OBSERVED: Palette.NEGATIVE,
+	StatusEffectData.STUNNED: Palette.FAMILY_QUANTUM,
 }
 
 @export var health: HealthComponent = null

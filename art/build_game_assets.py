@@ -41,6 +41,18 @@ FREE_NEUTRON_CANVAS = (40, 48)
 ALPHA_PARTICLE_CANVAS = (44, 44)
 ALPHA_LINES_CANVAS = (48, 28)
 PROJECTILE_CANVAS = (64, 16)
+# Recogibles, contenedores, tienda e iconos (Fase 7)
+PICKUP_CANVAS = {1: (28, 28), 5: (36, 36), 10: (48, 48)}
+POSITRON_CANVAS = (28, 28)
+HEAL_CANVAS = (28, 32)
+HEAL_BIG_CANVAS = (44, 44)
+WELL_CANVAS = (76, 52)
+BOUND_ELECTRON_CANVAS = (64, 40)
+PEDESTAL_CANVAS = (48, 56)
+SUPERPOSITION_CANVAS = (52, 44)
+SHOPKEEPER_CANVAS = (64, 64)
+ICON_CANVAS = (64, 72)
+GEM_CANVAS = (10, 10)
 # Capas con tileset exportado (se añaden según llegan al juego)
 TILESET_LAYERS = ("K",)
 
@@ -69,8 +81,26 @@ ASSETS: list[Asset] = [
     ("enemies/alpha_speed_lines.svg", ALPHA_LINES_CANVAS, (lambda: g(E.alpha_speed_lines(), x=ALPHA_LINES_CANVAS[0] / 2)), "enemies.alpha_speed_lines"),
     ("combat/player_projectile.svg", PROJECTILE_CANVAS, W.projectile_sprite, "world.projectile_sprite"),
 ] + [
-    (f"rewards/reward_{reward}.svg", REWARD_ICON_CANVAS, (lambda r=reward: I.reward_icon(r)), f"items.reward_icon('{reward}')")
-    for reward in I.REWARD_GLYPHS
+    (f"pickups/photon_{value}.svg", PICKUP_CANVAS[value], (lambda v=value: I.photon_sprite(v)), f"items.photon_sprite({value})")
+    for value in PICKUP_CANVAS
+] + [
+    ("pickups/positron.svg", POSITRON_CANVAS, I.positron_sprite, "items.positron_sprite"),
+    ("pickups/heal.svg", HEAL_CANVAS, I.heal_sprite, "items.heal_sprite"),
+    ("pickups/heal_big.svg", HEAL_BIG_CANVAS, (lambda: I.heal_sprite(big=True)), "items.heal_sprite(big=True)"),
+    # El pozo se dibuja con su borde superior a 26 px del centro: el lienzo lo baja para que quepa
+    ("containers/quantum_well.svg", WELL_CANVAS, I.quantum_well_sprite, "items.quantum_well_sprite"),
+    ("containers/quantum_well_lit.svg", WELL_CANVAS, (lambda: I.quantum_well_sprite(lit=True)), "items.quantum_well_sprite(lit=True)"),
+    ("containers/bound_electron.svg", BOUND_ELECTRON_CANVAS, I.bound_electron_sprite, "items.bound_electron_sprite"),
+    ("containers/item_pedestal.svg", PEDESTAL_CANVAS, (lambda: g(I.item_pedestal_sprite(), y=20)), "items.item_pedestal_sprite"),
+    ("containers/superposition_wave.svg", SUPERPOSITION_CANVAS, I.superposition_wave_sprite, "items.superposition_wave_sprite"),
+    ("shop/shopkeeper.svg", SHOPKEEPER_CANVAS, I.shopkeeper_sprite, "items.shopkeeper_sprite"),
+    ("icons/icon_gem.svg", GEM_CANVAS, I.icon_gem_sprite, "items.icon_gem_sprite"),
+] + [
+    (f"icons/{icon_id}.svg", ICON_CANVAS, (lambda i=icon_id: I.game_icon(i)), f"items.game_icon('{icon_id}')")
+    for icon_id in I.GAME_ICONS
+] + [
+    (f"rewards/reward_{reward}.svg", REWARD_ICON_CANVAS, (lambda r=reward: I.reward_game_icon(r)), f"items.reward_game_icon('{reward}')")
+    for reward in I.REWARD_GAME_GLYPHS
 ]
 
 # .import mínimo de un SVG nuevo: Godot lo completa al importar y conserva la escala doble

@@ -15,6 +15,14 @@ const LAYER: LayerData = preload("res://data/layers/layer_k.tres")
 const MIRRORED: String = "~m"
 ## One character per slot in the saved slot plans.
 const EMPTY_SLOT: String = "."
+## Character of each object in the saved slot plans (otherwise its first letter).
+const SYMBOLS: Dictionary[StringName, String] = {
+	&"coin_5": "v",
+	&"coin_10": "x",
+	&"chest": "w",
+	&"chest_special": "b",
+	&"choice_pedestal": "p",
+}
 
 
 static func file_path() -> String:
@@ -92,11 +100,15 @@ static func describe(placements: Array, library: ChunkLibrary, rng: WorldRng) ->
 	return lines
 
 
-## One character per slot, in name order: the first letter of its object or EMPTY_SLOT.
+## One character per slot, in name order: the symbol of its object or EMPTY_SLOT.
 static func slots_to_text(
 	slots: Dictionary[StringName, StringName], plan: Dictionary[StringName, StringName]
 ) -> String:
 	var text: String = ""
 	for slot_name: StringName in slots:
-		text += String(plan[slot_name]).left(1) if plan.has(slot_name) else EMPTY_SLOT
+		text += symbol(plan[slot_name]) if plan.has(slot_name) else EMPTY_SLOT
 	return text
+
+
+static func symbol(object_id: StringName) -> String:
+	return SYMBOLS.get(object_id, String(object_id).left(1))

@@ -127,19 +127,411 @@
       ],
       "source": "world.projectile_sprite"
     },
+    "pickups/photon_1.svg": {
+      "size": [
+        28,
+        28
+      ],
+      "source": "items.photon_sprite(1)"
+    },
+    "pickups/photon_5.svg": {
+      "size": [
+        36,
+        36
+      ],
+      "source": "items.photon_sprite(5)"
+    },
+    "pickups/photon_10.svg": {
+      "size": [
+        48,
+        48
+      ],
+      "source": "items.photon_sprite(10)"
+    },
+    "pickups/positron.svg": {
+      "size": [
+        28,
+        28
+      ],
+      "source": "items.positron_sprite"
+    },
+    "pickups/heal.svg": {
+      "size": [
+        28,
+        32
+      ],
+      "source": "items.heal_sprite"
+    },
+    "pickups/heal_big.svg": {
+      "size": [
+        44,
+        44
+      ],
+      "source": "items.heal_sprite(big=True)"
+    },
+    "containers/quantum_well.svg": {
+      "size": [
+        76,
+        52
+      ],
+      "source": "items.quantum_well_sprite"
+    },
+    "containers/quantum_well_lit.svg": {
+      "size": [
+        76,
+        52
+      ],
+      "source": "items.quantum_well_sprite(lit=True)"
+    },
+    "containers/bound_electron.svg": {
+      "size": [
+        64,
+        40
+      ],
+      "source": "items.bound_electron_sprite"
+    },
+    "containers/item_pedestal.svg": {
+      "size": [
+        48,
+        56
+      ],
+      "source": "items.item_pedestal_sprite"
+    },
+    "containers/superposition_wave.svg": {
+      "size": [
+        52,
+        44
+      ],
+      "source": "items.superposition_wave_sprite"
+    },
+    "shop/shopkeeper.svg": {
+      "size": [
+        64,
+        64
+      ],
+      "source": "items.shopkeeper_sprite"
+    },
+    "icons/icon_gem.svg": {
+      "size": [
+        10,
+        10
+      ],
+      "source": "items.icon_gem_sprite"
+    },
+    "icons/effective_mass.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('effective_mass')"
+    },
+    "icons/high_spin.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('high_spin')"
+    },
+    "icons/planck_constant.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('planck_constant')"
+    },
+    "icons/linear_momentum.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('linear_momentum')"
+    },
+    "icons/compton_length.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('compton_length')"
+    },
+    "icons/nuclear_shielding.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('nuclear_shielding')"
+    },
+    "icons/fine_structure.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('fine_structure')"
+    },
+    "icons/mean_free_path.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('mean_free_path')"
+    },
+    "icons/binding_energy.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('binding_energy')"
+    },
+    "icons/bose_einstein.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('bose_einstein')"
+    },
+    "icons/photoelectric_effect.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('photoelectric_effect')"
+    },
+    "icons/compton_effect.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('compton_effect')"
+    },
+    "icons/doppler_effect.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('doppler_effect')"
+    },
+    "icons/standing_wave.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('standing_wave')"
+    },
+    "icons/half_life.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('half_life')"
+    },
+    "icons/vacuum_energy.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('vacuum_energy')"
+    },
+    "icons/zeno_effect.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('zeno_effect')"
+    },
+    "icons/collapse.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('collapse')"
+    },
+    "icons/wave_packet.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('wave_packet')"
+    },
+    "icons/rest_heal.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('rest_heal')"
+    },
+    "icons/rest_max_hp.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('rest_max_hp')"
+    },
+    "icons/shop_reroll.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('shop_reroll')"
+    },
+    "icons/chain_discharge.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('chain_discharge')"
+    },
+    "icons/ionic_jump.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('ionic_jump')"
+    },
+    "icons/voltaic_arc.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('voltaic_arc')"
+    },
+    "icons/faraday_cage.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('faraday_cage')"
+    },
+    "icons/fission.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('fission')"
+    },
+    "icons/confinement.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('confinement')"
+    },
+    "icons/nuclear_charge.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('nuclear_charge')"
+    },
+    "icons/color_charge.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('color_charge')"
+    },
+    "icons/beta_decay.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('beta_decay')"
+    },
+    "icons/ghost_neutrino.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('ghost_neutrino')"
+    },
+    "icons/flavor_change.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('flavor_change')"
+    },
+    "icons/radioactivity.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('radioactivity')"
+    },
+    "icons/time_dilation.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('time_dilation')"
+    },
+    "icons/gravity_assist.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('gravity_assist')"
+    },
+    "icons/gravitational_wave.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('gravitational_wave')"
+    },
+    "icons/orbit.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('orbit')"
+    },
+    "icons/superposition.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('superposition')"
+    },
+    "icons/spin.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('spin')"
+    },
+    "icons/electroweak.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('electroweak')"
+    },
+    "icons/gravitational_lens.svg": {
+      "size": [
+        64,
+        72
+      ],
+      "source": "items.game_icon('gravitational_lens')"
+    },
     "rewards/reward_coins.svg": {
       "size": [
         48,
         48
       ],
-      "source": "items.reward_icon('coins')"
+      "source": "items.reward_game_icon('coins')"
     },
     "rewards/reward_key.svg": {
       "size": [
         48,
         48
       ],
-      "source": "items.reward_icon('key')"
+      "source": "items.reward_game_icon('key')"
+    },
+    "rewards/reward_item.svg": {
+      "size": [
+        48,
+        48
+      ],
+      "source": "items.reward_game_icon('item')"
     }
   }
 }

@@ -16,6 +16,9 @@ size = Vector2(30, 38)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hurt"]
 size = Vector2(24, 32)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_interact"]
+radius = 40.0
+
 [node name="Player" type="CharacterBody2D"]
 collision_layer = 2
 collision_mask = 129
@@ -36,6 +39,15 @@ script = ExtResource("8_hurt")
 [node name="CollisionShape" type="CollisionShape2D" parent="Hurtbox"]
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_hurt")
+
+[node name="InteractionArea" type="Area2D" parent="."]
+unique_name_in_owner = true
+collision_layer = 0
+collision_mask = 8
+monitorable = false
+
+[node name="CollisionShape" type="CollisionShape2D" parent="InteractionArea"]
+shape = SubResource("CircleShape2D_interact")
 
 [node name="Shooter" type="Node2D" parent="."]
 unique_name_in_owner = true

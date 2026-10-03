@@ -12,6 +12,7 @@ signal entered
 const REWARD_ICONS: Dictionary[StringName, Texture2D] = {
 	LayerData.REWARD_COINS: preload("res://assets/generated/rewards/reward_coins.svg"),
 	LayerData.REWARD_KEY: preload("res://assets/generated/rewards/reward_key.svg"),
+	LayerData.REWARD_ITEM: preload("res://assets/generated/rewards/reward_item.svg"),
 }
 ## Thickness of a fork's ceiling: the gate fills it when it collapses.
 const CEILING_THICKNESS: float = Chunk.TILE * 2.0

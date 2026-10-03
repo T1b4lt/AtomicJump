@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://items/effects/item_effect.gd" id="1_6spio"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_rjlww"]
+[ext_resource type="Script" path="res://items/effects/stat_effect.gd" id="3_vi55o"]
+[ext_resource type="Texture2D" path="res://assets/generated/icons/planck_constant.svg" id="4_y44ip"]
+[ext_resource type="Script" path="res://items/item_data.gd" id="5_0rhjs"]
+
+[sub_resource type="Resource" id="Resource_lcd5g"]
+script = ExtResource("2_rjlww")
+stat = &"max_hp"
+type = 1
+value = 0.05
+
+[sub_resource type="Resource" id="Resource_30vw2"]
+script = ExtResource("2_rjlww")
+stat = &"speed"
+type = 1
+value = 0.05
+
+[sub_resource type="Resource" id="Resource_16xb0"]
+script = ExtResource("2_rjlww")
+stat = &"jump_force"
+type = 1
+value = 0.05
+
+[sub_resource type="Resource" id="Resource_ju2xl"]
+script = ExtResource("2_rjlww")
+stat = &"attack_power"
+type = 1
+value = 0.05
+
+[sub_resource type="Resource" id="Resource_gca7l"]
+script = ExtResource("2_rjlww")
+stat = &"attack_rate"
+type = 1
+value = 0.05
+
+[sub_resource type="Resource" id="Resource_fr1p8"]
+script = ExtResource("2_rjlww")
+stat = &"attack_range"
+type = 1
+value = 0.05
+
+[sub_resource type="Resource" id="Resource_dsstv"]
+script = ExtResource("3_vi55o")
+modifiers = Array[ExtResource("2_rjlww")]([SubResource("Resource_lcd5g"), SubResource("Resource_30vw2"), SubResource("Resource_16xb0"), SubResource("Resource_ju2xl"), SubResource("Resource_gca7l"), SubResource("Resource_fr1p8")])
+
+[resource]
+script = ExtResource("5_0rhjs")
+id = &"planck_constant"
+pools = Array[StringName]([&"pool_container", &"pool_shop"])
+tags = Array[StringName]([&"quantum"])
+icon = ExtResource("4_y44ip")
+effects = Array[ExtResource("1_6spio")]([SubResource("Resource_dsstv")])

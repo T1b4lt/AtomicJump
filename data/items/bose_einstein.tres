@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://items/effects/item_effect.gd" id="1_t2ktp"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_kbtak"]
+[ext_resource type="Script" path="res://items/effects/stat_effect.gd" id="3_s1tmu"]
+[ext_resource type="Texture2D" path="res://assets/generated/icons/bose_einstein.svg" id="4_gpq1h"]
+[ext_resource type="Script" path="res://items/item_data.gd" id="5_8qimk"]
+
+[sub_resource type="Resource" id="Resource_tldpb"]
+script = ExtResource("2_kbtak")
+stat = &"pickup_radius"
+type = 1
+value = 2.0
+
+[sub_resource type="Resource" id="Resource_2waqq"]
+script = ExtResource("3_s1tmu")
+modifiers = Array[ExtResource("2_kbtak")]([SubResource("Resource_tldpb")])
+
+[resource]
+script = ExtResource("5_8qimk")
+id = &"bose_einstein"
+pools = Array[StringName]([&"pool_container", &"pool_shop"])
+tags = Array[StringName]([&"photon"])
+icon = ExtResource("4_gpq1h")
+effects = Array[ExtResource("1_t2ktp")]([SubResource("Resource_2waqq")])

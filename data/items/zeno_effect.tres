@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://items/effects/item_effect.gd" id="1_86cs2"]
+[ext_resource type="Script" path="res://items/effects/screen_status_effect.gd" id="2_dvpw2"]
+[ext_resource type="Resource" path="res://data/statuses/status_observed.tres" id="3_x8llw"]
+[ext_resource type="Texture2D" path="res://assets/generated/icons/zeno_effect.svg" id="4_v418i"]
+[ext_resource type="Script" path="res://items/item_data.gd" id="5_yjkku"]
+
+[sub_resource type="Resource" id="Resource_0b6by"]
+script = ExtResource("2_dvpw2")
+status = ExtResource("3_x8llw")
+destroy_enemy_projectiles = false
+
+[resource]
+script = ExtResource("5_yjkku")
+id = &"zeno_effect"
+kind = 1
+rarity = 1
+pools = Array[StringName]([&"pool_shop", &"pool_special"])
+icon = ExtResource("4_v418i")
+effects = Array[ExtResource("1_86cs2")]([SubResource("Resource_0b6by")])
+charge_chunks = 2

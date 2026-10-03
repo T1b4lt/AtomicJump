@@ -10,6 +10,9 @@ extends Hitbox
 ## The projectile stopped: `position` is where (on a wall or on a target).
 signal impacted(position: Vector2)
 
+## Group of the enemies' projectiles (the Colapso operator destroys them).
+const ENEMY_GROUP: StringName = &"enemy_projectiles"
+
 ## Seconds it takes to fade out at the end of its range.
 const FADE_TIME: float = 0.08
 ## Brightness multiplier (HDR) of the sprite, so it glows.
@@ -20,6 +23,8 @@ var velocity: Vector2 = Vector2.ZERO
 ## Distance flown so far, in px.
 var travelled: float = 0.0
 var _done: bool = false
+## Sideways offset of the wave from the straight path.
+var _wave_offset: Vector2 = Vector2.ZERO
 
 @onready var _sprite: Sprite2D = %Sprite
 
@@ -28,6 +33,8 @@ func _ready() -> void:
 	super()
 	continuous = false
 	set_physics_process(true)
+	if spec != null and spec.team == ProjectileSpec.Team.ENEMY:
+		add_to_group(ENEMY_GROUP)
 	hit_landed.connect(_on_hit_landed)
 	_sprite.self_modulate = Color(GLOW, GLOW, GLOW)
 
@@ -64,7 +71,10 @@ func launch(
 func _physics_process(delta: float) -> void:
 	if _done or spec == null:
 		return
-	var motion: Vector2 = velocity * delta
+	var step: Vector2 = velocity * delta
+	var previous_offset: Vector2 = _wave_offset
+	_wave_offset = wave_offset_at(travelled + step.length())
+	var motion: Vector2 = step + _wave_offset - previous_offset
 	var wall: Dictionary = _cast_to_wall(motion)
 	if not wall.is_empty():
 		var hit_point: Vector2 = wall[&"position"]
@@ -72,7 +82,7 @@ func _physics_process(delta: float) -> void:
 		_impact(-velocity.normalized())
 		return
 	global_position += motion
-	travelled += motion.length()
+	travelled += step.length()
 	if travelled >= spec.attack_range:
 		_fade_out()
 
@@ -80,6 +90,21 @@ func _physics_process(delta: float) -> void:
 ## Whether it already stopped (impact or end of range).
 func is_done() -> bool:
 	return _done
+
+
+## Sideways offset of a wavy path after flying `distance` px (ZERO if straight).
+func wave_offset_at(distance: float) -> Vector2:
+	if spec == null or spec.wave_amplitude <= 0.0 or velocity == Vector2.ZERO:
+		return Vector2.ZERO
+	var seconds: float = distance / velocity.length()
+	var side: Vector2 = velocity.normalized().orthogonal()
+	return side * spec.wave_amplitude * sin(TAU * spec.wave_frequency * seconds)
+
+
+## Stops it at once with its impact (the Colapso operator).
+func destroy() -> void:
+	if not _done:
+		_impact(-velocity.normalized())
 
 
 ## Result of a ray from the projectile along `motion` against walls and solid

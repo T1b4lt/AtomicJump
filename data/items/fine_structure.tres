@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://items/effects/item_effect.gd" id="1_6f861"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_yhcsi"]
+[ext_resource type="Script" path="res://items/effects/stat_effect.gd" id="3_8ohym"]
+[ext_resource type="Texture2D" path="res://assets/generated/icons/fine_structure.svg" id="4_itt1v"]
+[ext_resource type="Script" path="res://items/item_data.gd" id="5_cx3ql"]
+
+[sub_resource type="Resource" id="Resource_0xjvo"]
+script = ExtResource("2_yhcsi")
+stat = &"attack_rate"
+value = 0.5
+
+[sub_resource type="Resource" id="Resource_bnu31"]
+script = ExtResource("3_8ohym")
+modifiers = Array[ExtResource("2_yhcsi")]([SubResource("Resource_0xjvo")])
+
+[resource]
+script = ExtResource("5_cx3ql")
+id = &"fine_structure"
+pools = Array[StringName]([&"pool_container", &"pool_shop"])
+tags = Array[StringName]([&"photon"])
+icon = ExtResource("4_itt1v")
+effects = Array[ExtResource("1_6f861")]([SubResource("Resource_bnu31")])

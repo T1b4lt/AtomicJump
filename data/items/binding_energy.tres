@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://items/effects/item_effect.gd" id="1_in0fn"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_o3obt"]
+[ext_resource type="Script" path="res://items/effects/stat_effect.gd" id="3_r3x4v"]
+[ext_resource type="Texture2D" path="res://assets/generated/icons/binding_energy.svg" id="4_hxne0"]
+[ext_resource type="Script" path="res://items/item_data.gd" id="5_s0ajl"]
+
+[sub_resource type="Resource" id="Resource_ruoeo"]
+script = ExtResource("2_o3obt")
+stat = &"attack_power"
+value = 2.0
+
+[sub_resource type="Resource" id="Resource_wfpim"]
+script = ExtResource("3_r3x4v")
+modifiers = Array[ExtResource("2_o3obt")]([SubResource("Resource_ruoeo")])
+
+[resource]
+script = ExtResource("5_s0ajl")
+id = &"binding_energy"
+rarity = 1
+pools = Array[StringName]([&"pool_container", &"pool_shop", &"pool_special"])
+tags = Array[StringName]([&"mass"])
+icon = ExtResource("4_hxne0")
+effects = Array[ExtResource("1_in0fn")]([SubResource("Resource_wfpim")])

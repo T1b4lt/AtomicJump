@@ -46,6 +46,7 @@ La **Decoherencia** es una onda que asciende desde el Núcleo y colapsa todo lo 
 | Frecuencia        | `attack_rate`  | Disparos por segundo                                                |
 | Alcance           | `attack_range` | Distancia que recorren los proyectiles                              |
 | Apantallamiento   | `defense`      | Reducción de daño recibido (%)                                      |
+| Atracción         | `pickup_radius`| Radio al que los fotones vuelan hacia Wilas (desde la Fase 7)       |
 | Túnel             | `dash`         | Esquiva corta con invulnerabilidad (ver [04-jugador](04-player.md)) |
 
 ### Economía
@@ -60,6 +61,7 @@ La **Decoherencia** es una onda que asciende desde el Núcleo y colapsa todo lo 
 | Cuanto de energía | `heal_pickup`        | Recupera coherencia                                                             | —                                                             |
 | Intercambio       | `shop`               | Tienda de la partida                                                            | Partículas de intercambio (piones)                            |
 | Pión              | `shopkeeper`         | Tendero                                                                         | El pión media la fuerza entre nucleones: "el que intercambia" |
+| Estado fundamental | `chunk_rest`        | Tramo de descanso: curar o subir la coherencia máxima                           | El estado de menor energía                                    |
 | Quark             | `meta_currency`      | Moneda permanente común                                                         | Constituyentes del núcleo: vuelven al Núcleo contigo          |
 | Bosón de Higgs    | `rare_meta_currency` | Moneda permanente rara                                                          | Da "masa": desbloqueos grandes                                |
 
@@ -92,6 +94,8 @@ La **Decoherencia** es una onda que asciende desde el Núcleo y colapsa todo lo 
 | Dilatado    | `status_slow`    | Ralentizado                                    |
 | Confinado   | `status_root`    | Inmovilizado                                   |
 | Entrelazado | `status_linked`  | Recibe una copia del daño que reciba su pareja |
+| Observado   | `status_observed`| Congelado por el operador Efecto Zenón         |
+| Aturdido    | `status_stunned` | Inmovilizado un instante por el operador Colapso |
 
 ### Meta y Núcleo
 

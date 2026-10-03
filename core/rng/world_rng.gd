@@ -10,7 +10,7 @@ extends RefCounted
 
 ## Bumped whenever a change alters what an existing seed generates (new chunks,
 ## spawn tables, item pools…). Shown next to the seed as "K7QX-2MPA · g1".
-const GENERATION_VERSION: int = 3
+const GENERATION_VERSION: int = 4
 
 var seed_value: int
 ## Seed mixed once, so close seeds give unrelated rolls.

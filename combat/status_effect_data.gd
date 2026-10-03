@@ -12,6 +12,9 @@ const SLOW: StringName = &"status_slow"
 const ROOT: StringName = &"status_root"
 const CHARGED: StringName = &"status_charged"
 const LINKED: StringName = &"status_linked"
+## Frozen by the Efecto Zenón operator and stunned by Colapso.
+const OBSERVED: StringName = &"status_observed"
+const STUNNED: StringName = &"status_stunned"
 
 @export var id: StringName = &""
 @export var name_key: String = ""

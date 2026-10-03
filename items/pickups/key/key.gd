@@ -1,18 +1,10 @@
 class_name KeyPickup
-extends Area2D
-## Positron pickup: adds its value to the run when the player touches it.
+extends Pickup
+## Positron pickup: adds its value to the run (through Events.key_collected).
 
-## Keys added to the run.
+## Positrons added to the run.
 @export var value: int = 1
 
-@onready var _sprite: AnimatedSprite2D = $AnimatedSprite2D
 
-
-func _ready() -> void:
-	_sprite.play(&"idle")
-
-
-func _on_body_entered(body: Node2D) -> void:
-	if body is Player:
-		Events.key_collected.emit(value)
-		queue_free()
+func _apply(_player: Player) -> void:
+	Events.key_collected.emit(value)

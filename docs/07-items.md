@@ -158,3 +158,67 @@ Aparecen solo si tienes los requisitos. Son la recompensa de comprometerse con d
 | Cuanto de energía                       | `heal_pickup`     | +20 coherencia               |
 | Cuanto grande                           | `heal_pickup_big` | +50 coherencia               |
 | Quark                                   | `meta_pickup`     | +1 quark (moneda permanente) |
+
+## Implementación (Fase 7)
+
+### Datos y efectos
+
+- **`ItemData`** (`items/item_data.gd`, recursos en `data/items/`): `id`, tipo (`PASSIVE` observable / `ACTIVE` operador), rareza, pools, etiquetas, icono, efectos, peso dentro de su rareza, si es apilable y, en los operadores, `charge_chunks`. El nombre y la descripción son las claves `ITEM_<ID>_NAME` e `ITEM_<ID>_DESC`.
+- **`ItemCatalog`** (`data/items/item_catalog.tres`): todos los objetos y transformaciones. `get_pool(pool, tipo)` los devuelve **ordenados por id**, así que el orden de la lista nunca cambia una tirada. `RunManager.CATALOG` lo pasa a cada `RunState`.
+- **Efectos** (`items/effects/`), recursos que responden a _hooks_. `Build` duplica cada plantilla al aplicarla, así que un efecto guarda su propio estado:
+
+| Efecto | Hook | Qué hace |
+| --- | --- | --- |
+| `StatEffect` | al ganarlo / perderlo | Añade sus `StatModifier` con el objeto como origen |
+| `StillStatEffect` | cada fotograma | Sus modificadores solo cuentan con Wilas quieta en el suelo |
+| `ProjectileModifierEffect` | al disparar | Multiplica el daño, añade perforación, estados y ondulación al `ProjectileSpec` |
+| `DirectionalDamageEffect` | al disparar | Más daño si Wilas se mueve (≥ 60 px/s) en la dirección del disparo |
+| `CoinBurstEffect` | al recoger fotones | Cada N fotones, una ráfaga de proyectiles en todas direcciones |
+| `HitDropEffect` | al impactar | Probabilidad de soltar un recogible donde impacta (tirada de `combat`) |
+| `ChunkSpawnEffect` | al entrar en un tramo nuevo | Hace aparecer un recogible junto a Wilas |
+| `ScreenStatusEffect` | al usar el operador | Aplica un estado a los enemigos en pantalla y puede destruir los proyectiles enemigos |
+
+- **`Build`** (`items/build.gd`, en `RunState.build`): observables, operador con su carga y transformaciones. Aplica los efectos y les pasa los _hooks_: el `Player` lo llama al disparar (`Shooter.spec_modifier`), cuando sus proyectiles impactan y en cada fotograma; el `RunState`, al recoger fotones y al entrar en un tramo. Los efectos que hacen aparecer cosas usan `Build.spawner`, que el `Level` conecta al tramo correspondiente.
+
+### Observables de la Fase 7
+
+Además de los de la tabla de ejemplos, se añaden tres de estadística simple (Constante de estructura fina, Recorrido libre medio y Energía de enlace).
+
+| Observable | Código | Rareza | Pools | Etiquetas | Efecto |
+| --- | --- | --- | --- | --- | --- |
+| Masa efectiva | `effective_mass` | Fundamental | contenedor, tienda | `mass` | +25 coherencia máxima |
+| Espín alto | `high_spin` | Excitado | contenedor, tienda, especial | `spin` | +1 salto cuántico |
+| Constante de Planck | `planck_constant` | Fundamental | contenedor, tienda | `quantum` | +5 % a coherencia máxima, momento, impulso, carga, frecuencia y alcance |
+| Momento lineal | `linear_momentum` | Fundamental | contenedor, tienda | `mass` | +40 momento |
+| Longitud de Compton | `compton_length` | Excitado | contenedor, tienda | `wave` | −15 % longitud de onda |
+| Apantallamiento nuclear | `nuclear_shielding` | Excitado | contenedor, tienda, especial | `mass` | +10 % apantallamiento |
+| Constante de estructura fina | `fine_structure` | Fundamental | contenedor, tienda | `photon` | +0,5 frecuencia |
+| Recorrido libre medio | `mean_free_path` | Fundamental | contenedor, tienda | `wave` | +150 alcance |
+| Energía de enlace | `binding_energy` | Excitado | contenedor, tienda, especial | `mass` | +2 carga |
+| Condensado de Bose-Einstein | `bose_einstein` | Fundamental | contenedor, tienda | `photon` | Radio de atracción ×3 |
+| Efecto fotoeléctrico | `photoelectric_effect` | Excitado | contenedor, tienda, especial | `photon` | Cada 10 fotones, ráfaga de 8 proyectiles |
+| Efecto Compton | `compton_effect` | Fundamental | contenedor, tienda | `photon`, `wave` | 10 % de soltar 1 fotón al impactar |
+| Efecto Doppler | `doppler_effect` | Excitado | contenedor, tienda, especial | `wave` | +30 % de daño en la dirección del movimiento |
+| Onda estacionaria | `standing_wave` | Excitado | contenedor, tienda, especial | `wave` | +50 % frecuencia quieta en el suelo |
+| Vida media | `half_life` | Excitado | contenedor, tienda, especial | `decay` | Los impactos aplican Inestable |
+| Energía del vacío | `vacuum_energy` | Resonante | tienda, especial | `quantum` | Un cuanto de energía al entrar en cada tramo nuevo |
+
+### Transformación: Paquete de ondas
+
+`TransformationData` (`data/transformations/`): al llevar **3 observables con la etiqueta `wave`** se gana una vez **Paquete de ondas**: los proyectiles ondulan (6 px a 6 ciclos por segundo, con el rayo de las paredes siguiendo la trayectoria real) y atraviesan a 1 enemigo más. El HUD lo anuncia como un objeto. Las de `mass` y `photon` llegarán con más contenido (Fase 12).
+
+### Operadores
+
+- Wilas lleva **uno**: coger otro lo sustituye y deja el antiguo en el pedestal (o en uno nuevo, si se compró).
+- **Recarga por tramos:** cada tramo **nuevo** al que sube Wilas (más alto que el más alto alcanzado) suma una carga hasta `charge_chunks`. Un operador recién cogido llega **cargado**. Se usa con **E** / LB solo si está cargado y deja la carga a 0.
+- **Efecto Zenón** (`zeno_effect`, 2 tramos): aplica Observado (`status_observed`, inmovilizado 3 s, tinte cian) a los enemigos en pantalla. **Colapso** (`collapse`, 3 tramos): destruye los proyectiles enemigos en pantalla (grupo `enemy_projectiles`) y aplica Aturdido (`status_stunned`, 1 s).
+
+### Pools, rarezas y Amplitud
+
+- `LootRoller` hace las tiradas de objetos de una partida. Primero la **rareza** (dominio `rarity`), comparada desde la más alta con la probabilidad de obtener **al menos** esa rareza: `1 − (1 − base)^(1 + Amplitud / 50)`, con base 35 % (Excitado o mejor), 8 % (Resonante o mejor) y 1 % (Unificado). Con la misma tirada, más Amplitud da la misma rareza o una mejor (con 100 de Amplitud, Excitado o mejor sube al 72,5 %).
+- Después, el objeto: _rendezvous hashing_ (`pick_weighted`) entre los de esa rareza del pool, sin los que Wilas ya lleva (salvo los apilables) ni los excluidos (los otros objetos de la misma tienda o Superposición). Si no queda ninguno de esa rareza se prueban las inferiores y luego las superiores.
+- Pools usados hoy: `pool_container` (pozos, Superposiciones, recompensas de rama), `pool_special` (electrón ligado) y `pool_shop`. El bloqueo de objetos hasta desbloquearlos en el Acelerador llega en la Fase 10.
+
+### Sala de pruebas de objetos
+
+`world/debug/item_test_room.tscn` (F6): todos los recogibles, un pozo cuántico, un electrón ligado, una Superposición y un pedestal sobre un suelo, con el HUD y la pantalla de build. **C** da fotones y un positrón, **I** / **O** ponen en el pedestal el siguiente observable / operador del catálogo, **H** quita coherencia, **1** hace aparecer un neutrón libre (para probar los operadores) y **R** reconstruye la sala con otra semilla.

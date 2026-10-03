@@ -1,0 +1,291 @@
+{
+  "K7QX-2MPA": {
+    "code": "K7QX-2MPA",
+    "value": "2384594225281386139",
+    "main": [
+      "k_layer_start c.c.cc.",
+      "k_shaft ..of.c...c..",
+      "k_steps~m o.fss..cc..",
+      "k_fork~m .c.chc.",
+      "k_pillars~m .oa......cc.",
+      "k_spikes_run~m w....sss.c...c",
+      "k_shop",
+      "k_ladder~m ..f..c....ccc",
+      "k_zigzag~m .o...h....c",
+      "k_fork~m f.ch.cv",
+      "k_platform_1 ..f.....hcc...",
+      "k_steps ofas....cc.",
+      "k_rest~m",
+      "k_platform_2~m .o.s.....c.c..",
+      "k_platform_1~m .of....c......",
+      "k_boss_placeholder"
+    ],
+    "branches": {
+      "1/L": [
+        "k_pillars~m ..f........c",
+        "k_reward_arch~m"
+      ],
+      "1/R": [
+        "k_ladder ..fc..c.c....",
+        "k_platform_2~m pof.....h..xh.",
+        "k_reward_well"
+      ],
+      "2/L": [
+        "k_spikes_run~m .o.f....cc.... optional_a",
+        "k_pillars~m ..f.c......k",
+        "k_reward_well"
+      ],
+      "2/R": [
+        "k_steps~m o.assc...c.",
+        "k_reward_arch"
+      ]
+    },
+    "rewards": {
+      "1/L": "reward_item",
+      "1/R": "reward_coins",
+      "2/L": "reward_key",
+      "2/R": "reward_coins"
+    }
+  },
+  "0000-0000": {
+    "code": "0000-0000",
+    "value": "2635832728576993118",
+    "main": [
+      "k_layer_start c.ckc..",
+      "k_ladder~m w.a.c......c.",
+      "k_steps~m of.sscc.c..",
+      "k_fork .c.c...",
+      "k_pillars~m w.f.........",
+      "k_spikes_run .offss.s.vc.c.",
+      "k_shop~m",
+      "k_platform_1 ...s..c.vcv...",
+      "k_pillars~m ..as..c..c.c",
+      "k_fork~m f....c.",
+      "k_shaft woo.c.c.hcc. optional_b",
+      "k_steps of...c...c.",
+      "k_rest~m",
+      "k_platform_2 .o.s.c.c.cc...",
+      "k_platform_1 .of.vc.c...v..",
+      "k_boss_placeholder"
+    ],
+    "branches": {
+      "1/L": [
+        "k_ladder wof...cc.c.c.",
+        "k_zigzag~m pof.cc.ccc.",
+        "k_reward_arch~m"
+      ],
+      "1/R": [
+        "k_pillars .oa..c..cc.c",
+        "k_reward_well"
+      ],
+      "2/L": [
+        "k_spikes_run~m .offss.sc....c",
+        "k_steps~m o.a......c.",
+        "k_reward_arch~m"
+      ],
+      "2/R": [
+        "k_ladder~m .of...cx.v...",
+        "k_platform_2~m .o.s..cc......",
+        "k_reward_well"
+      ]
+    },
+    "rewards": {
+      "1/L": "reward_coins",
+      "1/R": "reward_key",
+      "2/L": "reward_coins",
+      "2/R": "reward_item"
+    }
+  },
+  "ZZZZ-ZZZZ": {
+    "code": "ZZZZ-ZZZZ",
+    "value": "4091564173431495122",
+    "main": [
+      "k_layer_start ....h..",
+      "k_platform_2~m pofs.......cc.",
+      "k_pillars~m ..fs....hchc",
+      "k_fork~m ak.c..h",
+      "k_spikes_run ..f.s.s..ccv.c optional_a",
+      "k_ladder .o..k..c..c.c",
+      "k_shop",
+      "k_steps~m o.f.....xc.",
+      "k_pillars .o...c.cc.kc",
+      "k_fork ...cc.c",
+      "k_zigzag ....c.c.... optional_a",
+      "k_platform_1~m ..fscck.c..h..",
+      "k_rest",
+      "k_shaft poof..c...cc optional_b",
+      "k_spikes_run~m ...f.s.scv...h",
+      "k_boss_placeholder"
+    ],
+    "branches": {
+      "1/L": [
+        "k_ladder~m .o.c.....ccc.",
+        "k_shaft~m .....h....c.",
+        "k_reward_arch~m"
+      ],
+      "1/R": [
+        "k_steps~m o..s.c.cckh",
+        "k_reward_well~m"
+      ],
+      "2/L": [
+        "k_pillars p.fs..cc...h",
+        "k_zigzag .o.....k.cc",
+        "k_reward_arch~m"
+      ],
+      "2/R": [
+        "k_steps~m o.fssc.....",
+        "k_spikes_run .o.f..s....... optional_a",
+        "k_reward_well~m"
+      ]
+    },
+    "rewards": {
+      "1/L": "reward_key",
+      "1/R": "reward_item",
+      "2/L": "reward_item",
+      "2/R": "reward_key"
+    }
+  },
+  "hola mundo": {
+    "code": "HOLAMUNDO",
+    "value": "-3331380914032591404",
+    "main": [
+      "k_layer_start .c..cvc",
+      "k_ladder .o.c.....k...",
+      "k_zigzag .o..c...... optional_a",
+      "k_fork~m f..h...",
+      "k_steps~m off.s..h.cc",
+      "k_pillars w..sv.h.....",
+      "k_shop",
+      "k_platform_1~m .of.ccc....vk.",
+      "k_spikes_run~m woffs..s......",
+      "k_fork~m ...vxc.",
+      "k_platform_2 w.fs..c.....vc",
+      "k_pillars~m .oasc.cc.chc",
+      "k_rest",
+      "k_shaft~m ...acc...c.c",
+      "k_platform_1 .o...ccc.ccc.c",
+      "k_boss_placeholder"
+    ],
+    "branches": {
+      "1/L": [
+        "k_steps offs.......",
+        "k_reward_well"
+      ],
+      "1/R": [
+        "k_ladder~m ...kkcch....c",
+        "k_reward_arch~m"
+      ],
+      "2/L": [
+        "k_spikes_run~m ....ss.....kc. optional_a",
+        "k_reward_arch~m"
+      ],
+      "2/R": [
+        "k_platform_1 b.fsc.....cc.c",
+        "k_reward_well~m"
+      ]
+    },
+    "rewards": {
+      "1/L": "reward_key",
+      "1/R": "reward_coins",
+      "2/L": "reward_coins",
+      "2/R": "reward_key"
+    }
+  },
+  "AtomicJump": {
+    "code": "ATOMICJUMP",
+    "value": "6952612581349805965",
+    "main": [
+      "k_layer_start c..c.cc",
+      "k_zigzag w.f..c.cc..",
+      "k_ladder~m .oa.c.cc.cc.c",
+      "k_fork f.xc...",
+      "k_spikes_run w.ff..s......c",
+      "k_pillars~m ......c.c..c",
+      "k_shop~m",
+      "k_platform_2 ..as.c...ccc..",
+      "k_platform_1 bofsc.h.c.c...",
+      "k_fork~m ....kcc",
+      "k_steps .ffsschcc.c",
+      "k_ladder .of.c....vc..",
+      "k_rest",
+      "k_shaft .o.f.c.c.c.. optional_b",
+      "k_platform_1~m ..f...c..c.cc.",
+      "k_boss_placeholder"
+    ],
+    "branches": {
+      "1/L": [
+        "k_pillars~m w.f.h....c..",
+        "k_zigzag~m ....cc.v.kc",
+        "k_reward_well"
+      ],
+      "1/R": [
+        "k_pillars w.a........c",
+        "k_platform_2~m .o.s.ccc......",
+        "k_reward_arch"
+      ],
+      "2/L": [
+        "k_spikes_run~m poa.ssssc.cc.c optional_a",
+        "k_reward_well~m"
+      ],
+      "2/R": [
+        "k_platform_1 .oasc.c..cc...",
+        "k_reward_arch~m"
+      ]
+    },
+    "rewards": {
+      "1/L": "reward_item",
+      "1/R": "reward_coins",
+      "2/L": "reward_coins",
+      "2/R": "reward_key"
+    }
+  },
+  "ñandú 42": {
+    "code": "ÑANDÚ42",
+    "value": "-792137675252634621",
+    "main": [
+      "k_layer_start c..c...",
+      "k_platform_2 .o.s...c...cch",
+      "k_ladder~m .o...c.....h.",
+      "k_fork f......",
+      "k_spikes_run ..a..s..c....v optional_a",
+      "k_platform_1~m wo..c....c..cc",
+      "k_shop",
+      "k_steps~m o.f...cccc.",
+      "k_pillars~m ....c.x.....",
+      "k_fork~m .c..vvc",
+      "k_zigzag .of...cc... optional_a",
+      "k_spikes_run .oafs..sc.hcc. optional_a",
+      "k_rest~m",
+      "k_shaft .oo...c.chh. optional_b",
+      "k_platform_1~m w..scc.h..cc..",
+      "k_boss_placeholder"
+    ],
+    "branches": {
+      "1/L": [
+        "k_ladder b.f..v..cvc..",
+        "k_steps .a..s....k.",
+        "k_reward_well"
+      ],
+      "1/R": [
+        "k_pillars~m .o.s..cc....",
+        "k_platform_2~m woa.c..ck.cc..",
+        "k_reward_arch"
+      ],
+      "2/L": [
+        "k_spikes_run~m w..fs..sck.ck. optional_a",
+        "k_reward_arch~m"
+      ],
+      "2/R": [
+        "k_steps~m o...s.c.c.c",
+        "k_pillars poa.v...c..k",
+        "k_reward_well"
+      ]
+    },
+    "rewards": {
+      "1/L": "reward_item",
+      "1/R": "reward_coins",
+      "2/L": "reward_key",
+      "2/R": "reward_coins"
+    }
+  }
+}

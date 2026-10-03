@@ -3,9 +3,10 @@ extends CanvasLayer
 ## Pauses and resumes the level. Its process_mode is Always (set in the scene),
 ## so it keeps receiving the pause action while the tree is paused.
 
-# Signals
 signal menu_button_pressed
 signal exit_button_pressed
+signal paused
+signal resumed
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -21,12 +22,14 @@ func pause() -> void:
 	# Pause everything in the scene and show the menu
 	get_tree().paused = true
 	show()
+	paused.emit()
 
 
 func resume() -> void:
 	# Hide the menu and resume activity in the scene
 	hide()
 	get_tree().paused = false
+	resumed.emit()
 
 
 func _on_resume_button_pressed() -> void:

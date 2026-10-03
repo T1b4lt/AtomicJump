@@ -151,16 +151,16 @@ La **v1.0** llegará después de la 0.99.0. Antes faltan cosas que quedan **fuer
 
 **Objetivo:** divisas, contenedores, tienda y observables según [06-economía](docs/06-economy.md) y [07-objetos](docs/07-items.md).
 
-- [ ] Recogibles: `coin` (1/5/10) con atracción, `key` y `heal_pickup`.
-- [ ] Contenedores: `chest` común (paga fotones), `chest` especial (positrón), `choice_pedestal`, `item_pedestal`.
-- [ ] `ItemData` y sistema de **efectos** (stat, on-hit, on-pickup, projectile modifier…).
-- [ ] Pools, rarezas y efecto de la Amplitud, con las reglas de monotonía.
-- [ ] ~15 observables (incluidos los de estadísticas simples y 5 con efectos) y 1 transformación por etiqueta.
-- [ ] Operadores: ranura, recarga por tramos y 2 operadores (Efecto Zenón, Colapso).
-- [ ] Tramo de Intercambio con el Pión: inventario por semilla, compra y reroll.
-- [ ] Tramo de Estado fundamental: elegir entre curar el 40 % o +10 de coherencia máxima.
-- [ ] Pantalla de build (Tab / pausa) con desglose de estadísticas.
-- [ ] **Arte:** recogibles, contenedores y sistema de iconos (marco + glifo + joya) con los iconos de esta fase y de la siguiente.
+- [x] Recogibles: `coin` (1/5/10) con atracción, `key` y `heal_pickup`.
+- [x] Contenedores: `chest` común (paga fotones), `chest` especial (positrón), `choice_pedestal`, `item_pedestal`.
+- [x] `ItemData` y sistema de **efectos** (stat, on-hit, on-pickup, projectile modifier…).
+- [x] Pools, rarezas y efecto de la Amplitud, con las reglas de monotonía.
+- [x] ~15 observables (incluidos los de estadísticas simples y 5 con efectos) y 1 transformación por etiqueta.
+- [x] Operadores: ranura, recarga por tramos y 2 operadores (Efecto Zenón, Colapso).
+- [x] Tramo de Intercambio con el Pión: inventario por semilla, compra y reroll.
+- [x] Tramo de Estado fundamental: elegir entre curar el 40 % o +10 de coherencia máxima.
+- [x] Pantalla de build (Tab / pausa) con desglose de estadísticas.
+- [x] **Arte:** recogibles, contenedores y sistema de iconos (marco + glifo + joya) con los iconos de esta fase y de la siguiente.
 
 **Terminado cuando:** una partida de la Capa K tiene economía completa y los objetos cambian el estilo de juego de forma perceptible.
 

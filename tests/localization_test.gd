@@ -55,7 +55,7 @@ func test_scene_texts_are_translation_keys() -> void:
 func test_stat_names_are_translated() -> void:
 	TranslationServer.set_locale("es")
 	for stat: StringName in Stats.ALL:
-		var key: String = Hud.STAT_KEY_PREFIX + String(stat).to_upper()
+		var key: String = BuildScreen.STAT_KEY_PREFIX + String(stat).to_upper()
 		assert_str(tr(key)).override_failure_message(key).is_not_equal(key)
 
 

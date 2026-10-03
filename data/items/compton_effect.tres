@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://items/effects/item_effect.gd" id="1_30yxh"]
+[ext_resource type="Script" path="res://items/effects/hit_drop_effect.gd" id="2_iajji"]
+[ext_resource type="Texture2D" path="res://assets/generated/icons/compton_effect.svg" id="3_t1s72"]
+[ext_resource type="Script" path="res://items/item_data.gd" id="4_8mcv3"]
+
+[sub_resource type="Resource" id="Resource_civud"]
+script = ExtResource("2_iajji")
+
+[resource]
+script = ExtResource("4_8mcv3")
+id = &"compton_effect"
+pools = Array[StringName]([&"pool_container", &"pool_shop"])
+tags = Array[StringName]([&"photon", &"wave"])
+icon = ExtResource("3_t1s72")
+effects = Array[ExtResource("1_30yxh")]([SubResource("Resource_civud")])

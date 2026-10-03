@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="ItemCatalog" format=3]
+
+[ext_resource type="Script" path="res://items/item_data.gd" id="1_aypuv"]
+[ext_resource type="Resource" path="res://data/items/effective_mass.tres" id="2_rt3fy"]
+[ext_resource type="Resource" path="res://data/items/high_spin.tres" id="3_75p0k"]
+[ext_resource type="Resource" path="res://data/items/planck_constant.tres" id="4_m7wus"]
+[ext_resource type="Resource" path="res://data/items/linear_momentum.tres" id="5_0q3t1"]
+[ext_resource type="Resource" path="res://data/items/compton_length.tres" id="6_ybm11"]
+[ext_resource type="Resource" path="res://data/items/nuclear_shielding.tres" id="7_04e0c"]
+[ext_resource type="Resource" path="res://data/items/fine_structure.tres" id="8_53w0u"]
+[ext_resource type="Resource" path="res://data/items/mean_free_path.tres" id="9_blx2r"]
+[ext_resource type="Resource" path="res://data/items/binding_energy.tres" id="10_eb04j"]
+[ext_resource type="Resource" path="res://data/items/bose_einstein.tres" id="11_fkqdl"]
+[ext_resource type="Resource" path="res://data/items/photoelectric_effect.tres" id="12_imtov"]
+[ext_resource type="Resource" path="res://data/items/compton_effect.tres" id="13_565kb"]
+[ext_resource type="Resource" path="res://data/items/doppler_effect.tres" id="14_q4sdd"]
+[ext_resource type="Resource" path="res://data/items/standing_wave.tres" id="15_4gpsu"]
+[ext_resource type="Resource" path="res://data/items/half_life.tres" id="16_duaxf"]
+[ext_resource type="Resource" path="res://data/items/vacuum_energy.tres" id="17_4gsf8"]
+[ext_resource type="Resource" path="res://data/items/zeno_effect.tres" id="18_56mwe"]
+[ext_resource type="Resource" path="res://data/items/collapse.tres" id="19_sngv2"]
+[ext_resource type="Script" path="res://items/item_catalog.gd" id="20_hbcyp"]
+[ext_resource type="Script" path="res://items/transformation_data.gd" id="21_p83rj"]
+[ext_resource type="Resource" path="res://data/transformations/wave_packet.tres" id="22_tc41a"]
+
+[resource]
+script = ExtResource("20_hbcyp")
+items = Array[ExtResource("1_aypuv")]([ExtResource("2_rt3fy"), ExtResource("3_75p0k"), ExtResource("4_m7wus"), ExtResource("5_0q3t1"), ExtResource("6_ybm11"), ExtResource("7_04e0c"), ExtResource("8_53w0u"), ExtResource("9_blx2r"), ExtResource("10_eb04j"), ExtResource("11_fkqdl"), ExtResource("12_imtov"), ExtResource("13_565kb"), ExtResource("14_q4sdd"), ExtResource("15_4gpsu"), ExtResource("16_duaxf"), ExtResource("17_4gsf8"), ExtResource("18_56mwe"), ExtResource("19_sngv2")])
+transformations = Array[ExtResource("21_p83rj")]([ExtResource("22_tc41a")])

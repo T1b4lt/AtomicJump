@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://items/effects/item_effect.gd" id="1_iuaod"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_sdokq"]
+[ext_resource type="Script" path="res://items/effects/stat_effect.gd" id="3_hb85q"]
+[ext_resource type="Texture2D" path="res://assets/generated/icons/mean_free_path.svg" id="4_72qn4"]
+[ext_resource type="Script" path="res://items/item_data.gd" id="5_57kd3"]
+
+[sub_resource type="Resource" id="Resource_spvlh"]
+script = ExtResource("2_sdokq")
+stat = &"attack_range"
+value = 150.0
+
+[sub_resource type="Resource" id="Resource_vdls8"]
+script = ExtResource("3_hb85q")
+modifiers = Array[ExtResource("2_sdokq")]([SubResource("Resource_spvlh")])
+
+[resource]
+script = ExtResource("5_57kd3")
+id = &"mean_free_path"
+pools = Array[StringName]([&"pool_container", &"pool_shop"])
+tags = Array[StringName]([&"wave"])
+icon = ExtResource("4_72qn4")
+effects = Array[ExtResource("1_iuaod")]([SubResource("Resource_vdls8")])

@@ -5,11 +5,15 @@ extends Node2D
 ## Pick the chunk with `chunk_scene` (or `--chunk=res://…` after `--` on the
 ## command line); without one it starts with the first chunk of `layer`.
 ## Keys: R back to the start, M mirror, N another seed, PgUp/PgDn previous/next
-## chunk of the layer. A development tool: the overlay shows code names.
+## chunk of the layer, C photons and a positron (to try shops and containers).
+## A development tool: the overlay shows code names.
 
 ## Thickness of the floor under the chunk.
 const FLOOR_HEIGHT: float = 40.0
 const CHUNK_ARG: String = "--chunk="
+## Photons and positrons given by the C key.
+const DEBUG_COINS: int = 50
+const DEBUG_KEYS: int = 1
 
 @export var layer: LayerData = preload("res://data/layers/layer_k.tres")
 @export var chunk_scene: PackedScene = null
@@ -41,6 +45,11 @@ func _ready() -> void:
 	_build()
 
 
+func _exit_tree() -> void:
+	if RunManager.run == run:
+		RunManager.run = null
+
+
 func _process(_delta: float) -> void:
 	_overlay.text = _describe()
 
@@ -58,6 +67,9 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		KEY_N:
 			_seed_number += 1
 			_build()
+		KEY_C:
+			run.add_coins(DEBUG_COINS)
+			run.add_keys(DEBUG_KEYS)
 		KEY_PAGEUP, KEY_PAGEDOWN:
 			var step: int = 1 if key.physical_keycode == KEY_PAGEDOWN else -1
 			var index: int = maxi(layer.chunks.find(chunk_scene), 0)
@@ -69,8 +81,13 @@ func _unhandled_key_input(event: InputEvent) -> void:
 func _build() -> void:
 	if chunk != null:
 		chunk.queue_free()
-	run = RunState.new("%s-%d" % [seed_text, _seed_number], RunManager.DEFAULT_CHARACTER)
+	run = RunState.new(
+		"%s-%d" % [seed_text, _seed_number], RunManager.DEFAULT_CHARACTER, RunManager.CATALOG
+	)
 	run.hp_changed.connect(_on_hp_changed)
+	run.build.spawner = _spawn_object
+	# The pickups report to RunManager's run: make this room's run that one
+	RunManager.run = run
 	_player.bind_run(run)
 	_last_choice = ""
 	chunk = chunk_scene.instantiate()
@@ -78,7 +95,8 @@ func _build() -> void:
 	placement.mirrored = mirrored and chunk.data.mirrorable
 	placement.fork = 1
 	placement.reward = LayerGenerator.pick_fork_rewards(run.world_rng, layer, 1)[0]
-	Level.build_chunk(chunk, placement, layer, run.world_rng)
+	var roller := LootRoller.new(run.world_rng, run.build.catalog, run)
+	Level.build_chunk(chunk, placement, layer, run.world_rng, 0, roller)
 	chunk.branch_chosen.connect(_on_branch_chosen)
 	_chunk_root.add_child(chunk)
 	_floor.position = Vector2(0.0, chunk.get_height())
@@ -113,11 +131,14 @@ func _describe() -> String:
 			]
 		),
 		(
-			"entries %s   exits %s   seed %s"
+			"entries %s   exits %s   seed %s   photons %d   positrons %d   items %d"
 			% [
 				_openings(ChunkInfo.read_openings(chunk.get_entry_markers())),
 				_openings(ChunkInfo.read_openings(chunk.get_exit_markers())),
-				run.seed_code
+				run.seed_code,
+				run.coins,
+				run.keys,
+				run.build.passive_items.size(),
 			]
 		),
 	]
@@ -133,6 +154,10 @@ static func _openings(openings: int) -> String:
 		if openings & Chunk.Opening[opening]:
 			text += opening.left(1)
 	return text
+
+
+func _spawn_object(object_id: StringName, at: Vector2) -> void:
+	chunk.spawn_object(object_id, chunk.to_local(at))
 
 
 func _on_branch_chosen(side: int) -> void:

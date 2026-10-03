@@ -17,6 +17,7 @@ const ATTACK_POWER: StringName = &"attack_power"
 const ATTACK_RATE: StringName = &"attack_rate"
 const ATTACK_RANGE: StringName = &"attack_range"
 const DEFENSE: StringName = &"defense"
+const PICKUP_RADIUS: StringName = &"pickup_radius"
 
 const ALL: Array[StringName] = [
 	MAX_HP,
@@ -28,7 +29,8 @@ const ALL: Array[StringName] = [
 	ATTACK_POWER,
 	ATTACK_RATE,
 	ATTACK_RANGE,
-	DEFENSE
+	DEFENSE,
+	PICKUP_RADIUS,
 ]
 
 ## Limits of each stat (docs/04-player.md). INF means no upper limit.
@@ -43,6 +45,7 @@ const MIN_VALUES: Dictionary[StringName, float] = {
 	ATTACK_RATE: 0.0,
 	ATTACK_RANGE: 0.0,
 	DEFENSE: 0.0,
+	PICKUP_RADIUS: 0.0,
 }
 const MAX_VALUES: Dictionary[StringName, float] = {
 	MAX_HP: 400.0,
@@ -55,6 +58,7 @@ const MAX_VALUES: Dictionary[StringName, float] = {
 	ATTACK_RATE: 10.0,
 	ATTACK_RANGE: 1200.0,
 	DEFENSE: 0.6,
+	PICKUP_RADIUS: 480.0,
 }
 
 var _base: StatBlock

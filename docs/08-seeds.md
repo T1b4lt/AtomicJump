@@ -82,6 +82,7 @@ Consecuencias:
 | `drop`        | Lo que suelta un enemigo al morir                    | Sí, de forma monótona (probabilidad)                                        |
 | `loot`        | Contenido de contenedores y recompensas              | Sí (rareza y pool desbloqueado)                                             |
 | `shop`        | Inventario de la tienda                              | Sí (pool desbloqueado)                                                      |
+| `rarity`      | Rareza de un objeto (misma dirección que su objeto)  | Sí, de forma monótona (Amplitud)                                            |
 | `combat`      | Críticos, efectos aleatorios en combate              | — (secuencia local, no garantizada)                                         |
 | `ai`          | Decisiones de enemigos                               | — (por enemigo, `RandomNumberGenerator` sembrado con su dirección de hueco) |
 
@@ -152,7 +153,7 @@ Implantado en la Fase 3, en `core/rng/`:
 | `local_rng(dominio, clave)` | `RandomNumberGenerator` sembrado con `roll_int`. |
 | `shuffled(lista, dominio, clave)` | Copia barajada (Fisher-Yates) con el `local_rng` de la dirección. `Array.shuffle()` usa el generador global y no se debe usar para generar. |
 
-`WorldRng.GENERATION_VERSION` (hoy **3**: la Fase 5 cambió la generación entera y la Fase 6 añadió los huecos de enemigo) y `version_label()` (`g3`). `RunState.get_seed_label()` da `K7QX-2MPA · g3`.
+`WorldRng.GENERATION_VERSION` (hoy **4**: la Fase 5 cambió la generación entera, la Fase 6 añadió los huecos de enemigo y la Fase 7 el tramo de Intercambio, los huecos de contenedor, nuevos recogibles y la recompensa de observable) y `version_label()` (`g4`). `RunState.get_seed_label()` da `K7QX-2MPA · g4`.
 
 ### Generación de capas (Fase 5)
 
@@ -183,10 +184,35 @@ Los huecos de enemigo siguen las mismas reglas que el resto, pero **qué enemigo
 
 El producto de decaimiento de un enemigo (el electrón del neutrón libre) usa la dirección de su padre más `"decay"`. Así, un mismo enemigo suelta siempre lo mismo y se mueve igual al aparecer, mate el jugador lo que mate antes. El combate en sí (cuándo embiste la alfa, por dónde va cada disparo) depende de lo que haga el jugador y no está garantizado.
 
+### Economía y objetos (Fase 7)
+
+Los contenedores reciben la dirección de su hueco (`hueco` = `[capa, rama, índice, nombre del hueco]`) y la tienda la clave de su tramo (`tramo` = `[capa, rama, índice]`). `LootRoller` tira la rareza en el dominio `rarity` y elige el objeto en el dominio de quien lo pide, con la misma dirección:
+
+| Dirección | Qué decide |
+| --- | --- |
+| `("slot_kind", …hueco)` | Qué contenedor ocupa un hueco de contenedor activo (pozo, electrón ligado o Superposición) |
+| `("loot", "chest", …hueco)` | Qué sale del pozo cuántico o del electrón ligado (`pick_weighted` en su `LootTable`) |
+| `("loot", "chest", …hueco, "count")` | Cuántos recogibles salen |
+| `("rarity" / "loot", "chest", …hueco, "item" / "active_item")` | La rareza y el observable u operador que contiene |
+| `("rarity" / "loot", "choice", …hueco, "a" / "b")` | Los dos observables de una Superposición (el segundo, sin el primero) |
+| `("loot", "reward", …tramo, "choice")` | Si un `reward_item` es Superposición (`chance` 0,5) o pedestal |
+| `("rarity" / "loot", "reward", …tramo)` | El observable de un pedestal de recompensa |
+| `("rarity" / "loot", "choice", "reward", …tramo, "a" / "b")` | Los dos observables de una Superposición de recompensa |
+| `("shop", …tramo, "count")` | Cuántos observables vende la tienda (2–3) |
+| `("rarity" / "shop", …tramo, "item", i)` | El observable _i_ de la tienda |
+| `("shop", …tramo, "active")` | Si vende un operador (`chance` 0,5) |
+| `("rarity" / "shop", …tramo, "active")` | Qué operador vende |
+| … + `("reroll", n)` | Lo mismo tras el reintento _n_ |
+
+- **Lo que hay en el mundo no depende del jugador**: qué contenedor ocupa cada hueco, cuántos objetos vende la tienda y si vende un operador.
+- **La calidad sí**, de forma monótona: la Amplitud solo mejora la rareza de una misma tirada.
+- **Lo que ya lleva el jugador** se excluye del pool, así que dos partidas con la misma semilla pueden ver objetos distintos si llevan objetos distintos: es una decisión del jugador, como elegir rama. Los contenedores tiran al abrirse (pozo, electrón ligado) o al construirse el tramo (Superposición, pedestal de recompensa y tienda).
+- Los efectos aleatorios de los objetos en combate (Efecto Compton) usan `Build.combat_rng`, sembrado con `local_rng("combat", [])`: no desplaza nada del mundo, pero tampoco está garantizado.
+
 ### Tests
 
 - `tests/generation_test.gd`: semillas doradas, misma capa con la misma semilla, independencia de otras tiradas y del orden de los huecos, independencia del generador global, monotonía (subir la probabilidad de los huecos solo añade objetos, sin cambiar los que ya había; añadir un candidato a `pick_weighted` solo cambia los huecos que gana el nuevo) y, para 150 semillas, que el camino principal sigue la plantilla, que cada bifurcación tiene dos ramas de la longitud correcta acabadas en su tramo de recompensa y con recompensas distintas, que **todas** las columnas posibles encajan entrada con salida y no repiten tramo seguido, que la dificultad sigue la curva y que solo se reflejan los tramos que lo permiten.
-- **Semillas doradas:** `tests/golden/generation_g<versión>.json` guarda, para 6 semillas fijas (`GoldenSeeds.SEEDS`), su entero, el camino principal y las ramas de la Capa K (una línea por tramo: id, `~m` si va reflejado, un carácter por hueco en orden de nombre —`c` fotón, `k` positrón, `s` pico, `o` electrón orbital, `f` neutrón libre, `a` partícula alfa, `.` vacío— y las partes opcionales que aparecen) y las recompensas de cada rama. Si un cambio de generación es intencionado, se sube `GENERATION_VERSION` y se regenera ejecutando el test con la variable de entorno `UPDATE_GOLDEN_SEEDS=1` (`UPDATE_GOLDEN_SEEDS=1 addons/gdUnit4/runtest.sh --headless --ignoreHeadlessMode -a res://tests/generation_test.gd`). El cambio del fichero se revisa en la PR.
+- **Semillas doradas:** `tests/golden/generation_g<versión>.json` guarda, para 6 semillas fijas (`GoldenSeeds.SEEDS`), su entero, el camino principal y las ramas de la Capa K (una línea por tramo: id, `~m` si va reflejado, un carácter por hueco en orden de nombre —`c` fotón, `v` fotón ×5, `x` fotón ×10, `k` positrón, `h` cuanto de energía, `s` pico, `o` electrón orbital, `f` neutrón libre, `a` partícula alfa, `w` pozo cuántico, `b` electrón ligado, `p` Superposición, `.` vacío— y las partes opcionales que aparecen) y las recompensas de cada rama. Si un cambio de generación es intencionado, se sube `GENERATION_VERSION` y se regenera ejecutando el test con la variable de entorno `UPDATE_GOLDEN_SEEDS=1` (`UPDATE_GOLDEN_SEEDS=1 addons/gdUnit4/runtest.sh --headless --ignoreHeadlessMode -a res://tests/generation_test.gd`). El cambio del fichero se revisa en la PR.
 
 ## Ideas a futuro
 

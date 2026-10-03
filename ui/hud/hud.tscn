@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://v0li1tt8875t"]
 
 [ext_resource type="Script" path="res://ui/hud/hud.gd" id="1_ldeaq"]
+[ext_resource type="Script" path="res://ui/item_icon/item_icon_rect.gd" id="2_icon"]
 
 [sub_resource type="Gradient" id="Gradient_threat"]
 colors = PackedColorArray(0.788235, 0.823529, 1, 0, 0.788235, 0.823529, 1, 0.75)
@@ -28,25 +29,24 @@ mouse_filter = 2
 texture = SubResource("GradientTexture2D_threat")
 expand_mode = 1
 
-[node name="StatsPanel" type="PanelContainer" parent="."]
+[node name="CountersPanel" type="PanelContainer" parent="."]
 offset_left = 8.0
 offset_top = 8.0
 offset_right = 63.0
 offset_bottom = 100.0
 
-[node name="Margin" type="MarginContainer" parent="StatsPanel"]
+[node name="Margin" type="MarginContainer" parent="CountersPanel"]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="StatsGrid" type="GridContainer" parent="StatsPanel/Margin"]
-unique_name_in_owner = true
+[node name="CountersGrid" type="GridContainer" parent="CountersPanel/Margin"]
 layout_mode = 2
 columns = 2
 
-[node name="AltitudeName" type="Label" parent="StatsPanel/Margin/StatsGrid"]
+[node name="AltitudeName" type="Label" parent="CountersPanel/Margin/CountersGrid"]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
@@ -54,7 +54,7 @@ theme_override_font_sizes/font_size = 15
 text = "HUD_ALTITUDE"
 vertical_alignment = 1
 
-[node name="AltitudeValue" type="Label" parent="StatsPanel/Margin/StatsGrid"]
+[node name="AltitudeValue" type="Label" parent="CountersPanel/Margin/CountersGrid"]
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
@@ -64,7 +64,7 @@ theme_override_font_sizes/font_size = 20
 text = "0"
 vertical_alignment = 1
 
-[node name="CoinsName" type="Label" parent="StatsPanel/Margin/StatsGrid"]
+[node name="CoinsName" type="Label" parent="CountersPanel/Margin/CountersGrid"]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
@@ -72,7 +72,7 @@ theme_override_font_sizes/font_size = 15
 text = "HUD_COINS"
 vertical_alignment = 1
 
-[node name="CoinsValue" type="Label" parent="StatsPanel/Margin/StatsGrid"]
+[node name="CoinsValue" type="Label" parent="CountersPanel/Margin/CountersGrid"]
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
@@ -82,7 +82,7 @@ theme_override_font_sizes/font_size = 20
 text = "0"
 vertical_alignment = 1
 
-[node name="KeysName" type="Label" parent="StatsPanel/Margin/StatsGrid"]
+[node name="KeysName" type="Label" parent="CountersPanel/Margin/CountersGrid"]
 layout_mode = 2
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
@@ -90,7 +90,7 @@ theme_override_font_sizes/font_size = 15
 text = "HUD_KEYS"
 vertical_alignment = 1
 
-[node name="KeysValue" type="Label" parent="StatsPanel/Margin/StatsGrid"]
+[node name="KeysValue" type="Label" parent="CountersPanel/Margin/CountersGrid"]
 unique_name_in_owner = true
 auto_translate_mode = 2
 layout_mode = 2
@@ -168,3 +168,95 @@ theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 20
 text = "-"
 vertical_alignment = 1
+
+[node name="ActivePanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = -104.0
+offset_right = 139.0
+offset_bottom = -38.0
+grow_vertical = 0
+
+[node name="Margin" type="MarginContainer" parent="ActivePanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 4
+
+[node name="Row" type="HBoxContainer" parent="ActivePanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ActiveIcon" type="TextureRect" parent="ActivePanel/Margin/Row"]
+unique_name_in_owner = true
+layout_mode = 2
+script = ExtResource("2_icon")
+
+[node name="Column" type="VBoxContainer" parent="ActivePanel/Margin/Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="ActiveKey" type="Label" parent="ActivePanel/Margin/Row/Column"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 15
+text = "[E]"
+horizontal_alignment = 1
+
+[node name="ActiveCharge" type="ProgressBar" parent="ActivePanel/Margin/Row/Column"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 8)
+layout_mode = 2
+max_value = 2.0
+step = 1.0
+show_percentage = false
+
+[node name="ItemBanner" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -260.0
+offset_top = 14.0
+offset_right = 260.0
+offset_bottom = 74.0
+grow_horizontal = 2
+mouse_filter = 2
+
+[node name="Margin" type="MarginContainer" parent="ItemBanner"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 6
+
+[node name="Column" type="VBoxContainer" parent="ItemBanner/Margin"]
+layout_mode = 2
+
+[node name="BannerTitle" type="Label" parent="ItemBanner/Margin/Column"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 22
+horizontal_alignment = 1
+
+[node name="BannerText" type="Label" parent="ItemBanner/Margin/Column"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 15
+horizontal_alignment = 1
+autowrap_mode = 3

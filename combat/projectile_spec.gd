@@ -2,8 +2,8 @@ class_name ProjectileSpec
 extends Resource
 ## What a projectile is (docs/12-architecture.md, "Objetos e interacciones"):
 ## damage, speed, range, size and what it does on impact. A Shooter builds one
-## from the stats for every shot, and projectile modifiers (Phase 7 onwards)
-## transform it before the projectile is launched.
+## from the stats for every shot, and the item effects
+## (Build.modify_projectile()) transform it before the projectile is launched.
 
 enum Team { PLAYER, ENEMY }
 
@@ -23,3 +23,6 @@ enum Team { PLAYER, ENEMY }
 @export var source_id: StringName = &""
 ## Status effects every hit applies.
 @export var statuses: Array[StatusEffectData] = []
+## Sideways wave of the path in px (0: straight) and its cycles per second.
+@export var wave_amplitude: float = 0.0
+@export var wave_frequency: float = 6.0
