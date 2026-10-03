@@ -31,7 +31,7 @@ Este documento describe **hacia dónde** debe ir el código. El estado actual y 
 
 ## Estructura de carpetas objetivo
 
-La Fase 2 implantó esta estructura; las carpetas sin contenido todavía se crearán en su fase. Estado actual: `core/autoload/` (`events`, `run_manager`, `scene_router` con su `.tscn`, `settings`), `core/run/` (`run_state.gd`, `run_counters.gd`), `core/stats/`, `core/rng/seed_code.gd` (provisional), `core/physics_layers.gd`, `actors/player/` (`player`, `scrolling_camera` y `character_data.gd`), `items/pickups/` y `items/containers/`, `world/level/` (escena de partida), `world/chunks/k/` (tramos del prototipo) y `world/chunks/parts/` (bloques, muros y fondos con los que están hechos), `world/hazards/spike/`, `ui/` (`hud`, `main_menu`, `pause_menu`, `settings_menu`, `game_over`), `data/characters/wilas.tres` y `localization/translations.csv`.
+La Fase 2 implantó esta estructura; las carpetas sin contenido todavía se crearán en su fase. Estado actual: `core/autoload/` (`events`, `run_manager`, `scene_router` con su `.tscn`, `settings`), `core/run/` (`run_state.gd`, `run_counters.gd`), `core/stats/`, `core/rng/` (`seed_code`, `seed_hash`, `world_rng`), `core/physics_layers.gd`, `actors/player/` (`player`, `scrolling_camera` y `character_data.gd`), `items/pickups/` y `items/containers/`, `world/level/` (escena de partida), `world/generation/prototype_generator.gd` (generación provisional hasta la Fase 5), `world/chunks/k/` (tramos del prototipo) y `world/chunks/parts/` (bloques, muros y fondos con los que están hechos), `world/hazards/spike/`, `ui/` (`hud`, `main_menu`, `pause_menu`, `settings_menu`, `game_over`), `data/characters/wilas.tres` y `localization/translations.csv`. Las semillas doradas están en `tests/golden/`.
 
 ```
 res://
@@ -118,8 +118,8 @@ signal coins_changed(value: int)
 
 Implementado en la Fase 2 (`core/run/run_state.gd`), con lo que necesita el prototipo; el resto de campos llega con su sistema:
 
-- `RunManager.start_run(seed, character)` crea el `RunState` (por defecto con Wilas) y emite `Events.run_started`; `end_run()` lo suelta, emite `Events.run_ended` y lo devuelve para que la pantalla final lo reciba por `SceneRouter`. Ir al menú desde la pausa también termina la partida.
-- Campos actuales: `seed_value: int` (provisional: pasa a `seed_code` en la Fase 3), `character`, `stats`, `hp`, `coins`, `keys` (saldo), `altitude` y `counters` (`jumps`, `coins_collected`, `keys_collected`).
+- `RunManager.start_run(seed_text, character)` crea el `RunState` (por defecto con Wilas; sin semilla válida, con una aleatoria) y emite `Events.run_started`; `end_run()` lo suelta, emite `Events.run_ended` y lo devuelve para que la pantalla final lo reciba por `SceneRouter`. Ir al menú desde la pausa también termina la partida.
+- Campos actuales: `seed_code` (semilla como la ve el jugador, normalizada), `world_rng` (desde la Fase 3), `character`, `stats`, `hp`, `coins`, `keys` (saldo), `altitude` y `counters` (`jumps`, `coins_collected`, `keys_collected`).
 - Señales: `hp_changed(value, max_value)`, `coins_changed`, `keys_changed`, `altitude_changed` y `died`. `take_damage(amount)` aplica el apantallamiento (`daño × (1 − defense)`) y emite `died` una sola vez; si baja la coherencia máxima, la coherencia se recorta.
 - Los recogibles no conocen la partida: emiten `Events.coin_collected` / `Events.key_collected` y `RunManager` lo suma al `RunState` en curso.
 - `Player`, `Hud` y `Level` reciben el `RunState` con `bind_run(run)` (llamar hacia abajo) en lugar de leer un autoload; así se prueban sin partida global. La escena del nivel lanzada sola (F6) empieza una partida aleatoria.
@@ -143,7 +143,8 @@ Implementado en la Fase 2 (`core/run/run_state.gd`), con lo que necesita el prot
 
 - `SeedCode`: generación, normalización y conversión de texto a `int`.
 - `SeedHash`: hash estable propio (no se usa `hash()` del motor).
-- `WorldRng`: `roll(domain, key...)`, `roll_int`, `pick_weighted` (con _rendezvous hashing_) y `local_rng(address)`.
+- `WorldRng`: `roll(domain, key)`, `roll_int`, `roll_range`, `chance`, `pick_weighted` (con _rendezvous hashing_), `local_rng(domain, key)` y `shuffled`; la clave es un `Array`. Contiene `GENERATION_VERSION`.
+- Implantados en la Fase 3 (`core/rng/`). Hasta la Fase 5, `PrototypeGenerator` (`world/generation/`) elige los tramos del nivel y planifica sus objetos con funciones puras del `WorldRng` de la partida; `Chunk.place_objects(plan)` solo instancia lo planificado. Nada del mundo usa el generador global (`randi()`, `seed()`).
 - `LayerGenerator`: produce la secuencia de tramos de una capa y de sus ramas a partir de `LayerData` y `ChunkLibrary`.
 - `Chunk` (script base de todos los tramos): expone marcadores, huecos y metadatos, y rellena sus huecos al entrar en el árbol usando su dirección.
 - Detalles en [08-semillas](08-seeds.md).

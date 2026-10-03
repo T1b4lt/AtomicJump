@@ -120,6 +120,54 @@ Elegir _qué_ objeto concreto aparece depende del pool desbloqueado. Para minimi
 - **Test de monotonía:** con la misma semilla, subir la probabilidad de un tipo de hueco produce un superconjunto de huecos activos.
 - **Test de independencia del orden:** generar los tramos en orden distinto da el mismo resultado.
 
+## Implementación
+
+Implantado en la Fase 3, en `core/rng/`:
+
+### `SeedCode` (formato)
+
+- `generate()`: 40 bits aleatorios codificados en 8 caracteres del alfabeto `0123456789ABCDEFGHJKMNPQRSTVWXYZ`, con guion en medio (`K7QX-2MPA`).
+- `normalize(texto)`: mayúsculas, sin espacios en blanco ni guiones y como mucho 32 caracteres (`MAX_TEXT_LENGTH`). Si quedan 8 caracteres del alfabeto (o de sus alias de Crockford I y L → 1, O → 0) es un **código** y se sustituyen los alias. Un texto vacío no es una semilla válida.
+- `from_text(texto)`: forma que ve el jugador; los códigos llevan el guion (`k7qx2mpa` → `K7QX-2MPA`) y el texto libre queda normalizado (`hola mundo` → `HOLAMUNDO`).
+- `to_int(texto)`: `SeedHash.hash_string(normalize(texto))`. Códigos y texto libre se tratan igual: el entero es el hash del texto normalizado (el código aleatorio no se decodifica). Escribir la misma semilla con otras mayúsculas, espacios, guiones o alias da el mismo entero.
+
+### `SeedHash` (hash estable)
+
+- FNV-1a de 64 bits sobre los bytes UTF-8, seguido del finalizador de SplitMix64 (`mix`). Los enteros de GDScript son de 64 bits con signo y desbordan envolviendo, así que los hashes pueden ser negativos y las constantes sin signo se escriben con su valor con signo. El desplazamiento a la derecha sin signo se hace con `shift_right` (el `>>` de GDScript conserva el signo).
+- Una dirección es una lista de partes (textos, `StringName` o enteros, **nunca** `float`) unidas con `|` (`hash_parts`).
+- `tests/seed_hash_test.gd` comprueba valores conocidos calculados fuera de Godot.
+
+### `WorldRng` (tiradas)
+
+`RunState` crea uno por partida (`run.world_rng`) a partir del entero de la semilla. La clave es un `Array`:
+
+| Método | Resultado |
+| --- | --- |
+| `roll_int(dominio, clave)` | Hash de 64 bits de la dirección: `mix(mix(semilla) ^ hash_parts([dominio] + clave))`. |
+| `roll(dominio, clave)` | `float` en [0, 1) con los 53 bits altos del hash. |
+| `roll_range(desde, hasta, dominio, clave)` | Entero en [desde, hasta]. |
+| `chance(p, dominio, clave)` | `roll < p`: presencia monótona. |
+| `pick_weighted({id: peso}, dominio, clave)` | _Rendezvous hashing_: gana el mayor `log(1 − roll(clave + [id])) / peso` (mismo orden que `roll^(1/peso)` sin problemas de precisión). Los pesos ≤ 0 nunca ganan; el empate se resuelve por id, y el orden del diccionario no importa. |
+| `local_rng(dominio, clave)` | `RandomNumberGenerator` sembrado con `roll_int`. |
+| `shuffled(lista, dominio, clave)` | Copia barajada (Fisher-Yates) con el `local_rng` de la dirección. `Array.shuffle()` usa el generador global y no se debe usar para generar. |
+
+`WorldRng.GENERATION_VERSION` (hoy **1**) y `version_label()` (`g1`). `RunState.get_seed_label()` da `K7QX-2MPA · g1`.
+
+### Generación del prototipo
+
+Hasta que la Fase 5 traiga `LayerGenerator`, `world/generation/prototype_generator.gd` (`PrototypeGenerator`) genera la columna de tramos del nivel con funciones puras del `WorldRng`. La clave de un tramo es `["K", "main", índice]` (el índice 0 es el tramo inicial; la rama `main` es provisional, aún no hay bifurcaciones):
+
+- `("layout", "K", "main", i)`: qué tramo va en la posición `i` (`pick_weighted` entre `platform_1` y `platform_2`).
+- `("slot_order", "K", "main", i)`: orden barajado de los huecos del tramo.
+- `("slot_count", "K", "main", i, tipo)`: cuántos objetos de cada tipo hay (pincho 0–1, fotón 1–5, positrón 0–1).
+
+Cada tipo ocupa los siguientes huecos del orden barajado, sin reintentos (el prototipo elegía huecos al azar hasta encontrar uno libre, un bucle que podía no terminar). `slot_order` y `slot_count` son dominios **provisionales** del prototipo: la Fase 5 los sustituye por `slot` y `slot_kind` por hueco.
+
+### Tests
+
+- `tests/generation_test.gd`: semillas doradas, misma partida con la misma semilla, independencia del orden (generar la columna al revés con tiradas ajenas entre medias da lo mismo), independencia del generador global y monotonía (subir la probabilidad de `chance` solo añade huecos activos; añadir un candidato a `pick_weighted` solo cambia los huecos que gana el nuevo).
+- **Semillas doradas:** `tests/golden/generation_g<versión>.json` guarda, para 6 semillas fijas (`GoldenSeeds.SEEDS`), su entero, los 12 primeros tramos y el plan de objetos de cada uno (un carácter por hueco: `c` fotón, `k` positrón, `s` pincho, `.` vacío). Si un cambio de generación es intencionado, se sube `GENERATION_VERSION` y se regenera ejecutando el test con la variable de entorno `UPDATE_GOLDEN_SEEDS=1` (`UPDATE_GOLDEN_SEEDS=1 addons/gdUnit4/runtest.sh --headless --ignoreHeadlessMode -a res://tests/generation_test.gd`). El cambio del fichero se revisa en la PR.
+
 ## Ideas a futuro
 
 La **semilla diaria** (misma semilla para todos cada día, derivada de la fecha) encaja con este sistema sin necesidad de servidor. Está recogida en [99-ideas a futuro](99-future-ideas.md).
