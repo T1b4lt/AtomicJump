@@ -1,0 +1,42 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://world/debug/chunk_test_room.gd" id="1_room"]
+[ext_resource type="Script" path="res://world/debug/debug_block.gd" id="2_block"]
+[ext_resource type="PackedScene" uid="uid://bj2fndebqtlg5" path="res://actors/player/player.tscn" id="3_player"]
+[ext_resource type="PackedScene" path="res://actors/player/player_camera.tscn" id="4_camera"]
+[ext_resource type="Environment" path="res://world/environment/glow_environment.tres" id="5_env"]
+[ext_resource type="PackedScene" path="res://world/backgrounds/orbital_background.tscn" id="6_bg"]
+
+[node name="ChunkTestRoom" type="Node2D"]
+script = ExtResource("1_room")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("5_env")
+
+[node name="OrbitalBackground" parent="." instance=ExtResource("6_bg")]
+
+[node name="ChunkRoot" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="Floor" type="StaticBody2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_block")
+size = Vector2(1280, 40)
+
+[node name="Player" parent="." instance=ExtResource("3_player")]
+unique_name_in_owner = true
+z_index = 2
+
+[node name="Camera" parent="." instance=ExtResource("4_camera")]
+unique_name_in_owner = true
+
+[node name="Ui" type="CanvasLayer" parent="."]
+
+[node name="Overlay" type="Label" parent="Ui"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 900.0
+offset_bottom = 120.0
+theme_override_font_sizes/font_size = 14

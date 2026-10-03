@@ -202,3 +202,95 @@ def projectile(color: str = P.PLAYER, length: float = 46) -> str:
 
     pts = [(-length + i, 2.5 * m.sin(i / 3.2) * (i / length)) for i in range(0, int(length) + 1)]
     return g(polyline(pts, stroke=color, sw=1.6, opacity=0.8), glow=2) + g(circle(0, 0, 4.5, fill="#FFFFFF") + circle(0, 0, 6.5, stroke=color, sw=2), glow=3)
+
+
+# --- Tileset del juego (Fase 5) ---------------------------------------------
+# Atlas de 8×3 tiles de 32 unidades (se importa al doble: tiles de 64 px que la
+# TileMapLayer dibuja a escala 0,5). Su distribución la usa el TileSet de cada
+# capa en Godot (world/tilesets/), así que no se cambia sin actualizarlo:
+#   filas 0–1: retícula (pared), un tile por combinación de lados expuestos
+#              (bits N=1, E=2, S=4, O=8; tile en columna = bits % 8, fila = bits // 8)
+#   fila 2:    nivel de energía (sólido) suelto, izquierda, centro y derecha
+#              (columnas 0–3) y nivel virtual (atravesable) en la columna 4
+
+ATLAS_COLUMNS = 8
+ATLAS_ROWS = 3
+WALL_N, WALL_E, WALL_S, WALL_W = 1, 2, 4, 8
+PLATFORM_CAPS = ("single", "left", "middle", "right")
+# Alto del cuerpo de un nivel de energía dentro de su tile (la colisión ocupa la mitad superior)
+PLATFORM_BODY = 14
+
+
+def wall_tile(exposed: int, color: str = P.INK_DIM) -> str:
+    """Tile de retícula (0..TILE): rejilla de 16 px con nodos y borde en los lados expuestos."""
+    t = TILE
+    out = rect(0, 0, t, t, fill=P.VOID_2)
+    for c in (8, 24):
+        out += path(f"M{c},0 L{c},{t}", stroke=P.GRID, sw=1, cap="butt")
+        out += path(f"M0,{c} L{t},{c}", stroke=P.GRID, sw=1, cap="butt")
+    out += "".join(circle(x, y, 1.2, fill=color, opacity=0.5) for x in (8, 24) for y in (8, 24))
+    edge = 0.75
+    sides = {
+        WALL_N: f"M0,{edge} L{t},{edge}",
+        WALL_E: f"M{t - edge},0 L{t - edge},{t}",
+        WALL_S: f"M0,{t - edge} L{t},{t - edge}",
+        WALL_W: f"M{edge},0 L{edge},{t}",
+    }
+    out += "".join(path(d, stroke=color, sw=1.5, opacity=0.8, cap="square") for bit, d in sides.items() if exposed & bit)
+    return out
+
+
+def energy_level_tile(cap: str, color: str) -> str:
+    """Tile de nivel de energía (plataforma sólida): barra con borde superior luminoso y marcas."""
+    t, h, r = TILE, PLATFORM_BODY, 3
+    left, right = cap in ("single", "left"), cap in ("single", "right")
+    x0, x1 = (0.5 if left else 0), (t - 0.5 if right else t)
+    top, bottom = 1, 1 + h
+    # Contorno con las esquinas redondeadas solo en los extremos de la plataforma
+    d = f"M{x0 + r if left else x0},{top} L{x1 - r if right else x1},{top} "
+    d += f"Q{x1},{top} {x1},{top + r} L{x1},{bottom - r} Q{x1},{bottom} {x1 - r},{bottom} " if right else f"L{x1},{bottom} "
+    d += f"L{x0 + r if left else x0},{bottom} "
+    d += f"Q{x0},{bottom} {x0},{bottom - r} L{x0},{top + r} Q{x0},{top} {x0 + r},{top} Z" if left else f"L{x0},{top} Z"
+    body = path(d, fill=P.VOID_3, opacity=0.95)
+    edges = path(f"M{x0 + r if left else x0},{bottom} L{x1 - r if right else x1},{bottom}", stroke=color, sw=0.8, opacity=0.95, cap="butt")
+    if left:
+        edges += path(f"M{x0 + r},{bottom} Q{x0},{bottom} {x0},{bottom - r} L{x0},{top + r}", stroke=color, sw=0.8, opacity=0.95)
+    if right:
+        edges += path(f"M{x1 - r},{bottom} Q{x1},{bottom} {x1},{bottom - r} L{x1},{top + r}", stroke=color, sw=0.8, opacity=0.95)
+    ticks = "".join(path(f"M{x},{top + 4} L{x},{top + 10}", stroke=color, sw=1, opacity=0.35) for x in (4, 12, 20, 28) if not (left and x < 8) and not (right and x > t - 8))
+    top_line = path(f"M{x0 + r if left else x0},{top + 0.5} L{x1 - r if right else x1},{top + 0.5}", stroke=color, sw=2.5, cap="round" if cap == "single" else "butt")
+    return body + ticks + edges + top_line
+
+
+def virtual_level_tile(color: str) -> str:
+    """Tile de nivel virtual (plataforma atravesable): línea discontinua con sombra punteada."""
+    t = TILE
+    dashes = path(f"M3,1.5 L13,1.5 M19,1.5 L29,1.5", stroke=color, sw=2.5)
+    shadow = path(f"M1,7.5 L{t - 1},7.5", stroke=color, sw=1, opacity=0.25, dash="2 2", cap="butt")
+    return dashes + shadow
+
+
+def tileset_atlas(layer: str) -> str:
+    """Atlas de tiles de una capa, centrado en (0, 0) (ver la distribución arriba)."""
+    color = P.LAYER[layer]["accent"]
+    out = ""
+    for exposed in range(16):
+        out += g(wall_tile(exposed), x=(exposed % ATLAS_COLUMNS) * TILE, y=(exposed // ATLAS_COLUMNS) * TILE)
+    for column, cap in enumerate(PLATFORM_CAPS):
+        out += g(energy_level_tile(cap, color), x=column * TILE, y=2 * TILE)
+    out += g(virtual_level_tile(color), x=len(PLATFORM_CAPS) * TILE, y=2 * TILE)
+    return g(out, x=-ATLAS_COLUMNS * TILE / 2, y=-ATLAS_ROWS * TILE / 2)
+
+
+def potential_spikes_sprite(width_tiles: int = 2) -> str:
+    """Pico de potencial del juego, centrado en (0, 0) y sin filtros (el brillo lo pone el motor)."""
+    w = width_tiles * TILE
+    n = width_tiles * 3
+    pts = []
+    for i in range(n + 1):
+        pts.append((i * w / n, 16))
+        if i < n:
+            pts.append((i * w / n + w / n / 2, 0))
+    teeth = polyline(pts, fill=P.DANGER, opacity=0.15) + polyline(pts, stroke=P.DANGER, sw=2)
+    base = path(f"M0,16 L{w},16", stroke=P.DANGER, sw=1, opacity=0.5)
+    return g(base + teeth, x=-w / 2, y=-8)

@@ -1,7 +1,9 @@
 class_name Spike
 extends Area2D
-## Hurts the player while in contact. The player's invulnerability window sets
-## the rate, so standing on the spikes keeps hurting.
+## Potential spikes (picos de potencial): hurt the player while in contact. The
+## player's invulnerability window sets the rate, so standing on them keeps
+## hurting. The origin is the middle of their base: place it on the surface of
+## a platform (slot_hazard markers are placed there).
 
 ## Damage of each hit, before defense.
 @export var damage: float = 10.0

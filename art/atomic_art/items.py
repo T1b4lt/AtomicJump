@@ -3,7 +3,7 @@
 import math
 
 from . import palette as P
-from .svg import circle, coil, ellipse, g, path, polyline, radial, rect, text, wave
+from .svg import circle, coil, ellipse, g, path, polyline, radial, rect, text, wave, without_glow
 
 # --- Recogibles -------------------------------------------------------------
 
@@ -193,3 +193,17 @@ ICON_SAMPLES = [
     ("Espín alto", "item", "spin_up", "rare"),
     ("Gato de Schrödinger", "item", "cat", "epic"),
 ]
+
+
+# --- Iconos de recompensa de bifurcación ------------------------------------
+
+REWARD_GLYPHS = {
+    "coins": lambda: photon(5),
+    "key": positron,
+}
+
+
+def reward_icon(reward: str) -> str:
+    """Icono que flota sobre una salida de bifurcación: marco cuadrado y el recogible de la recompensa."""
+    frame = rect(-20, -20, 40, 40, rx=8, fill=P.VOID_2, stroke=P.INK, sw=2)
+    return frame + g(without_glow(REWARD_GLYPHS[reward]()), scale=0.9)

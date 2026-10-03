@@ -15,7 +15,9 @@ from collections.abc import Callable
 from pathlib import Path
 
 from atomic_art import characters as C
+from atomic_art import items as I
 from atomic_art import palette as P
+from atomic_art import world as W
 from atomic_art.svg import doc, g
 
 ROOT = Path(__file__).resolve().parent
@@ -27,6 +29,12 @@ PALETTE_GD = PROJECT / "core" / "palette.gd"
 CORE_CANVAS = (52, 52)
 ORBITAL_CANVAS = (72, 72)
 ELECTRON_CANVAS = (8, 8)
+# Atlas de tiles de una capa (distribución en atomic_art/world.py) y otros lienzos del mundo
+ATLAS_CANVAS = (W.ATLAS_COLUMNS * W.TILE, W.ATLAS_ROWS * W.TILE)
+SPIKES_CANVAS = (2 * W.TILE, 20)
+REWARD_ICON_CANVAS = (48, 48)
+# Capas con tileset exportado (se añaden según llegan al juego)
+TILESET_LAYERS = ("K",)
 
 # (ruta relativa a OUT, lienzo, función que devuelve el SVG centrado en (0, 0), origen)
 Asset = tuple[str, tuple[int, int], Callable[[], str], str]
@@ -39,7 +47,18 @@ ASSETS: list[Asset] = [
 ] + [
     (f"player/player_eyes_{expr}.svg", CORE_CANVAS, (lambda e=expr: C.wilas_eyes(e)), f"characters.wilas_eyes('{expr}')")
     for expr in C.EXPRESSIONS
+] + [
+    (f"tilesets/layer_{layer.lower()}_tiles.svg", ATLAS_CANVAS, (lambda l=layer: W.tileset_atlas(l)), f"world.tileset_atlas('{layer}')")
+    for layer in TILESET_LAYERS
+] + [
+    ("hazards/potential_spikes.svg", SPIKES_CANVAS, W.potential_spikes_sprite, "world.potential_spikes_sprite"),
+] + [
+    (f"rewards/reward_{reward}.svg", REWARD_ICON_CANVAS, (lambda r=reward: I.reward_icon(r)), f"items.reward_icon('{reward}')")
+    for reward in I.REWARD_GLYPHS
 ]
+
+# .import mínimo de un SVG nuevo: Godot lo completa al importar y conserva la escala doble
+DEFAULT_IMPORT = '[remap]\n\nimporter="texture"\ntype="CompressedTexture2D"\n\n[params]\n\nsvg/scale=2.0\n'
 
 
 def export_svg(body: str, size: tuple[int, int]) -> str:
@@ -103,6 +122,9 @@ def main() -> None:
         out = OUT / rel
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(export_svg(fn(), size), encoding="utf-8")
+        imported = out.with_name(out.name + ".import")
+        if not imported.exists():
+            imported.write_text(DEFAULT_IMPORT, encoding="utf-8")
         manifest[rel] = {"size": list(size), "source": source}
         print("  ", rel)
     # Assets que ya no existen: su .import queda huérfano

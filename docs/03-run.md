@@ -42,6 +42,7 @@ Cada capa es una secuencia de **tramos** (una pantalla de alto cada uno, ver [05
 - Al cruzar una salida, la otra **colapsa** (se cierra con un efecto visual).
 - La recompensa aparece en el siguiente tramo (el **tramo de recompensa**, al final de la rama) y se obtiene al superarlo.
 - Cada rama puede ser de distinta longitud y dificultad. Las recompensas mejores tienden a estar tras las ramas más difíciles.
+- Hasta elegir, por encima de la bifurcación no hay nada: la rama no existe hasta que se observa. Sus tramos aparecen (con un fundido) al cruzar la salida. Implementación en [05-mundo](05-world.md#implementación-fase-5); de momento hay recompensas de fotones y de positrón.
 
 ### Tipos de recompensa de rama
 
@@ -64,11 +65,11 @@ Cada capa es una secuencia de **tramos** (una pantalla de alto cada uno, ver [05
 - **La velocidad es variable**:
   - Velocidad base por capa (K lenta → N rápida). En la Capa K, 45 px/s.
   - Si el jugador está muy por encima, se acelera para acercarse ("goma elástica"): a más de 900 px, +0,6 px/s por cada píxel de más, hasta 420 px/s. Cerca (menos de 220 px) va más despacio, hasta la mitad de la base. Lejos nunca da respiro, cerca no es injusta.
-  - **Se detiene** en los tramos seguros (entrada de capa, Estado fundamental, Intercambio) y en los jefes. Hoy el único tramo seguro es el inicial, que hace de entrada de capa: la Decoherencia espera, 500 px por debajo del suelo, a que Wilas salga de él.
+  - **Se detiene** en los tramos seguros (entrada de capa, Estado fundamental, Intercambio) y en los jefes. Al empezar, la Decoherencia espera 500 px por debajo del suelo de la entrada de capa a que Wilas salga de ella.
   - Las perturbaciones de Entropía y algunas mejoras la modifican.
 - En el HUD, un **indicador de distancia** en el borde inferior muestra lo cerca que está: la distancia en pm desde los pies de Wilas y un brillo que se intensifica por debajo de 8 pm.
 - La cámara **sigue al jugador** con suavizado, un poco por encima de él (en un juego vertical importa más ver hacia arriba) y con _look-ahead_ vertical: mira hacia donde se mueve, más al caer que al subir. No enseña más allá de los lados del área de juego ni por debajo del fondo del nivel. La Decoherencia es la que mete prisa, no la cámara: caer ya no mata por salirse de la pantalla.
-- Valores en `RisingThreat` (`world/rising_threat/`); la velocidad base pasará a `LayerData` con la generación de capas (Fase 5).
+- Valores en `RisingThreat` (`world/rising_threat/`); la velocidad base de cada capa está en su `LayerData` (`threat_speed`).
 
 ## Jefes
 

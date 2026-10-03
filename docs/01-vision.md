@@ -59,6 +59,6 @@ La diferencia clave con las referencias: en lugar de **salas** hay **tramos** ve
 
 ## Dirección artística
 
-Estilo **"Luz sobre el vacío"**: vectorial, geométrico y luminoso sobre fondo casi negro, generado íntegramente por código. Fondos con los orbitales reales de cada capa, colores por carga eléctrica y efectos inspirados en las trazas de una cámara de burbujas. Los assets actuales de Kenney son provisionales y se sustituyen a medida que se generan los nuevos.
+Estilo **"Luz sobre el vacío"**: vectorial, geométrico y luminoso sobre fondo casi negro, generado íntegramente por código. Fondos con los orbitales reales de cada capa, colores por carga eléctrica y efectos inspirados en las trazas de una cámara de burbujas. Los assets de Kenney que quedan (fotones, positrones y cofres) son provisionales y se sustituyen a medida que se generan los nuevos.
 
 Guía completa en [13-dirección de arte](13-art-style.md) y propuesta visual en [`assets/art-direction/index.html`](assets/art-direction/index.html).

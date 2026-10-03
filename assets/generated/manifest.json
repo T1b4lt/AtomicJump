@@ -70,6 +70,34 @@
         52
       ],
       "source": "characters.wilas_eyes('hurt')"
+    },
+    "tilesets/layer_k_tiles.svg": {
+      "size": [
+        256,
+        96
+      ],
+      "source": "world.tileset_atlas('K')"
+    },
+    "hazards/potential_spikes.svg": {
+      "size": [
+        64,
+        20
+      ],
+      "source": "world.potential_spikes_sprite"
+    },
+    "rewards/reward_coins.svg": {
+      "size": [
+        48,
+        48
+      ],
+      "source": "items.reward_icon('coins')"
+    },
+    "rewards/reward_key.svg": {
+      "size": [
+        48,
+        48
+      ],
+      "source": "items.reward_icon('key')"
     }
   }
 }

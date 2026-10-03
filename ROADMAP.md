@@ -115,19 +115,19 @@ La **v1.0** llegará después de la 0.99.0. Antes faltan cosas que quedan **fuer
 
 **Objetivo:** poder diseñar tramos rápidamente y encadenarlos según [05-mundo](docs/05-world.md).
 
-- [ ] **Arte:** tileset de la Capa K generado (niveles de energía, niveles virtuales, retícula, picos de potencial) con colisiones y tiles atravesables.
-- [ ] `chunk_template.tscn` con TileMapLayers, marcadores de entrada y salida, huecos y script `Chunk`.
-- [ ] `ChunkData` (metadatos) y `ChunkLibrary` (indexa los tramos por capa, tipo y dificultad).
-- [ ] Validador `@tool` en el editor (marcadores obligatorios, límites, huecos solapados).
-- [ ] Variación: espejo y plataformas opcionales.
-- [ ] `LayerData` para la Capa K y `LayerGenerator` (secuencia, ramas y compatibilidad entrada/salida).
-- [ ] Instanciación perezosa y liberación de tramos a partir de la secuencia de `LayerGenerator` (la Fase 4 ya sustituyó las señales `screen_entered`/`screen_exited` de `Chunk` por una gestión por índice en `Level`).
-- [ ] Tramos de bifurcación con dos salidas, iconos de recompensa y colapso de la rama no elegida.
-- [ ] Tramos especiales: entrada de capa, recompensa y descanso.
-- [ ] **Arte:** shader del fondo orbital 1s de la Capa K.
-- [ ] Convertir `initial`, `platform_1` y `platform_2` al nuevo formato y crear hasta 8 tramos normales de la Capa K.
-- [ ] Escena de depuración para jugar un tramo suelto.
-- [ ] Tests de generación: la secuencia respeta la plantilla y la compatibilidad, y es determinista.
+- [x] **Arte:** tileset de la Capa K generado (niveles de energía, niveles virtuales, retícula, picos de potencial) con colisiones y tiles atravesables.
+- [x] `chunk_template.tscn` con TileMapLayers, marcadores de entrada y salida, huecos y script `Chunk`.
+- [x] `ChunkData` (metadatos) y `ChunkLibrary` (indexa los tramos por capa, tipo y dificultad).
+- [x] Validador `@tool` en el editor (marcadores obligatorios, límites, huecos solapados).
+- [x] Variación: espejo y plataformas opcionales.
+- [x] `LayerData` para la Capa K y `LayerGenerator` (secuencia, ramas y compatibilidad entrada/salida).
+- [x] Instanciación perezosa y liberación de tramos a partir de la secuencia de `LayerGenerator` (la Fase 4 ya sustituyó las señales `screen_entered`/`screen_exited` de `Chunk` por una gestión por índice en `Level`).
+- [x] Tramos de bifurcación con dos salidas, iconos de recompensa y colapso de la rama no elegida.
+- [x] Tramos especiales: entrada de capa, recompensa y descanso.
+- [x] **Arte:** shader del fondo orbital 1s de la Capa K.
+- [x] Convertir `initial`, `platform_1` y `platform_2` al nuevo formato y crear hasta 8 tramos normales de la Capa K.
+- [x] Escena de depuración para jugar un tramo suelto.
+- [x] Tests de generación: la secuencia respeta la plantilla y la compatibilidad, y es determinista.
 
 **Terminado cuando:** una partida recorre una Capa K generada con bifurcaciones y todo es reproducible por semilla.
 

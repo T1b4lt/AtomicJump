@@ -19,6 +19,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Title" type="Label" parent="Rows"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "GAME_OVER_TITLE"
 horizontal_alignment = 1

@@ -21,6 +21,7 @@ PAUSE_RESUME,Continuar,Resume
 PAUSE_MENU,Menú principal,Main menu
 PAUSE_EXIT,Salir del juego,Quit game
 GAME_OVER_TITLE,DECOHERENCIA,DECOHERENCE
+GAME_OVER_TITLE_COMPLETED,CAPA COMPLETADA,LAYER COMPLETED
 GAME_OVER_SEED,Semilla: %s,Seed: %s
 GAME_OVER_COPY_SEED,Copiar semilla,Copy seed
 GAME_OVER_SCORE,Puntuación: %s,Score: %s
@@ -43,3 +44,5 @@ STAT_ATTACK_RATE,Frecuencia,Frequency
 STAT_ATTACK_RANGE,Alcance,Range
 STAT_DEFENSE,Apantallamiento,Shielding
 DEBUG_MOVEMENT_ROOM_HELP,"R: volver al inicio · T: Decoherencia · F: trayectoria","R: back to start · T: Decoherence · F: trajectory"
+LAYER_K_NAME,Capa K,Layer K
+DEBUG_CHUNK_ROOM_HELP,"R: volver al inicio · M: espejo · N: otra semilla · Re Pág/Av Pág: tramo anterior/siguiente","R: back to start · M: mirror · N: another seed · PgUp/PgDn: previous/next chunk"

@@ -62,6 +62,7 @@ rm -rf "$TMP_GODOT"
 - Autoloads (`core/autoload/`): `Events`, `Settings`, `RunManager` y `SceneRouter`. El estado de la partida vive en un `RunState` nuevo por partida (`RunManager.run`); se cambia de pantalla con `SceneRouter.go_to(...)`, nunca con `change_scene_to_file`.
 - Textos visibles: claves de `localization/translations.csv` (columnas `es` y `en`), nunca texto literal. Capas de física con `PhysicsLayers`.
 - Tests con **gdUnit4** en `tests/`, ficheros `*_test.gd` que extienden `GdUnitTestSuite`.
+- Tramos nuevos: duplica `world/chunks/chunk_template.tscn`, dale un `id` único en su `ChunkData`, añádelo a la `LayerData` de su capa y comprueba que no tiene avisos del validador (los tests lo exigen). Se prueban sueltos con `world/debug/chunk_test_room.tscn`. Ver [`docs/05-world.md`](docs/05-world.md#herramientas-de-autoría).
 - Aleatoriedad del mundo **solo** con `RunManager.run.world_rng` (tiradas direccionadas, ver [`docs/08-seeds.md`](docs/08-seeds.md)): nunca `randi()`, `randf()`, `seed()` ni `Array.shuffle()` globales para generar. Si un cambio altera lo que genera una semilla, sube `WorldRng.GENERATION_VERSION` y regenera las semillas doradas.
 - Commits con _Conventional Commits_ (release-please genera versión y CHANGELOG; configuración en `release-please-config.json` y `.release-please-manifest.json`, no edites la versión a mano). Trabaja en ramas con PR a `main`.
 - No edites `addons/gdUnit4/` (dependencia de terceros, v6.2.1) ni `.godot/`.

@@ -10,6 +10,8 @@ signal altitude_changed(value: float)
 ## Distance (pm) from the player's feet down to the Decoherence.
 signal threat_distance_changed(value: float)
 signal died
+## A fork's branch was chosen: its id ("K/1/L").
+signal branch_chosen(branch: String)
 
 ## Seed as shown to the player ("K7QX-2MPA" or a normalized text).
 var seed_code: String
@@ -24,6 +26,10 @@ var keys: int = 0
 ## Highest altitude reached, in pm.
 var altitude: float = 0.0
 var threat_distance: float = INF
+## Index of the layer being played in the level's list of layers.
+var layer_index: int = 0
+## Branches chosen at the forks, in order: ["K/1/L", "K/2/R"…].
+var path: PackedStringArray = []
 var counters := RunCounters.new()
 
 
@@ -86,6 +92,21 @@ func add_keys(amount: int) -> void:
 
 func register_jump() -> void:
 	counters.jumps += 1
+
+
+func choose_branch(branch: String) -> void:
+	path.append(branch)
+	branch_chosen.emit(branch)
+
+
+## Sides chosen at the forks of a layer, in order (["L", "R"…]).
+func get_choices(layer_code: String) -> PackedStringArray:
+	var choices: PackedStringArray = []
+	for branch: String in path:
+		var parts: PackedStringArray = branch.split("/")
+		if parts.size() == 3 and parts[0] == layer_code:
+			choices.append(parts[2])
+	return choices
 
 
 func set_altitude(value: float) -> void:

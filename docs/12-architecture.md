@@ -5,7 +5,7 @@ Este documento describe **hacia dónde** debe ir el código. El estado actual y 
 ## Motor y configuración
 
 - **Godot 4.7** (GDScript), renderer _Compatibility_.
-- Viewport de referencia **1280×720** (migrado en la Fase 2); ver [13-dirección de arte](13-art-style.md). Los tramos del prototipo siguen midiendo 1160×670 (`Chunk.WIDTH` y `Chunk.HEIGHT`): como el área de juego es más estrecha que la vista, la cámara la centra en horizontal, y nunca enseña nada por debajo del primer tramo. La Fase 5 rehace los tramos con el tamaño definitivo.
+- Viewport de referencia **1280×720** (migrado en la Fase 2); ver [13-dirección de arte](13-art-style.md). Desde la Fase 5 los tramos miden 1280×704 (40 × 22 tiles de 32 px, `Chunk.WIDTH` y `ChunkData.height_tiles`); la cámara nunca enseña nada por debajo del primer tramo.
 - **HDR 2D** activado (`rendering/viewport/hdr_2d`) y un `WorldEnvironment` con _glow_ en las escenas de juego (`world/environment/glow_environment.tres`): brilla lo que se dibuja con color por encima de 1 (ver [13-dirección de arte](13-art-style.md#implementación-en-godot)).
 - `display/window/stretch/mode = canvas_items` y `aspect = keep_width` (el alto se amplía en pantallas más altas).
 - Se trackean en git `*.import` y `*.uid`; se ignora `.godot/`.
@@ -32,7 +32,7 @@ Este documento describe **hacia dónde** debe ir el código. El estado actual y 
 
 ## Estructura de carpetas objetivo
 
-La Fase 2 implantó esta estructura; las carpetas sin contenido todavía se crearán en su fase. Estado actual: `core/autoload/` (`events`, `run_manager`, `scene_router` con su `.tscn`, `settings`), `core/run/` (`run_state.gd`, `run_counters.gd`), `core/stats/`, `core/rng/` (`seed_code`, `seed_hash`, `world_rng`), `core/physics_layers.gd`, `core/palette.gd` (generado), `actors/player/` (`player`, `player_visual`, `player_input`, `movement_config`, `player_camera` y `character_data.gd`), `items/pickups/` y `items/containers/`, `world/level/` (escena de partida), `world/generation/prototype_generator.gd` (generación provisional hasta la Fase 5), `world/chunks/k/` (tramos del prototipo) y `world/chunks/parts/` (bloques, muros y fondos con los que están hechos), `world/hazards/spike/`, `world/rising_threat/` (la Decoherencia y su shader), `world/environment/` (el `Environment` con _glow_), `world/debug/` (sala de pruebas de movimiento y `DebugBlock`), `ui/` (`hud`, `main_menu`, `pause_menu`, `settings_menu`, `game_over`), `data/characters/wilas.tres`, `data/movement/wilas_movement.tres`, `assets/generated/` (arte exportado por `art/build_game_assets.py`) y `localization/translations.csv`. Las semillas doradas están en `tests/golden/`.
+La Fase 2 implantó esta estructura; las carpetas sin contenido todavía se crearán en su fase. Estado actual: `core/autoload/` (`events`, `run_manager`, `scene_router` con su `.tscn`, `settings`), `core/run/` (`run_state.gd`, `run_counters.gd`), `core/stats/`, `core/rng/` (`seed_code`, `seed_hash`, `world_rng`), `core/physics_layers.gd`, `core/palette.gd` (generado), `actors/player/` (`player`, `player_visual`, `player_input`, `movement_config`, `player_camera` y `character_data.gd`), `items/pickups/` y `items/containers/`, `world/level/` (escena de partida), `world/generation/` (`layer_data`, `layer_generator`, `layer_plan`, `chunk_placement`, `chunk_library`, `chunk_info`, `slot_filler`), `world/chunks/` (`chunk.gd`, `chunk_data.gd`, `chunk_validator.gd`, `fork_gate`, `chunk_template.tscn` y los tramos de la Capa K en `k/`), `world/tilesets/` (TileSet de la Capa K), `world/backgrounds/` (fondo orbital), `world/hazards/spike/`, `world/rising_threat/` (la Decoherencia y su shader), `world/environment/` (el `Environment` con _glow_), `world/debug/` (salas de pruebas de movimiento y de un tramo, y `DebugBlock`), `ui/` (`hud`, `main_menu`, `pause_menu`, `settings_menu`, `game_over`), `data/characters/wilas.tres`, `data/movement/wilas_movement.tres`, `data/layers/layer_k.tres`, `assets/generated/` (arte exportado por `art/build_game_assets.py`) y `localization/translations.csv`. Las semillas doradas están en `tests/golden/`.
 
 ```
 res://
@@ -52,13 +52,14 @@ res://
 ├── combat/                  # projectile, shooter, damage_info
 ├── world/
 │   ├── level/               # escena de partida (level.tscn)
-│   ├── chunks/              # chunk.gd (base), chunk_template.tscn, k/, l/, m/, n/, special/, parts/
-│   ├── generation/          # layer_generator.gd, chunk_library.gd
+│   ├── chunks/              # chunk.gd (base), chunk_data, chunk_validator, fork_gate, chunk_template.tscn, k/, l/, m/, n/
+│   ├── generation/          # layer_data, layer_generator, layer_plan, chunk_library, slot_filler
+│   ├── backgrounds/         # fondo orbital de cada capa (shader)
 │   ├── rising_threat/       # rising_threat (la Decoherencia), decoherence.gdshader
 │   ├── environment/         # Environment con glow
-│   ├── debug/               # salas de pruebas (movimiento; tramo suelto en la Fase 5)
+│   ├── debug/               # salas de pruebas (movimiento, tramo suelto)
 │   ├── hazards/             # spike, force_field…
-│   └── tilesets/
+│   └── tilesets/            # un TileSet por capa sobre el atlas generado
 ├── items/
 │   ├── pickups/             # coin, key, heal
 │   ├── containers/          # chest, choice_pedestal, item_pedestal
@@ -123,8 +124,8 @@ signal coins_changed(value: int)
 Implementado en la Fase 2 (`core/run/run_state.gd`), con lo que necesita el prototipo; el resto de campos llega con su sistema:
 
 - `RunManager.start_run(seed_text, character)` crea el `RunState` (por defecto con Wilas; sin semilla válida, con una aleatoria) y emite `Events.run_started`; `end_run()` lo suelta, emite `Events.run_ended` y lo devuelve para que la pantalla final lo reciba por `SceneRouter`. Ir al menú desde la pausa también termina la partida.
-- Campos actuales: `seed_code` (semilla como la ve el jugador, normalizada), `world_rng` (desde la Fase 3), `character`, `stats`, `hp`, `coins`, `keys` (saldo), `altitude` (máxima alcanzada), `threat_distance` (desde la Fase 4) y `counters` (`jumps`, `coins_collected`, `keys_collected`).
-- Señales: `hp_changed(value, max_value)`, `coins_changed`, `keys_changed`, `altitude_changed`, `threat_distance_changed` y `died`. `take_damage(amount, reducible = true)` aplica el apantallamiento (`daño × (1 − defense)`) salvo con `reducible = false` (la Decoherencia) y emite `died` una sola vez; si baja la coherencia máxima, la coherencia se recorta.
+- Campos actuales: `seed_code` (semilla como la ve el jugador, normalizada), `world_rng` (desde la Fase 3), `character`, `stats`, `hp`, `coins`, `keys` (saldo), `altitude` (máxima alcanzada), `threat_distance` (desde la Fase 4), `layer_index` y `path` (ramas elegidas, `K/1/L`; desde la Fase 5, con `choose_branch()` y `get_choices(capa)`) y `counters` (`jumps`, `coins_collected`, `keys_collected`).
+- Señales: `hp_changed(value, max_value)`, `coins_changed`, `keys_changed`, `altitude_changed`, `threat_distance_changed`, `branch_chosen` y `died`. `take_damage(amount, reducible = true)` aplica el apantallamiento (`daño × (1 − defense)`) salvo con `reducible = false` (la Decoherencia) y emite `died` una sola vez; si baja la coherencia máxima, la coherencia se recorta.
 - Los recogibles no conocen la partida: emiten `Events.coin_collected` / `Events.key_collected` y `RunManager` lo suma al `RunState` en curso.
 - `Player`, `Hud` y `Level` reciben el `RunState` con `bind_run(run)` (llamar hacia abajo) en lugar de leer un autoload; así se prueban sin partida global. La escena del nivel lanzada sola (F6) empieza una partida aleatoria.
 
@@ -148,9 +149,10 @@ Implementado en la Fase 2 (`core/run/run_state.gd`), con lo que necesita el prot
 - `SeedCode`: generación, normalización y conversión de texto a `int`.
 - `SeedHash`: hash estable propio (no se usa `hash()` del motor).
 - `WorldRng`: `roll(domain, key)`, `roll_int`, `roll_range`, `chance`, `pick_weighted` (con _rendezvous hashing_), `local_rng(domain, key)` y `shuffled`; la clave es un `Array`. Contiene `GENERATION_VERSION`.
-- Implantados en la Fase 3 (`core/rng/`). Hasta la Fase 5, `PrototypeGenerator` (`world/generation/`) elige los tramos del nivel y planifica sus objetos con funciones puras del `WorldRng` de la partida; `Chunk.place_objects(plan)` solo instancia lo planificado. Nada del mundo usa el generador global (`randi()`, `seed()`).
-- `LayerGenerator`: produce la secuencia de tramos de una capa y de sus ramas a partir de `LayerData` y `ChunkLibrary`.
-- `Chunk` (script base de todos los tramos): expone marcadores, huecos y metadatos, y rellena sus huecos al entrar en el árbol usando su dirección.
+- Implantados en la Fase 3 (`core/rng/`). Nada del mundo usa el generador global (`randi()`, `seed()`).
+- `LayerGenerator` (Fase 5): produce el `LayerPlan` de una capa (camino principal y ramas de cada bifurcación, con sus recompensas) a partir de `LayerData` y `ChunkLibrary`; `SlotFiller` decide qué rellena cada hueco. Son funciones puras del `WorldRng`.
+- `Chunk` (script `@tool` de todos los tramos): expone marcadores, huecos y metadatos (`ChunkData`) y se valida en el editor con `ChunkValidator`. `Level.build_chunk()` le aplica su colocación antes de entrar en el árbol (llamar hacia abajo): espejo, partes opcionales, huecos y salidas de bifurcación o recompensa.
+- Detalle del formato de los tramos y del algoritmo en [05-mundo](05-world.md#implementación-fase-5).
 - Detalles en [08-semillas](08-seeds.md).
 
 ## Combate
@@ -171,7 +173,7 @@ Implementado en la Fase 2 (`core/run/run_state.gd`), con lo que necesita el prot
 | 8    | `one_way_platforms`  |
 | 9    | `rising_threat`      |
 
-Configuradas en `project.godot` desde la Fase 2 y disponibles en código como `PhysicsLayers.WORLD`, `PhysicsLayers.HAZARDS`… Hoy: muros y suelo en `world`; bloques del prototipo (atravesables desde abajo) en `one_way_platforms`; el jugador en `player` con máscara `world` + `one_way_platforms`; recogibles y cofres en `pickups` y pinchos en `hazards`, ambos con máscara `player`. Los cuerpos estáticos no llevan máscara.
+Configuradas en `project.godot` desde la Fase 2 y disponibles en código como `PhysicsLayers.WORLD`, `PhysicsLayers.HAZARDS`… Hoy: en el TileSet, la retícula y los niveles de energía colisionan en `world` y los niveles virtuales (atravesables desde abajo) en `one_way_platforms`; el bloqueador de una salida de bifurcación colapsada en `world`; el jugador en `player` con máscara `world` + `one_way_platforms`; recogibles y cofres en `pickups` y pinchos en `hazards`, ambos con máscara `player`. Los cuerpos estáticos no llevan máscara.
 
 ## Jugador
 
@@ -191,7 +193,7 @@ Implementado en la Fase 4 (`actors/player/`):
 ## La Decoherencia y el nivel
 
 - `RisingThreat` (`world/rising_threat/`): su `y` es el frente. Velocidad base, goma elástica, frenado cerca del jugador y `paused`; un `Area2D` en la capa `rising_threat` detecta al jugador y `hit()` aplica el daño y busca dónde reaparecer (`find_respawn_spot`: último punto seguro válido o, si no, rayos hacia abajo por columnas). Se dibuja con `decoherence.gdshader`. Valores en [03-partida](03-run.md#la-decoherencia-amenaza-ascendente).
-- `Level` reparte el trabajo: coloca la Decoherencia bajo el primer tramo, la pausa mientras el jugador está en un tramo `safe` (`Chunk.safe`; hoy, el inicial), crea los tramos por índice hasta uno por encima de la vista y libera los que quedan por debajo de la Decoherencia y de la vista. Ya no usa las señales de pantalla de los tramos. Cada fotograma de física actualiza en el `RunState` la altura máxima (`altitude`) y la distancia a la Decoherencia (`threat_distance`, señal `threat_distance_changed`), ambas en pm.
+- `Level` reparte el trabajo: genera la capa (`layers`, hoy solo `layer_k.tres`) y su columna de tramos, coloca a Wilas en el marcador `spawn` de la entrada de capa y la Decoherencia bajo el primer tramo con la velocidad base de la capa, la pausa mientras el jugador está en un tramo seguro (`ChunkData.is_safe()`: entrada de capa, descanso, tienda y jefe), instancia los tramos desde uno por debajo del jugador hasta dos por encima y libera los que quedan por debajo de la Decoherencia y de la vista. Al cruzar una salida de bifurcación apunta la rama en el `RunState` y alarga la columna. Al salir por arriba del último tramo de la capa termina la partida como completada (`SceneRouter` pasa `completed` a la pantalla final). Cada fotograma de física actualiza en el `RunState` la altura máxima (`altitude`, 11 pm por pantalla) y la distancia a la Decoherencia (`threat_distance`), ambas en pm.
 
 ## Guardado
 
@@ -204,5 +206,5 @@ Implementado en la Fase 4 (`actors/player/`):
 - **CI** (GitHub Actions, `.github/workflows/ci.yml`): `gdformat --check`, `gdlint` y los tests con Godot 4.7.2 _headless_ en cada PR y en cada push a `main`; el informe de gdUnit4 se sube como artefacto. Las builds de exportación (Windows y Linux) en cada release de release-please llegan en la Fase 15.
 - **Releases** con release-please (`.github/workflows/release-please.yml`, action v5) en cada push a `main`: abre o actualiza la PR de release con la versión y el `CHANGELOG.md`. Configuración en `release-please-config.json` (tipo `simple`, `bump-minor-pre-major` para que un cambio incompatible no salte a la 1.0 antes de tiempo) y versión actual en `.release-please-manifest.json`. Usa el `GITHUB_TOKEN` del workflow, así que no hay token personal que caduque; a cambio, la CI no se dispara sola en las PR de release (solo tocan versión y CHANGELOG).
 - **Exportación**: `export_presets.cfg` con los presets `Windows Desktop` y `Linux` (x86_64, PCK embebido), que excluyen `tests/` y `addons/gdUnit4/`. Salida en `export/` (ignorado por git).
-- **Escenas de depuración**: sala de pruebas de movimiento (`world/debug/movement_test_room.tscn`, Fase 4); jugar un tramo suelto, arena de jefe y galería de objetos llegarán con sus fases.
+- **Escenas de depuración**: sala de pruebas de movimiento (`world/debug/movement_test_room.tscn`, Fase 4) y sala de un tramo (`world/debug/chunk_test_room.tscn`, Fase 5); arena de jefe y galería de objetos llegarán con sus fases.
 - **Consola o menú de depuración** (solo en builds de desarrollo): dar objetos, saltar de capa, invulnerabilidad y mostrar huecos y direcciones de las tiradas.
