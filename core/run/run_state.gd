@@ -12,6 +12,8 @@ signal threat_distance_changed(value: float)
 signal died
 ## A fork's branch was chosen: its id ("K/1/L").
 signal branch_chosen(branch: String)
+## An observable or an operator was gained (the HUD shows its name).
+signal item_gained(item: ItemData)
 
 ## Seed as shown to the player ("K7QX-2MPA" or a normalized text).
 var seed_code: String
@@ -31,16 +33,22 @@ var layer_index: int = 0
 ## Branches chosen at the forks, in order: ["K/1/L", "K/2/R"…].
 var path: PackedStringArray = []
 var counters := RunCounters.new()
+## Items of the run (observables, operator, transformations) and their effects.
+var build: Build
+## Index in the level's column of the highest chunk entered so far.
+var chunk_index: int = 0
 
 
-## Takes the seed as typed by the player; see SeedCode.normalize().
-func _init(p_seed_text: String, p_character: CharacterData) -> void:
+## Takes the seed as typed by the player; see SeedCode.normalize(). Without a
+## catalog the run has no transformations (tests).
+func _init(p_seed_text: String, p_character: CharacterData, catalog: ItemCatalog = null) -> void:
 	seed_code = SeedCode.from_text(p_seed_text)
 	world_rng = WorldRng.new(SeedCode.to_int(p_seed_text))
 	character = p_character
 	stats = Stats.new(character.base_stats)
 	hp = get_max_hp()
 	stats.stat_changed.connect(_on_stat_changed)
+	build = Build.new(self, catalog)
 
 
 ## Seed with its generation version, as shown in the HUD: "K7QX-2MPA · g1".
@@ -80,16 +88,59 @@ func heal(amount: float) -> void:
 	hp_changed.emit(hp, get_max_hp())
 
 
+func is_hp_full() -> bool:
+	return hp >= get_max_hp()
+
+
 func add_coins(amount: int) -> void:
 	coins += amount
 	counters.coins_collected += amount
 	coins_changed.emit(coins)
+	build.on_coins_collected(amount)
 
 
 func add_keys(amount: int) -> void:
 	keys += amount
 	counters.keys_collected += amount
 	keys_changed.emit(keys)
+
+
+## Pays photons if there are enough. Returns whether they were paid.
+func spend_coins(amount: int) -> bool:
+	if amount < 0 or coins < amount:
+		return false
+	coins -= amount
+	counters.coins_spent += amount
+	coins_changed.emit(coins)
+	return true
+
+
+## Uses positrons if there are enough. Returns whether they were used.
+func spend_keys(amount: int = 1) -> bool:
+	if amount < 0 or keys < amount:
+		return false
+	keys -= amount
+	keys_changed.emit(keys)
+	return true
+
+
+## Gains an item (see Build.add_item()) and counts it. Returns the operator it
+## replaced, if any.
+func add_item(item: ItemData) -> ItemData:
+	counters.items_collected += 1
+	var replaced: ItemData = build.add_item(item)
+	item_gained.emit(item)
+	return replaced
+
+
+## The player reached the chunk at `index` of the column: a new one recharges
+## the operator and wakes the effects that act per chunk.
+func enter_chunk(index: int) -> void:
+	if index <= chunk_index:
+		return
+	for entered: int in range(chunk_index + 1, index + 1):
+		build.on_chunk_entered(entered)
+	chunk_index = index
 
 
 func register_jump() -> void:

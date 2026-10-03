@@ -4,7 +4,10 @@ extends CharacterBody2D
 ## variable jump, coyote time, jump buffer, quantum jumps, one-way platforms and
 ## the Tunnel (dash). Shoots in 4 directions with its Shooter and takes hits
 ## through its Hurtbox. Reads its stats from the RunState given in bind_run()
-## and reports jumps and damage to it. See docs/04-player.md.
+## and reports jumps and damage to it. Its InteractionArea finds the
+## Interactables around it (the closest one gets the focus) and it calls the
+## run's Build down: shots, hits, physics frames and the operator.
+## See docs/04-player.md.
 
 signal state_changed(from: State, to: State)
 signal jumped(in_air: bool)
@@ -13,6 +16,7 @@ signal dashed(direction: float)
 signal hurt
 signal respawned
 signal shot(direction: Vector2)
+signal interacted(interactable: Interactable)
 
 enum State { IDLE, RUN, JUMP, FALL, DASH, HURT, DEAD }
 
@@ -60,6 +64,10 @@ var hurt_left: float = 0.0
 ## Recent floor spots, oldest first (see RisingThreat).
 var safe_spots: PackedVector2Array = []
 
+## Interactables in reach and the one with the focus.
+var interactables: Array[Interactable] = []
+var focused_interactable: Interactable = null
+
 var _dash_direction: float = 1.0
 ## Whether releasing jump can still cut the current rise.
 var _jump_cut_available: bool = false
@@ -68,6 +76,7 @@ var _was_on_floor: bool = false
 @onready var _collision_shape: CollisionShape2D = %CollisionShape
 @onready var _hurtbox: Hurtbox = %Hurtbox
 @onready var _shooter: Shooter = %Shooter
+@onready var _interaction_area: Area2D = %InteractionArea
 @onready var _visual: PlayerVisual = %Visual
 @onready var _hp_bar: ProgressBar = %HpBar
 @onready var _hp_label: Label = %HpLabel
@@ -82,6 +91,12 @@ static func max_air_jumps(max_jumps: int) -> int:
 func _ready() -> void:
 	add_to_group(GROUP)
 	_hurtbox.handler = take_hit
+	_shooter.shot.connect(_on_shooter_shot)
+	_interaction_area.collision_layer = 0
+	_interaction_area.collision_mask = 0
+	_interaction_area.set_collision_mask_value(PhysicsLayers.PICKUPS, true)
+	_interaction_area.area_entered.connect(_on_interaction_area_entered)
+	_interaction_area.area_exited.connect(_on_interaction_area_exited)
 
 
 ## Connects the player to the run it plays. Call it before the first physics frame.
@@ -90,11 +105,14 @@ func bind_run(new_run: RunState) -> void:
 		run.hp_changed.disconnect(_on_hp_changed)
 		run.died.disconnect(_on_died)
 		run.stats.stat_changed.disconnect(_on_stat_changed)
+		run.build.player = null
 	run = new_run
 	run.hp_changed.connect(_on_hp_changed)
 	run.died.connect(_on_died)
 	run.stats.stat_changed.connect(_on_stat_changed)
+	run.build.player = self
 	_shooter.stats = run.stats
+	_shooter.spec_modifier = run.build.modify_projectile
 	_apply_size(run.stats.get_value(Stats.SIZE))
 	_on_hp_changed(run.hp, run.get_max_hp())
 
@@ -125,6 +143,8 @@ func physics_step(delta: float, input: PlayerInput) -> void:
 	_after_move()
 	_update_state()
 	_visual.facing = facing
+	_update_focus()
+	run.build.physics_step(delta)
 
 
 func is_invulnerable() -> bool:
@@ -146,6 +166,29 @@ func get_feet_offset() -> float:
 ## Air jumps still available before touching the floor again.
 func get_air_jumps_left() -> int:
 	return max_air_jumps(run.stats.get_int(Stats.MAX_JUMPS)) - air_jumps_used
+
+
+## Px at which photons start flying towards the player.
+func get_pickup_radius() -> float:
+	return run.stats.get_value(Stats.PICKUP_RADIUS) if run != null else 0.0
+
+
+## Fires a burst of projectiles in every direction (item effects).
+func shoot_burst(count: int) -> void:
+	if state != State.DEAD:
+		_shooter.shoot_burst(count, velocity)
+
+
+## Uses the focused interactable, if any. Returns whether one was used.
+func interact() -> bool:
+	_update_focus()
+	if focused_interactable == null:
+		return false
+	var used: Interactable = focused_interactable
+	used.interact(self)
+	interacted.emit(used)
+	_update_focus()
+	return true
 
 
 ## Node that receives the player's projectiles (the level).
@@ -224,6 +267,10 @@ func _process_control(delta: float, input: PlayerInput) -> void:
 		_cut_jump()
 	_apply_horizontal(delta, input.move_axis)
 	_try_shoot(input.shoot_direction)
+	if input.interact_pressed:
+		interact()
+	if input.use_active_pressed:
+		run.build.use_active()
 
 
 ## Shoots if a direction is held and the rate allows it. Shooting down in the
@@ -414,6 +461,52 @@ func _update_invulnerability(delta: float) -> void:
 
 func _apply_size(value: float) -> void:
 	scale = Vector2(value, value)
+
+
+## Gives the focus to the closest enabled interactable in reach.
+func _update_focus() -> void:
+	var closest: Interactable = null
+	var closest_distance: float = INF
+	for interactable: Interactable in interactables:
+		if not is_instance_valid(interactable) or not interactable.enabled:
+			continue
+		var distance: float = global_position.distance_squared_to(interactable.global_position)
+		if distance < closest_distance:
+			closest = interactable
+			closest_distance = distance
+	if closest == focused_interactable:
+		return
+	if is_instance_valid(focused_interactable):
+		focused_interactable.set_focused(false)
+	focused_interactable = closest
+	if closest != null:
+		closest.set_focused(true)
+
+
+func _on_interaction_area_entered(area: Area2D) -> void:
+	var interactable: Interactable = area as Interactable
+	if interactable != null and interactable not in interactables:
+		interactables.append(interactable)
+
+
+func _on_interaction_area_exited(area: Area2D) -> void:
+	var interactable: Interactable = area as Interactable
+	if interactable == null:
+		return
+	interactables.erase(interactable)
+	if interactable == focused_interactable:
+		interactable.set_focused(false)
+		focused_interactable = null
+
+
+## Every shot of the player tells the build where it hits.
+func _on_shooter_shot(projectile: Projectile, _direction: Vector2) -> void:
+	projectile.hit_landed.connect(_on_projectile_hit_landed)
+
+
+func _on_projectile_hit_landed(hurtbox: Hurtbox, info: DamageInfo) -> void:
+	if run != null and is_instance_valid(hurtbox):
+		run.build.on_projectile_hit(info, hurtbox.global_position)
 
 
 func _on_died() -> void:

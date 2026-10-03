@@ -1,18 +1,11 @@
 class_name Coin
-extends Area2D
-## Photon pickup: adds its value to the run when the player touches it.
+extends Pickup
+## Photon pickup (×1, ×5 or ×10): adds its value to the run (through
+## Events.coin_collected) and flies to the player when it gets close.
 
-## Coins added to the run.
+## Photons added to the run.
 @export var value: int = 1
 
-@onready var _sprite: AnimatedSprite2D = $AnimatedSprite2D
 
-
-func _ready() -> void:
-	_sprite.play(&"idle")
-
-
-func _on_body_entered(body: Node2D) -> void:
-	if body is Player:
-		Events.coin_collected.emit(value)
-		queue_free()
+func _apply(_player: Player) -> void:
+	Events.coin_collected.emit(value)

@@ -26,6 +26,9 @@ var stats: Stats = null
 var projectile_parent: Node = null
 ## Seconds until the next shot is allowed.
 var cooldown_left: float = 0.0
+## func(spec: ProjectileSpec, direction: Vector2, shooter_velocity: Vector2)
+## that transforms every spec before its shot (the player's build).
+var spec_modifier: Callable = Callable()
 
 
 ## Seconds between shots for a rate in shots per second.
@@ -51,7 +54,7 @@ func can_shoot() -> bool:
 	return stats != null and cooldown_left <= 0.0
 
 
-## The spec of a shot with the current stats (modifiers will transform it).
+## The spec of a shot with the current stats (spec_modifier transforms it).
 func make_spec() -> ProjectileSpec:
 	var spec := ProjectileSpec.new()
 	spec.team = team
@@ -68,13 +71,31 @@ func try_shoot(direction: Vector2, shooter_velocity: Vector2 = Vector2.ZERO) -> 
 	if aim == Vector2.ZERO or not can_shoot():
 		return null
 	cooldown_left = cooldown_for(stats.get_value(Stats.ATTACK_RATE))
-	var origin: Vector2 = global_position + aim * muzzle_distance
+	return _launch(aim, shooter_velocity)
+
+
+## Fires `count` projectiles evenly around the shooter at once, ignoring the
+## rate (Efecto fotoeléctrico). Returns them.
+func shoot_burst(count: int, shooter_velocity: Vector2 = Vector2.ZERO) -> Array[Projectile]:
+	var projectiles: Array[Projectile] = []
+	if stats == null or count <= 0:
+		return projectiles
+	for i: int in count:
+		projectiles.append(_launch(Vector2.RIGHT.rotated(TAU * i / count), shooter_velocity))
+	return projectiles
+
+
+func _launch(direction: Vector2, shooter_velocity: Vector2) -> Projectile:
+	var spec: ProjectileSpec = make_spec()
+	if spec_modifier.is_valid():
+		spec_modifier.call(spec, direction, shooter_velocity)
+	var origin: Vector2 = global_position + direction * muzzle_distance
 	var projectile: Projectile = PROJECTILE_SCENE.instantiate()
-	projectile.launch(make_spec(), origin, aim, shooter_velocity * inherit_velocity_ratio)
+	projectile.launch(spec, origin, direction, shooter_velocity * inherit_velocity_ratio)
 	var parent: Node = projectile_parent
 	if parent == null:
 		parent = get_tree().current_scene
 	parent.add_child(projectile)
 	projectile.global_position = origin
-	shot.emit(projectile, aim)
+	shot.emit(projectile, direction)
 	return projectile

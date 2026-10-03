@@ -1,41 +1,34 @@
 class_name Hud
 extends CanvasLayer
-## In-run HUD. Listens to the RunState given in bind_run(): nothing is refreshed
-## every frame.
+## In-run HUD (docs/11-ui.md#hud-de-partida). Listens to the RunState given in
+## bind_run(): nothing is refreshed every frame. Shows the altitude, photons
+## and positrons, the operator with its charge, a banner with the name and
+## description of every item gained, the seed and the Decoherence warning.
+## The full stats are on the build screen (Tab).
 
-## Label font sizes: names of the values and the values themselves.
-const NAME_FONT_SIZE: int = 15
-const VALUE_FONT_SIZE: int = 20
-const OUTLINE_SIZE: int = 5
-## Translation key of each stat name: STAT_ + the stat id in capitals.
-const STAT_KEY_PREFIX: String = "STAT_"
+## Seconds the item banner stays and fades.
+const BANNER_TIME: float = 3.0
+const BANNER_FADE_TIME: float = 0.4
 
 ## Distance (pm) to the Decoherence under which the bottom edge starts to glow.
 @export var threat_warning_distance: float = 8.0
 
 var _run: RunState = null
-var _stat_labels: Dictionary[StringName, Label] = {}
+var _banner_tween: Tween = null
 
 @onready var _altitude_value: Label = %AltitudeValue
 @onready var _coins_value: Label = %CoinsValue
 @onready var _keys_value: Label = %KeysValue
-@onready var _stats_grid: GridContainer = %StatsGrid
 @onready var _seed_value: Label = %SeedValue
 @onready var _threat_value: Label = %ThreatValue
 @onready var _threat_glow: TextureRect = %ThreatGlow
-
-
-## Formats a stat value for display.
-static func format_stat(stat: StringName, value: float) -> String:
-	match stat:
-		Stats.MAX_JUMPS:
-			return str(roundi(value))
-		Stats.LUCK:
-			return "%.2f %%" % value
-		Stats.DEFENSE:
-			return "%.0f %%" % (value * 100.0)
-		_:
-			return "%.2f" % value
+@onready var _active_panel: Control = %ActivePanel
+@onready var _active_icon: ItemIconRect = %ActiveIcon
+@onready var _active_charge: ProgressBar = %ActiveCharge
+@onready var _active_key: Label = %ActiveKey
+@onready var _banner: Control = %ItemBanner
+@onready var _banner_title: Label = %BannerTitle
+@onready var _banner_text: Label = %BannerText
 
 
 ## How strong the Decoherence warning is (0 far, 1 touching) for a distance.
@@ -46,14 +39,8 @@ static func threat_danger(distance: float, warning_distance: float) -> float:
 
 
 func _ready() -> void:
-	for stat: StringName in Stats.ALL:
-		_stats_grid.add_child(
-			_make_label(STAT_KEY_PREFIX + String(stat).to_upper(), NAME_FONT_SIZE)
-		)
-		var value_label: Label = _make_label("", VALUE_FONT_SIZE)
-		value_label.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED
-		_stats_grid.add_child(value_label)
-		_stat_labels[stat] = value_label
+	_banner.modulate.a = 0.0
+	_active_key.text = "[%s]" % InputHints.key_name(&"use_active")
 
 
 func bind_run(run: RunState) -> void:
@@ -62,35 +49,52 @@ func bind_run(run: RunState) -> void:
 		_run.keys_changed.disconnect(_on_keys_changed)
 		_run.altitude_changed.disconnect(_on_altitude_changed)
 		_run.threat_distance_changed.disconnect(_on_threat_distance_changed)
-		_run.stats.stat_changed.disconnect(_on_stat_changed)
+		_run.item_gained.disconnect(_on_item_gained)
+		_run.build.active_item_changed.disconnect(_on_active_item_changed)
+		_run.build.active_charge_changed.disconnect(_on_active_charge_changed)
+		_run.build.transformation_gained.disconnect(_on_transformation_gained)
 	_run = run
 	_run.coins_changed.connect(_on_coins_changed)
 	_run.keys_changed.connect(_on_keys_changed)
 	_run.altitude_changed.connect(_on_altitude_changed)
 	_run.threat_distance_changed.connect(_on_threat_distance_changed)
-	_run.stats.stat_changed.connect(_on_stat_changed)
+	_run.item_gained.connect(_on_item_gained)
+	_run.build.active_item_changed.connect(_on_active_item_changed)
+	_run.build.active_charge_changed.connect(_on_active_charge_changed)
+	_run.build.transformation_gained.connect(_on_transformation_gained)
 
 	_seed_value.text = run.get_seed_label()
 	_on_coins_changed(run.coins)
 	_on_keys_changed(run.keys)
 	_on_altitude_changed(run.altitude)
 	_on_threat_distance_changed(run.threat_distance)
-	for stat: StringName in Stats.ALL:
-		_on_stat_changed(stat, run.stats.get_value(stat))
+	_on_active_item_changed(run.build.active_item)
 
 
-func get_stat_text(stat: StringName) -> String:
-	return _stat_labels[stat].text
+func get_coins_text() -> String:
+	return _coins_value.text
 
 
-func _make_label(text: String, font_size: int) -> Label:
-	var label := Label.new()
-	label.text = text
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.add_theme_color_override(&"font_outline_color", Color.BLACK)
-	label.add_theme_constant_override(&"outline_size", OUTLINE_SIZE)
-	label.add_theme_font_size_override(&"font_size", font_size)
-	return label
+## Title of the item banner (what the last item gained was called).
+func get_banner_title() -> String:
+	return _banner_title.text
+
+
+func is_active_shown() -> bool:
+	return _active_panel.visible
+
+
+## Shows a title and a text in the banner for a while.
+func show_banner(title: String, text: String, color: Color = Palette.INK) -> void:
+	_banner_title.text = title
+	_banner_title.add_theme_color_override(&"font_color", color)
+	_banner_text.text = text
+	if _banner_tween != null:
+		_banner_tween.kill()
+	_banner.modulate.a = 1.0
+	_banner_tween = create_tween()
+	_banner_tween.tween_interval(BANNER_TIME)
+	_banner_tween.tween_property(_banner, ^"modulate:a", 0.0, BANNER_FADE_TIME)
 
 
 func _on_coins_changed(value: int) -> void:
@@ -110,5 +114,26 @@ func _on_threat_distance_changed(value: float) -> void:
 	_threat_glow.modulate.a = threat_danger(value, threat_warning_distance)
 
 
-func _on_stat_changed(stat: StringName, value: float) -> void:
-	_stat_labels[stat].text = format_stat(stat, value)
+func _on_item_gained(item: ItemData) -> void:
+	show_banner(
+		tr(item.get_name_key()), tr(item.get_description_key()), ItemRarity.get_color(item.rarity)
+	)
+
+
+func _on_transformation_gained(transformation: TransformationData) -> void:
+	show_banner(
+		tr(transformation.get_name_key()), tr(transformation.get_description_key()), Palette.PLAYER
+	)
+
+
+func _on_active_item_changed(item: ItemData) -> void:
+	_active_panel.visible = item != null
+	_active_icon.set_item(item)
+	if item != null:
+		_on_active_charge_changed(_run.build.active_charge, _run.build.get_max_charge())
+
+
+func _on_active_charge_changed(charge: int, max_charge: int) -> void:
+	_active_charge.max_value = maxi(max_charge, 1)
+	_active_charge.value = charge
+	_active_key.modulate.a = 1.0 if charge >= max_charge else 0.35

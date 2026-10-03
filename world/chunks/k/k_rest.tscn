@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://world/chunks/chunk.gd" id="1_ut21q"]
 [ext_resource type="Script" path="res://world/chunks/chunk_data.gd" id="2_a2mi2"]
 [ext_resource type="TileSet" path="res://world/tilesets/layer_k_tileset.tres" id="3_k51ub"]
+[ext_resource type="PackedScene" path="res://items/rest/rest_shrine.tscn" id="4_shrine"]
 
 [sub_resource type="Resource" id="Resource_ny10v"]
 script = ExtResource("2_a2mi2")
@@ -56,3 +57,6 @@ gizmo_extents = 12.0
 [node name="Slots" type="Node2D" parent="." unique_id=786744410]
 
 [node name="Props" type="Node2D" parent="." unique_id=1432071716]
+
+[node name="RestShrine" parent="Props" unique_id=1250797845 instance=ExtResource("4_shrine")]
+position = Vector2(640, 352)

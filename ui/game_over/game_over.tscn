@@ -79,6 +79,14 @@ text = "-"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="ItemsLabel" type="Label" parent="Rows"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+text = "-"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="CauseLabel" type="Label" parent="Rows"]
 unique_name_in_owner = true
 auto_translate_mode = 2

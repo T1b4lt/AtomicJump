@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://items/effects/item_effect.gd" id="1_ka3sv"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_mko8m"]
+[ext_resource type="Script" path="res://items/effects/stat_effect.gd" id="3_5jnfe"]
+[ext_resource type="Texture2D" path="res://assets/generated/icons/compton_length.svg" id="4_1fn1e"]
+[ext_resource type="Script" path="res://items/item_data.gd" id="5_1w41k"]
+
+[sub_resource type="Resource" id="Resource_riyf3"]
+script = ExtResource("2_mko8m")
+stat = &"size"
+type = 1
+value = -0.15
+
+[sub_resource type="Resource" id="Resource_gnphx"]
+script = ExtResource("3_5jnfe")
+modifiers = Array[ExtResource("2_mko8m")]([SubResource("Resource_riyf3")])
+
+[resource]
+script = ExtResource("5_1w41k")
+id = &"compton_length"
+rarity = 1
+pools = Array[StringName]([&"pool_container", &"pool_shop"])
+tags = Array[StringName]([&"wave"])
+icon = ExtResource("4_1fn1e")
+effects = Array[ExtResource("1_ka3sv")]([SubResource("Resource_gnphx")])

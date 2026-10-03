@@ -46,23 +46,39 @@ const SLOT_SECRET: StringName = &"slot_secret"
 const SLOT_KINDS: Array[StringName] = [
 	SLOT_PICKUP, SLOT_CONTAINER, SLOT_ENEMY_GROUND, SLOT_ENEMY_AIR, SLOT_HAZARD, SLOT_SECRET
 ]
-## Objects that slots and rewards can hold.
-const COIN: StringName = &"coin"
-const KEY: StringName = &"key"
+## Objects that slots and rewards can hold (pickups: see PickupScenes).
+const COIN: StringName = PickupScenes.COIN
+const COIN_5: StringName = PickupScenes.COIN_5
+const COIN_10: StringName = PickupScenes.COIN_10
+const KEY: StringName = PickupScenes.KEY
+const HEAL: StringName = PickupScenes.HEAL
+const HEAL_BIG: StringName = PickupScenes.HEAL_BIG
 const SPIKE: StringName = &"spike"
+## Containers (docs/06-economy.md#contenedores): quantum well, bound electron, superposition.
+const CHEST: StringName = &"chest"
+const CHEST_SPECIAL: StringName = &"chest_special"
+const CHOICE_PEDESTAL: StringName = &"choice_pedestal"
 ## Enemies of Layer K (their EnemyData ids).
 const ORBITAL_ELECTRON: StringName = &"orbital_electron"
 const FREE_NEUTRON: StringName = &"free_neutron"
 const ALPHA_PARTICLE: StringName = &"alpha_particle"
 const OBJECT_SCENES: Dictionary[StringName, PackedScene] = {
 	COIN: preload("res://items/pickups/coin/coin.tscn"),
+	COIN_5: preload("res://items/pickups/coin/coin_5.tscn"),
+	COIN_10: preload("res://items/pickups/coin/coin_10.tscn"),
 	KEY: preload("res://items/pickups/key/key.tscn"),
+	HEAL: preload("res://items/pickups/heal/heal_pickup.tscn"),
+	HEAL_BIG: preload("res://items/pickups/heal/heal_pickup_big.tscn"),
 	SPIKE: preload("res://world/hazards/spike/spike.tscn"),
+	CHEST: preload("res://items/containers/common_chest.tscn"),
+	CHEST_SPECIAL: preload("res://items/containers/special_chest.tscn"),
+	CHOICE_PEDESTAL: preload("res://items/containers/choice_pedestal.tscn"),
 	ORBITAL_ELECTRON: preload("res://actors/enemies/orbital_electron/orbital_electron.tscn"),
 	FREE_NEUTRON: preload("res://actors/enemies/free_neutron/free_neutron.tscn"),
 	ALPHA_PARTICLE: preload("res://actors/enemies/alpha_particle/alpha_particle.tscn"),
 }
 const FORK_GATE_SCENE: PackedScene = preload("res://world/chunks/fork_gate.tscn")
+const ITEM_PEDESTAL_SCENE: PackedScene = preload("res://items/containers/item_pedestal.tscn")
 ## Coins of a reward_coins reward, in a ring around the reward marker.
 const REWARD_COINS: int = 8
 const REWARD_RING_RADIUS: float = 44.0
@@ -71,6 +87,10 @@ const DROP_SPACING: float = 20.0
 const DROP_HEIGHT: float = 16.0
 ## Suffix of the address of what an enemy decays into.
 const DECAY_KEY: StringName = &"decay"
+## Prefix of the address of a branch's reward item (domain "loot").
+const REWARD_KEY: StringName = &"reward"
+## Chance that a reward_item is a superposition (two items) instead of a pedestal.
+const REWARD_CHOICE_CHANCE: float = 0.5
 
 @export var data: ChunkData:
 	set(value):
@@ -86,6 +106,8 @@ var _chosen_side: int = -1
 ## Rolls of the run, for the drops of the enemies (set by fill_slots()).
 var _rng: WorldRng = null
 var _layer_index: int = 0
+## Item and loot rolls of the run, for containers, rewards and shops.
+var _roller: LootRoller = null
 
 
 ## Opening (third of the inner width) that contains the x of a marker.
@@ -170,7 +192,7 @@ func get_optional_layers() -> Array[TileMapLayer]:
 
 
 ## Every TileMapLayer of the chunk: walls, platforms and optional parts.
-func get_tile_layers() -> Array[TileMapLayer]:
+func _tile_layers() -> Array[TileMapLayer]:
 	var layers: Array[TileMapLayer] = []
 	for layer: TileMapLayer in [get_walls(), get_platforms()]:
 		if layer != null:
@@ -208,7 +230,7 @@ func get_slot_nodes() -> Array[Node2D]:
 func apply_mirror() -> void:
 	assert(not mirrored, "Chunk already mirrored")
 	mirrored = true
-	for layer: TileMapLayer in get_tile_layers():
+	for layer: TileMapLayer in _tile_layers():
 		_mirror_layer(layer)
 	for group: NodePath in [^"Markers", ^"Slots", ^"Props"]:
 		var node: Node = get_node_or_null(group)
@@ -227,32 +249,39 @@ func set_optional_parts(enabled: Array[StringName]) -> void:
 
 
 ## Fills the slots with {slot name: object id} from SlotFiller.plan(). The
-## enemies get the address of their slot (`key` + slot name), which seeds their
-## decisions and their drops with `rng`, and scale with `layer_index`.
+## enemies and the containers get the address of their slot (`key` + slot
+## name), which seeds their decisions, their drops and their loot with `rng`
+## and `roller`; enemies scale and containers cost more with `layer_index`.
 func fill_slots(
 	plan: Dictionary[StringName, StringName],
 	key: Array = [],
 	rng: WorldRng = null,
-	layer_index: int = 0
+	layer_index: int = 0,
+	roller: LootRoller = null
 ) -> void:
-	set_rolls(rng, layer_index)
+	set_rolls(rng, layer_index, roller)
 	for slot_name: StringName in plan:
 		var slot: Node2D = get_node_or_null(NodePath("Slots/" + String(slot_name))) as Node2D
 		if slot == null or not OBJECT_SCENES.has(plan[slot_name]):
 			continue
 		var object: Node = OBJECT_SCENES[plan[slot_name]].instantiate()
 		var enemy: Enemy = object as Enemy
+		var container: LootContainer = object as LootContainer
 		if enemy != null:
 			add_enemy(enemy, slot.position, key + [slot_name])
+		elif container != null:
+			container.setup_slot(key + [slot_name], _roller, _layer_index)
+			_add_object(container, slot.position)
 		else:
 			_add_object(object as Node2D, slot.position)
 
 
-## Rolls of the run for the drops of the enemies, and the layer index that
-## scales them (fill_slots() sets them).
-func set_rolls(rng: WorldRng, layer_index: int = 0) -> void:
+## Rolls of the run for the drops of the enemies and the loot of the
+## containers, and the layer index that scales them (fill_slots() sets them).
+func set_rolls(rng: WorldRng, layer_index: int = 0, roller: LootRoller = null) -> void:
 	_rng = rng
 	_layer_index = layer_index
+	_roller = roller
 
 
 ## Adds an enemy at `at` (chunk px) with the address of its slot. When it dies,
@@ -272,8 +301,10 @@ func get_enemies() -> Array[Enemy]:
 	return enemies
 
 
-## Puts the reward of the branch on the reward marker.
-func spawn_reward(reward: StringName) -> void:
+## Puts the reward of the branch on the reward marker. A reward_item rolls
+## its observable (or the two of a superposition) at ("reward", `key`…) with
+## the roller given to set_rolls().
+func spawn_reward(reward: StringName, key: Array = []) -> void:
 	var marker: Marker2D = get_marker(REWARD_MARKER)
 	if marker == null:
 		return
@@ -286,6 +317,30 @@ func spawn_reward(reward: StringName) -> void:
 				_spawn(OBJECT_SCENES[COIN], marker.position + offset)
 		LayerData.REWARD_KEY:
 			_spawn(OBJECT_SCENES[KEY], marker.position)
+		LayerData.REWARD_ITEM:
+			_spawn_reward_item(marker.position, [REWARD_KEY] + key)
+
+
+## Rolls the shops of the chunk (Shop nodes in Props/) with the roller given
+## to set_rolls(), at the chunk's `key`. Returns them.
+func setup_shops(key: Array) -> Array[Shop]:
+	var shops: Array[Shop] = []
+	var props: Node = get_node_or_null(^"Props")
+	if props == null or _roller == null:
+		return shops
+	for child: Node in props.get_children():
+		var shop: Shop = child as Shop
+		if shop != null:
+			shop.setup(key, _roller, _layer_index)
+			shops.append(shop)
+	return shops
+
+
+## Puts a pickup (an OBJECT_SCENES id) at `at` (chunk px), e.g. what an item
+## effect drops. Deferred, since it may happen during a physics callback.
+func spawn_object(object_id: StringName, at: Vector2) -> void:
+	if OBJECT_SCENES.has(object_id):
+		_spawn.call_deferred(OBJECT_SCENES[object_id], at)
 
 
 ## Puts a ForkGate on each exit, left to right, showing the reward of its branch.
@@ -303,6 +358,22 @@ func setup_fork(rewards: Array[StringName]) -> void:
 
 func get_gates() -> Array[ForkGate]:
 	return _gates
+
+
+func _spawn_reward_item(at: Vector2, address: Array) -> void:
+	if _roller == null or _rng == null:
+		return
+	if _rng.chance(REWARD_CHOICE_CHANCE, &"loot", address + [&"choice"]):
+		var choice: ChoicePedestal = OBJECT_SCENES[CHOICE_PEDESTAL].instantiate()
+		choice.setup_slot(address, _roller, _layer_index)
+		_add_object(choice, at)
+		return
+	var item: ItemData = _roller.roll_item(ItemData.POOL_CONTAINER, address)
+	if item == null:
+		return
+	var pedestal: ItemPedestal = ITEM_PEDESTAL_SCENE.instantiate()
+	pedestal.set_item(item)
+	_add_object(pedestal, at)
 
 
 func _markers_with_prefix(prefix: String) -> Array[Marker2D]:

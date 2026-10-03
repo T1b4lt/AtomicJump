@@ -45,7 +45,7 @@ STAT_ATTACK_RANGE,Alcance,Range
 STAT_DEFENSE,Apantallamiento,Shielding
 DEBUG_MOVEMENT_ROOM_HELP,"R: volver al inicio · T: Decoherencia · F: trayectoria","R: back to start · T: Decoherence · F: trajectory"
 LAYER_K_NAME,Capa K,Layer K
-DEBUG_CHUNK_ROOM_HELP,"R: volver al inicio · M: espejo · N: otra semilla · Re Pág/Av Pág: tramo anterior/siguiente","R: back to start · M: mirror · N: another seed · PgUp/PgDn: previous/next chunk"
+DEBUG_CHUNK_ROOM_HELP,"R: volver al inicio · M: espejo · N: otra semilla · Re Pág/Av Pág: tramo anterior/siguiente · C: fotones y positrón","R: back to start · M: mirror · N: another seed · PgUp/PgDn: previous/next chunk · C: photons and positron"
 GAME_OVER_KILLS,Enemigos eliminados: %s,Enemies eliminated: %s
 GAME_OVER_CAUSE,Causa: %s,Cause: %s
 CAUSE_ORBITAL_ELECTRON,Electrón orbital,Orbital electron
@@ -63,3 +63,62 @@ STATUS_DECAY,Inestable,Unstable
 STATUS_SLOW,Dilatado,Dilated
 STATUS_ROOT,Confinado,Confined
 DEBUG_COMBAT_ROOM_HELP,"1/2/3: electrón/neutrón/alfa · 4/5/6: inestable/dilatado/confinado · K: eliminar todos · R: volver al inicio","1/2/3: electron/neutron/alpha · 4/5/6: unstable/dilated/confined · K: kill all · R: back to start"
+STAT_PICKUP_RADIUS,Atracción,Attraction
+STATUS_OBSERVED,Observado,Observed
+STATUS_STUNNED,Aturdido,Stunned
+RARITY_COMMON,Fundamental,Fundamental
+RARITY_RARE,Excitado,Excited
+RARITY_EPIC,Resonante,Resonant
+RARITY_LEGENDARY,Unificado,Unified
+INTERACT_OPEN,Excitar,Excite
+SHOP_HEAL,Cuanto de energía (+20),Energy quantum (+20)
+SHOP_KEY,Positrón,Positron
+SHOP_REROLL,Reintento,Reroll
+REST_HEAL,Relajarse: +40 % de coherencia,Relax: +40% coherence
+REST_MAX_HP,Estabilizarse: +10 de coherencia máxima,Stabilize: +10 max coherence
+SOURCE_REST_MAX_HP,Estado fundamental,Ground state
+BUILD_STATS,Estadísticas,Stats
+BUILD_ITEMS,Observables y operador,Observables and operator
+BUILD_BASE,base,base
+BUILD_CHARGE,carga %d/%d,charge %d/%d
+BUILD_NO_ITEMS,Aún no llevas nada.,You carry nothing yet.
+GAME_OVER_ITEMS,Objetos: %s,Items: %s
+ITEM_EFFECTIVE_MASS_NAME,Masa efectiva,Effective mass
+ITEM_EFFECTIVE_MASS_DESC,+25 de coherencia máxima.,+25 max coherence.
+ITEM_HIGH_SPIN_NAME,Espín alto,High spin
+ITEM_HIGH_SPIN_DESC,+1 salto cuántico.,+1 quantum jump.
+ITEM_PLANCK_CONSTANT_NAME,Constante de Planck,Planck constant
+ITEM_PLANCK_CONSTANT_DESC,"+5 % de coherencia máxima, momento, impulso, carga, frecuencia y alcance.","+5% max coherence, momentum, impulse, charge, frequency and range."
+ITEM_LINEAR_MOMENTUM_NAME,Momento lineal,Linear momentum
+ITEM_LINEAR_MOMENTUM_DESC,+40 de momento.,+40 momentum.
+ITEM_COMPTON_LENGTH_NAME,Longitud de Compton,Compton wavelength
+ITEM_COMPTON_LENGTH_DESC,−15 % de longitud de onda: eres más pequeño.,−15% wavelength: you are smaller.
+ITEM_NUCLEAR_SHIELDING_NAME,Apantallamiento nuclear,Nuclear shielding
+ITEM_NUCLEAR_SHIELDING_DESC,+10 % de apantallamiento.,+10% shielding.
+ITEM_FINE_STRUCTURE_NAME,Constante de estructura fina,Fine-structure constant
+ITEM_FINE_STRUCTURE_DESC,"+0,5 disparos por segundo.",+0.5 shots per second.
+ITEM_MEAN_FREE_PATH_NAME,Recorrido libre medio,Mean free path
+ITEM_MEAN_FREE_PATH_DESC,+150 de alcance.,+150 range.
+ITEM_BINDING_ENERGY_NAME,Energía de enlace,Binding energy
+ITEM_BINDING_ENERGY_DESC,+2 de carga.,+2 charge.
+ITEM_BOSE_EINSTEIN_NAME,Condensado de Bose-Einstein,Bose-Einstein condensate
+ITEM_BOSE_EINSTEIN_DESC,Radio de atracción de fotones ×3.,Photon attraction radius ×3.
+ITEM_PHOTOELECTRIC_EFFECT_NAME,Efecto fotoeléctrico,Photoelectric effect
+ITEM_PHOTOELECTRIC_EFFECT_DESC,Cada 10 fotones recogidos lanzas una ráfaga de proyectiles en todas direcciones.,Every 10 photons collected fire a burst of projectiles in every direction.
+ITEM_COMPTON_EFFECT_NAME,Efecto Compton,Compton effect
+ITEM_COMPTON_EFFECT_DESC,Los proyectiles que impactan tienen un 10 % de soltar 1 fotón.,Projectiles that hit have a 10% chance to drop 1 photon.
+ITEM_DOPPLER_EFFECT_NAME,Efecto Doppler,Doppler effect
+ITEM_DOPPLER_EFFECT_DESC,+30 % de daño al disparar en la dirección en la que te mueves.,+30% damage when shooting in the direction you move.
+ITEM_STANDING_WAVE_NAME,Onda estacionaria,Standing wave
+ITEM_STANDING_WAVE_DESC,+50 % de frecuencia mientras estás quieto en el suelo.,+50% frequency while standing still on the ground.
+ITEM_HALF_LIFE_NAME,Vida media,Half-life
+ITEM_HALF_LIFE_DESC,Los enemigos golpeados quedan Inestables (daño por segundo).,Enemies hit become Unstable (damage over time).
+ITEM_VACUUM_ENERGY_NAME,Energía del vacío,Vacuum energy
+ITEM_VACUUM_ENERGY_DESC,Al entrar en cada tramo aparece un cuanto de energía.,An energy quantum appears whenever you enter a new chunk.
+ITEM_ZENO_EFFECT_NAME,Efecto Zenón,Zeno effect
+ITEM_ZENO_EFFECT_DESC,Operador (2 tramos): observar congela a los enemigos en pantalla 3 s.,Operator (2 chunks): observing freezes the enemies on screen for 3 s.
+ITEM_COLLAPSE_NAME,Colapso,Collapse
+ITEM_COLLAPSE_DESC,Operador (3 tramos): destruye los proyectiles enemigos en pantalla y aturde a los enemigos 1 s.,Operator (3 chunks): destroys the enemy projectiles on screen and stuns the enemies for 1 s.
+TRANSFORMATION_WAVE_PACKET_NAME,¡Paquete de ondas!,Wave packet!
+TRANSFORMATION_WAVE_PACKET_DESC,3 observables de onda: tus proyectiles ondulan y atraviesan a 1 enemigo.,3 wave observables: your projectiles undulate and pierce 1 enemy.
+DEBUG_ITEM_ROOM_HELP,"C: fotones y positrón · I: siguiente observable · O: siguiente operador · H: perder coherencia · 1: neutrón libre · R: reiniciar · Tab: build","C: photons and positron · I: next observable · O: next operator · H: lose coherence · 1: free neutron · R: rebuild · Tab: build"

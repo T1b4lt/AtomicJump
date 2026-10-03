@@ -1,0 +1,106 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/build_screen/build_screen.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.0431373, 0.0627451, 0.133333, 0.92)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.109804, 0.145098, 0.278431, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+content_margin_left = 14.0
+content_margin_top = 10.0
+content_margin_right = 14.0
+content_margin_bottom = 10.0
+
+[node name="BuildScreen" type="CanvasLayer"]
+process_mode = 3
+layer = 5
+visible = false
+script = ExtResource("1_script")
+
+[node name="Dim" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.0196078, 0.027451, 0.0588235, 0.55)
+
+[node name="StatsPanel" type="PanelContainer" parent="."]
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 516.0
+offset_bottom = -16.0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Column" type="VBoxContainer" parent="StatsPanel"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="StatsPanel/Column"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "BUILD_STATS"
+
+[node name="StatsGrid" type="GridContainer" parent="StatsPanel/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/h_separation = 12
+columns = 3
+
+[node name="SeedRow" type="HBoxContainer" parent="StatsPanel/Column"]
+layout_mode = 2
+
+[node name="SeedLabel" type="Label" parent="StatsPanel/Column/SeedRow"]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+size_flags_horizontal = 3
+text = "XXXX-XXXX · g1"
+
+[node name="CopySeedButton" type="Button" parent="StatsPanel/Column/SeedRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "GAME_OVER_COPY_SEED"
+
+[node name="ItemsPanel" type="PanelContainer" parent="."]
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -420.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Column" type="VBoxContainer" parent="ItemsPanel"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="ItemsPanel/Column"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "BUILD_ITEMS"
+
+[node name="Scroll" type="ScrollContainer" parent="ItemsPanel/Column"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ItemsList" type="VBoxContainer" parent="ItemsPanel/Column/Scroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8

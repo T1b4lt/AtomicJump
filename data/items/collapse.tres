@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://items/effects/item_effect.gd" id="1_t3sap"]
+[ext_resource type="Script" path="res://items/effects/screen_status_effect.gd" id="2_wkk8n"]
+[ext_resource type="Resource" path="res://data/statuses/status_stunned.tres" id="3_0q7ei"]
+[ext_resource type="Texture2D" path="res://assets/generated/icons/collapse.svg" id="4_56wi2"]
+[ext_resource type="Script" path="res://items/item_data.gd" id="5_4ygio"]
+
+[sub_resource type="Resource" id="Resource_sca5g"]
+script = ExtResource("2_wkk8n")
+status = ExtResource("3_0q7ei")
+destroy_enemy_projectiles = true
+
+[resource]
+script = ExtResource("5_4ygio")
+id = &"collapse"
+kind = 1
+rarity = 1
+pools = Array[StringName]([&"pool_shop", &"pool_special"])
+icon = ExtResource("4_56wi2")
+effects = Array[ExtResource("1_t3sap")]([SubResource("Resource_sca5g")])
+charge_chunks = 3

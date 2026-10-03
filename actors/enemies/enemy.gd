@@ -12,6 +12,9 @@ extends CharacterBody2D
 
 signal died(enemy: Enemy)
 
+## Group of the living enemies (operators look for them on screen).
+const GROUP: StringName = &"enemies"
+
 ## Gravity of the walking enemies, in px/s².
 const GRAVITY: float = 1400.0
 const MAX_FALL_SPEED: float = 820.0
@@ -67,6 +70,7 @@ func setup(p_address: Array, rng: WorldRng, p_layer_index: int = 0) -> void:
 
 
 func _ready() -> void:
+	add_to_group(GROUP)
 	collision_layer = 0
 	collision_mask = 0
 	set_collision_mask_value(PhysicsLayers.WORLD, true)

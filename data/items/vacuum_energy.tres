@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://items/effects/item_effect.gd" id="1_ksssh"]
+[ext_resource type="Script" path="res://items/effects/chunk_spawn_effect.gd" id="2_kl4ua"]
+[ext_resource type="Texture2D" path="res://assets/generated/icons/vacuum_energy.svg" id="3_gbau2"]
+[ext_resource type="Script" path="res://items/item_data.gd" id="4_u0coi"]
+
+[sub_resource type="Resource" id="Resource_lqwed"]
+script = ExtResource("2_kl4ua")
+
+[resource]
+script = ExtResource("4_u0coi")
+id = &"vacuum_energy"
+rarity = 2
+pools = Array[StringName]([&"pool_shop", &"pool_special"])
+tags = Array[StringName]([&"quantum"])
+icon = ExtResource("3_gbau2")
+effects = Array[ExtResource("1_ksssh")]([SubResource("Resource_lqwed")])

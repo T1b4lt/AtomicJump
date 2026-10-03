@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://items/effects/item_effect.gd" id="1_afnyi"]
+[ext_resource type="Script" path="res://items/effects/coin_burst_effect.gd" id="2_j1tk3"]
+[ext_resource type="Texture2D" path="res://assets/generated/icons/photoelectric_effect.svg" id="3_muocq"]
+[ext_resource type="Script" path="res://items/item_data.gd" id="4_cm2pe"]
+
+[sub_resource type="Resource" id="Resource_b2r11"]
+script = ExtResource("2_j1tk3")
+
+[resource]
+script = ExtResource("4_cm2pe")
+id = &"photoelectric_effect"
+rarity = 1
+pools = Array[StringName]([&"pool_container", &"pool_shop", &"pool_special"])
+tags = Array[StringName]([&"photon"])
+icon = ExtResource("3_muocq")
+effects = Array[ExtResource("1_afnyi")]([SubResource("Resource_b2r11")])

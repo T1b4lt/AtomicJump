@@ -1,0 +1,46 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://items/containers/special_chest.gd" id="1_script"]
+[ext_resource type="Resource" path="res://data/loot/chest_special.tres" id="2_loot"]
+[ext_resource type="Texture2D" path="res://assets/generated/containers/bound_electron.svg" id="3_orbits"]
+[ext_resource type="Texture2D" path="res://assets/generated/enemies/decay_electron.svg" id="4_electron"]
+[ext_resource type="Texture2D" path="res://assets/generated/pickups/positron.svg" id="5_hint"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_touch"]
+radius = 26.0
+
+[node name="SpecialChest" type="Node2D"]
+script = ExtResource("1_script")
+loot = ExtResource("2_loot")
+
+[node name="Visual" type="Node2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(0, -24)
+
+[node name="Orbits" type="Sprite2D" parent="Visual"]
+self_modulate = Color(1.4, 1.4, 1.4, 1)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("3_orbits")
+
+[node name="Electron" type="Sprite2D" parent="Visual"]
+unique_name_in_owner = true
+self_modulate = Color(1.6, 1.6, 1.6, 1)
+scale = Vector2(0.35, 0.35)
+texture = ExtResource("4_electron")
+
+[node name="Hint" type="Sprite2D" parent="Visual"]
+unique_name_in_owner = true
+self_modulate = Color(1.4, 1.4, 1.4, 1)
+position = Vector2(0, -40)
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("5_hint")
+
+[node name="Touch" type="Area2D" parent="."]
+unique_name_in_owner = true
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Touch"]
+position = Vector2(0, -24)
+shape = SubResource("CircleShape2D_touch")

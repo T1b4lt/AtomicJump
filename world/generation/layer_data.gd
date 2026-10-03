@@ -9,6 +9,7 @@ extends Resource
 ## docs/03-run.md#tipos-de-recompensa-de-rama).
 const REWARD_COINS: StringName = &"reward_coins"
 const REWARD_KEY: StringName = &"reward_key"
+const REWARD_ITEM: StringName = &"reward_item"
 
 ## Letter of the layer in the addresses of the rolls ("K").
 @export var code: String = "K"
@@ -30,6 +31,8 @@ const REWARD_KEY: StringName = &"reward_key"
 ## Weight of each object (Chunk.COIN…) in pickup and hazard slots.
 @export var pickup_weights: Dictionary[StringName, float] = {}
 @export var hazard_weights: Dictionary[StringName, float] = {}
+## Weight of each container (Chunk.CHEST…) in container slots.
+@export var container_weights: Dictionary[StringName, float] = {}
 ## Weight of each enemy (Chunk.ORBITAL_ELECTRON…) in ground and air enemy slots.
 @export var enemy_ground_weights: Dictionary[StringName, float] = {}
 @export var enemy_air_weights: Dictionary[StringName, float] = {}
@@ -44,6 +47,8 @@ func get_slot_objects(kind: StringName) -> Dictionary[StringName, float]:
 			return pickup_weights
 		Chunk.SLOT_HAZARD:
 			return hazard_weights
+		Chunk.SLOT_CONTAINER:
+			return container_weights
 		Chunk.SLOT_ENEMY_GROUND:
 			return enemy_ground_weights
 		Chunk.SLOT_ENEMY_AIR:

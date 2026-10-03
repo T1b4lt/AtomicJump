@@ -7,6 +7,8 @@ extends Node2D
 ## without a choice: crossing one of its exits records the branch in the run and
 ## adds that branch to the column. Reaching the top of the layer ends the run as
 ## completed (the boss and the next layers arrive in later phases); dying ends it.
+## Climbing into a new chunk tells the run (it recharges the operator), and
+## the run's build drops its pickups into the chunk where they fall.
 
 ## Altitude units (pm) per chunk height of one screen (the prototype counted 11).
 const ALTITUDE_UNITS_PER_CHUNK: float = 11.0
@@ -27,6 +29,8 @@ var run: RunState = null
 var layer: LayerData = null
 var plan: LayerPlan = null
 var _library: ChunkLibrary = null
+## Item and loot rolls of the run (containers, rewards, shops).
+var _roller: LootRoller = null
 ## Placements of the column, bottom up, and the world y of each one's top edge.
 var _column: Array[ChunkPlacement] = []
 var _tops: PackedFloat32Array = []
@@ -42,6 +46,8 @@ var _ending: bool = false
 @onready var _player: Player = %Player
 @onready var _threat: RisingThreat = %RisingThreat
 @onready var _hud: Hud = %Hud
+@onready var _build_screen: BuildScreen = %BuildScreen
+@onready var _pause_menu: PauseMenu = %PauseMenu
 @onready var _projectiles: Node2D = %Projectiles
 @onready var _hit_stop: HitStop = %HitStop
 
@@ -50,6 +56,7 @@ func _ready() -> void:
 	# Running the level scene on its own (F6) starts a random run
 	run = RunManager.run if RunManager.has_run() else RunManager.start_run()
 	layer = layers[mini(run.layer_index, layers.size() - 1)]
+	_roller = LootRoller.new(run.world_rng, run.build.catalog, run)
 	_library = ChunkLibrary.from_layers(layers)
 	plan = LayerGenerator.new(_library).generate(layer, run.world_rng)
 	_rebuild_column()
@@ -61,6 +68,10 @@ func _ready() -> void:
 	Events.enemy_damaged.connect(_on_enemy_damaged)
 	Events.enemy_killed.connect(_on_enemy_killed)
 	_hud.bind_run(run)
+	_build_screen.bind_run(run)
+	_pause_menu.paused.connect(_build_screen.set_pinned.bind(true))
+	_pause_menu.resumed.connect(_build_screen.set_pinned.bind(false))
+	run.build.spawner = spawn_object
 	run.died.connect(_end_run.bind(false))
 	var spawn: Marker2D = _chunks[0].get_marker(Chunk.SPAWN_MARKER)
 	if spawn != null:
@@ -81,9 +92,15 @@ func _ready() -> void:
 	_update_chunks()
 
 
+func _exit_tree() -> void:
+	if run != null:
+		run.build.spawner = Callable()
+
+
 func _physics_process(_delta: float) -> void:
 	_threat.paused = is_safe_at(_player.global_position.y)
 	_update_chunks()
+	run.enter_chunk(chunk_index_at(_player.global_position.y))
 	var height: float = (_start_y - _player.global_position.y) / PX_PER_UNIT
 	if height > run.altitude:
 		run.set_altitude(height)
@@ -120,6 +137,14 @@ func chunk_index_at(y: float) -> int:
 		if y >= _tops[index]:
 			return index
 	return _tops.size() - 1
+
+
+## Puts a pickup (a Chunk object id) at a world position, in the chunk that
+## holds it (so it is freed with the chunk). The run's build uses it.
+func spawn_object(object_id: StringName, at: Vector2) -> void:
+	var chunk: Chunk = _chunks.get(chunk_index_at(at.y))
+	if chunk != null:
+		chunk.spawn_object(object_id, chunk.to_local(at))
 
 
 ## Whether the chunk at the world height `y` is safe (the Decoherence stops).
@@ -170,7 +195,7 @@ func _add_chunk(index: int) -> void:
 	var placement: ChunkPlacement = _column[index]
 	var chunk: Chunk = _library.get_info(placement.chunk_id).scene.instantiate()
 	chunk.position = Vector2(0.0, _tops[index])
-	build_chunk(chunk, placement, layer, run.world_rng, run.layer_index)
+	build_chunk(chunk, placement, layer, run.world_rng, run.layer_index, _roller)
 	if placement.type == ChunkData.Type.FORK:
 		chunk.branch_chosen.connect(_on_branch_chosen.bind(placement))
 	_chunks_root.add_child(chunk)
@@ -181,14 +206,15 @@ func _add_chunk(index: int) -> void:
 
 
 ## Prepares a chunk for its placement before it enters the tree: mirror,
-## optional parts, slots, and its fork exits or its reward. Also used by the
-## chunk test room.
+## optional parts, slots, and its fork exits, its reward or its shop. Also
+## used by the chunk test room.
 static func build_chunk(
 	chunk: Chunk,
 	placement: ChunkPlacement,
 	layer_data: LayerData,
 	rng: WorldRng,
-	layer_index: int = 0
+	layer_index: int = 0,
+	roller: LootRoller = null
 ) -> void:
 	var key: Array = placement.key()
 	if placement.mirrored:
@@ -199,13 +225,19 @@ static func build_chunk(
 		)
 	)
 	chunk.fill_slots(
-		SlotFiller.plan(rng, layer_data, key, ChunkInfo.read_slots(chunk)), key, rng, layer_index
+		SlotFiller.plan(rng, layer_data, key, ChunkInfo.read_slots(chunk)),
+		key,
+		rng,
+		layer_index,
+		roller
 	)
 	match placement.type:
 		ChunkData.Type.FORK:
 			chunk.setup_fork(LayerGenerator.pick_fork_rewards(rng, layer_data, placement.fork))
 		ChunkData.Type.REWARD:
-			chunk.spawn_reward(placement.reward)
+			chunk.spawn_reward(placement.reward, key)
+		ChunkData.Type.SHOP:
+			chunk.setup_shops(key)
 
 
 func _is_on_screen(chunk: Chunk) -> bool:

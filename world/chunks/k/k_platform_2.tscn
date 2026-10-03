@@ -91,4 +91,8 @@ gizmo_extents = 12.0
 position = Vector2(976, 464)
 gizmo_extents = 12.0
 
+[node name="slot_container_1" type="Marker2D" parent="Slots" unique_id=1497871144]
+position = Vector2(400, 384)
+gizmo_extents = 12.0
+
 [node name="Props" type="Node2D" parent="." unique_id=868656664]

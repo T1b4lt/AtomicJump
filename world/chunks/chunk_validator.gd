@@ -8,6 +8,8 @@ extends RefCounted
 ## per problem (none if the chunk is valid). Chunk shows them as configuration
 ## warnings in the editor and the tests require every chunk to pass.
 
+## Slots whose objects stand on a platform: their marker must be on its surface.
+const STANDING_SLOT_KINDS: Array[StringName] = [Chunk.SLOT_ENEMY_GROUND, Chunk.SLOT_CONTAINER]
 ## Minimum distance (px) from the center of a slot to anything else, per kind:
 ## two slots overlap when they are closer than the sum of their radii.
 const SLOT_RADIUS: Dictionary[StringName, float] = {
@@ -117,7 +119,11 @@ static func _check_inside_walls(marker: Node2D, problems: PackedStringArray) -> 
 
 static func _check_bounds(chunk: Chunk, problems: PackedStringArray) -> void:
 	var rows: int = chunk.data.height_tiles
-	for layer: TileMapLayer in chunk.get_tile_layers():
+	var layers: Array[TileMapLayer] = chunk.get_optional_layers()
+	for layer: TileMapLayer in [chunk.get_walls(), chunk.get_platforms()]:
+		if layer != null:
+			layers.append(layer)
+	for layer: TileMapLayer in layers:
 		for cell: Vector2i in layer.get_used_cells():
 			if cell.x < 0 or cell.x >= Chunk.COLUMNS or cell.y < 0 or cell.y >= rows:
 				problems.append("%s has tiles outside the chunk (cell %s)." % [layer.name, cell])
@@ -185,8 +191,7 @@ static func _check_slots(chunk: Chunk, problems: PackedStringArray) -> void:
 		elif is_solid_at(chunk, cell_at(position + Vector2.UP)):
 			problems.append("%s is inside a solid tile." % slot.name)
 		elif (
-			Chunk.slot_kind(slot.name) == Chunk.SLOT_ENEMY_GROUND
-			and not has_floor_at(chunk, position)
+			Chunk.slot_kind(slot.name) in STANDING_SLOT_KINDS and not has_floor_at(chunk, position)
 		):
 			problems.append("%s must stand on a platform (its marker on the surface)." % slot.name)
 	for i: int in slots.size():

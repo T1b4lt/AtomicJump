@@ -11,6 +11,8 @@ var jump_held: bool = false
 var dash_pressed: bool = false
 ## Held shooting direction (each axis -1 to 1; the Shooter snaps it to 4 directions).
 var shoot_direction: Vector2 = Vector2.ZERO
+var interact_pressed: bool = false
+var use_active_pressed: bool = false
 
 
 ## Reads the input actions (docs/04-player.md#controles).
@@ -24,6 +26,8 @@ static func from_actions() -> PlayerInput:
 	input.shoot_direction = Vector2(
 		Input.get_axis(&"shoot_left", &"shoot_right"), Input.get_axis(&"shoot_up", &"shoot_down")
 	)
+	input.interact_pressed = Input.is_action_just_pressed(&"interact")
+	input.use_active_pressed = Input.is_action_just_pressed(&"use_active")
 	return input
 
 

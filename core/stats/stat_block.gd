@@ -22,6 +22,8 @@ extends Resource
 @export var attack_range: float = 450.0
 ## Fraction of damage blocked (0.25 = 25 %).
 @export var defense: float = 0.0
+## Px from the player at which photons start flying towards it.
+@export var pickup_radius: float = 80.0
 
 
 func get_base(stat: StringName) -> float:

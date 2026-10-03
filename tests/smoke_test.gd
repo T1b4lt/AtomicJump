@@ -9,6 +9,7 @@ const SCRIPT_DIRS: Array[String] = [
 const LEVEL_SCENE: PackedScene = preload("res://world/level/level.tscn")
 const MOVEMENT_ROOM: PackedScene = preload("res://world/debug/movement_test_room.tscn")
 const CHUNK_ROOM: PackedScene = preload("res://world/debug/chunk_test_room.tscn")
+const ITEM_ROOM: PackedScene = preload("res://world/debug/item_test_room.tscn")
 
 
 func test_truth() -> void:
@@ -104,6 +105,36 @@ func test_chunk_room_runs_on_its_own() -> void:
 	var chunk: Chunk = room.get("chunk")
 	assert_object(chunk).is_not_null()
 	assert_float(player.global_position.y).is_less(chunk.get_height())
+
+
+func test_item_room_runs_on_its_own() -> void:
+	var saved_run: RunState = RunManager.run
+	var room: Node2D = auto_free(ITEM_ROOM.instantiate())
+	add_child(room)
+	var player: Player = room.get_node("%Player")
+	assert_object(player.run).is_not_null()
+	assert_object(player.run.build.catalog).is_not_null()
+	room.queue_free()
+	await get_tree().process_frame
+	assert_object(RunManager.run).is_null()
+	RunManager.run = saved_run
+
+
+func test_level_builds_a_shop_with_stands() -> void:
+	var saved_run: RunState = RunManager.run
+	var run: RunState = RunManager.start_run("SHOP-SMOKE")
+	var library := ChunkLibrary.from_layers([Level.LAYER_K])
+	var shop_info: ChunkInfo = library.get_chunks("K", ChunkData.Type.SHOP)[0]
+	var chunk: Chunk = auto_free(shop_info.scene.instantiate())
+	var placement := ChunkPlacement.create("K", "main", 6, ChunkData.Type.SHOP)
+	var roller := LootRoller.new(run.world_rng, run.build.catalog, run)
+	Level.build_chunk(chunk, placement, Level.LAYER_K, run.world_rng, 0, roller)
+	var shops: Array[Node] = chunk.get_node("Props").get_children().filter(
+		func(node: Node) -> bool: return node is Shop
+	)
+	assert_array(shops).is_not_empty()
+	assert_int((shops[0] as Shop).stands.size()).is_greater_equal(5)
+	RunManager.run = saved_run
 
 
 func test_all_project_scripts_compile() -> void:

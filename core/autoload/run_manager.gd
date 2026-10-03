@@ -3,6 +3,8 @@ extends Node
 ## every start and drops it when the run ends.
 
 const DEFAULT_CHARACTER: CharacterData = preload("res://data/characters/wilas.tres")
+## Every item and transformation of the game.
+const CATALOG: ItemCatalog = preload("res://data/items/item_catalog.tres")
 
 ## Run in progress, or null between runs.
 var run: RunState = null
@@ -19,7 +21,7 @@ func _ready() -> void:
 func start_run(seed_text: String = "", character: CharacterData = DEFAULT_CHARACTER) -> RunState:
 	if not SeedCode.is_valid_text(seed_text):
 		seed_text = SeedCode.generate()
-	run = RunState.new(seed_text, character)
+	run = RunState.new(seed_text, character, CATALOG)
 	Events.run_started.emit(run)
 	return run
 

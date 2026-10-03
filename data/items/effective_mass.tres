@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://items/effects/item_effect.gd" id="1_5c2hr"]
+[ext_resource type="Script" path="res://core/stats/stat_modifier.gd" id="2_1pm6u"]
+[ext_resource type="Script" path="res://items/effects/stat_effect.gd" id="3_gj8yr"]
+[ext_resource type="Texture2D" path="res://assets/generated/icons/effective_mass.svg" id="4_8q3r8"]
+[ext_resource type="Script" path="res://items/item_data.gd" id="5_awcjv"]
+
+[sub_resource type="Resource" id="Resource_anbpx"]
+script = ExtResource("2_1pm6u")
+stat = &"max_hp"
+value = 25.0
+
+[sub_resource type="Resource" id="Resource_opab4"]
+script = ExtResource("3_gj8yr")
+modifiers = Array[ExtResource("2_1pm6u")]([SubResource("Resource_anbpx")])
+
+[resource]
+script = ExtResource("5_awcjv")
+id = &"effective_mass"
+pools = Array[StringName]([&"pool_container", &"pool_shop"])
+tags = Array[StringName]([&"mass"])
+icon = ExtResource("4_8q3r8")
+effects = Array[ExtResource("1_5c2hr")]([SubResource("Resource_opab4")])

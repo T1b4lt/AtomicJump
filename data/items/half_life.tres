@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ItemData" format=3]
+
+[ext_resource type="Script" path="res://items/effects/item_effect.gd" id="1_i2jx1"]
+[ext_resource type="Script" path="res://items/effects/projectile_modifier_effect.gd" id="2_qjbn8"]
+[ext_resource type="Script" path="res://combat/status_effect_data.gd" id="3_hdm3m"]
+[ext_resource type="Resource" path="res://data/statuses/status_decay.tres" id="4_46pwj"]
+[ext_resource type="Texture2D" path="res://assets/generated/icons/half_life.svg" id="5_dcwv3"]
+[ext_resource type="Script" path="res://items/item_data.gd" id="6_ypnxr"]
+
+[sub_resource type="Resource" id="Resource_cyeow"]
+script = ExtResource("2_qjbn8")
+statuses = Array[ExtResource("3_hdm3m")]([ExtResource("4_46pwj")])
+
+[resource]
+script = ExtResource("6_ypnxr")
+id = &"half_life"
+rarity = 1
+pools = Array[StringName]([&"pool_container", &"pool_shop", &"pool_special"])
+tags = Array[StringName]([&"decay"])
+icon = ExtResource("5_dcwv3")
+effects = Array[ExtResource("1_i2jx1")]([SubResource("Resource_cyeow")])
